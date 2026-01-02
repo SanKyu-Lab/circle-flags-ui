@@ -1,5 +1,19 @@
 import { render, screen } from '@testing-library/react'
-import { CircleFlag, DynamicFlag, FlagUs, FlagCn, FlagUtils } from './index'
+import {
+  CircleFlag,
+  DynamicFlag,
+  FlagUs,
+  FlagCn,
+  FlagUS,
+  FlagCN,
+  FlagGB,
+  FlagJP,
+  FlagUtils,
+  FlagSizes,
+  getSizeName,
+  buildMeta,
+  FLAG_REGISTRY,
+} from './index'
 
 describe('Main exports', () => {
   test('should export CircleFlag component', () => {
@@ -82,6 +96,21 @@ describe('FlagUtils', () => {
     expect(FlagUtils.isValidCountryCode('us')).toBe(true)
     expect(FlagUtils.isValidCountryCode('invalid')).toBe(false)
   })
+
+  test('should format country codes to uppercase', () => {
+    expect(FlagUtils.formatCountryCode('uS')).toBe('US')
+  })
+
+  test('should get component names from codes with delimiters', () => {
+    expect(FlagUtils.getComponentName('gb-wls')).toBe('FlagGbWls')
+    expect(FlagUtils.getComponentName('123-abc')).toBe('FlagFlag_123Abc')
+  })
+
+  test('should expose sizes and resolve size names', () => {
+    expect(FlagUtils.sizes).toEqual(FlagSizes)
+    expect(FlagUtils.getSizeName(32)).toBe('md')
+    expect(FlagUtils.getSizeName(999)).toBeNull()
+  })
 })
 
 describe('Individual flag components', () => {
@@ -112,5 +141,52 @@ describe('Individual flag components', () => {
     const flag = screen.getByTestId('custom-flag')
     expect(flag).toBeInTheDocument()
     expect(flag).toHaveClass('custom-class')
+  })
+
+  test('alias exports should render correctly', () => {
+    render(
+      <>
+        <FlagUS data-testid="us-flag-alias" />
+        <FlagCN data-testid="cn-flag-alias" />
+        <FlagGB data-testid="gb-flag-alias" />
+        <FlagJP data-testid="jp-flag-alias" />
+      </>
+    )
+
+    expect(screen.getByTestId('us-flag-alias')).toBeInTheDocument()
+    expect(screen.getByTestId('cn-flag-alias')).toBeInTheDocument()
+    expect(screen.getByTestId('gb-flag-alias')).toBeInTheDocument()
+    expect(screen.getByTestId('jp-flag-alias')).toBeInTheDocument()
+  })
+})
+
+describe('DynamicFlag accessibility', () => {
+  test('should derive default title with emoji when title is missing', () => {
+    render(<DynamicFlag code="us" />)
+    expect(screen.getByRole('img', { name: '🇺🇸 US' })).toBeInTheDocument()
+  })
+
+  test('should handle single-letter code with fallback emoji', () => {
+    render(<DynamicFlag code="x" />)
+    expect(screen.getByRole('img', { name: '🏳️ X' })).toBeInTheDocument()
+  })
+})
+
+describe('getSizeName helper', () => {
+  test('should return null when size not found', () => {
+    expect(getSizeName(1)).toBeNull()
+  })
+})
+
+describe('Registry and metadata', () => {
+  test('FLAG_REGISTRY should expose known mappings', () => {
+    expect(FLAG_REGISTRY.us).toBe('FlagUs')
+    expect(FLAG_REGISTRY.cn).toBe('FlagCn')
+  })
+
+  test('buildMeta should include version, commit, and builtAt', () => {
+    expect(buildMeta.version).toMatch(/^[0-9]+\./)
+    expect(buildMeta.commit).toBeTruthy()
+    expect(Number.isFinite(buildMeta.builtAt)).toBe(true)
   })
 })

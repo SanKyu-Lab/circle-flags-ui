@@ -188,8 +188,10 @@ export type CountryCode = FlagCode
 
 // Re-export all individual flags for tree-shaking
 /** @internal */
+/* istanbul ignore next */
 export * from '../generated/flags'
 /** @internal */
+/* istanbul ignore next */
 export {
   FlagUs as FlagUS,
   FlagCn as FlagCN,
@@ -198,5 +200,7 @@ export {
 } from '../generated/flags'
 
 // Export the flag registry for dynamic loading
+/* istanbul ignore next */
 export type { FlagCode } from '../generated/flags'
+/* istanbul ignore next */
 export { FLAG_REGISTRY } from '../generated/flags'

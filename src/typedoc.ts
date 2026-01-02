@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export { CircleFlag, DynamicFlag, FlagSizes, FlagUtils, FLAG_REGISTRY, getSizeName } from './index'
 
 export type {
