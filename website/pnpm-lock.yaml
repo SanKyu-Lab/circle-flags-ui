@@ -29,6 +29,9 @@ importers:
       '@sankyu/react-circle-flags':
         specifier: file:..
         version: file:..(react@19.2.3)
+      '@use-gesture/react':
+        specifier: ^10.3.1
+        version: 10.3.1(react@19.2.3)
       astro:
         specifier: ^5.6.1
         version: 5.16.6(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.54.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -3405,7 +3408,6 @@ snapshots:
 
   '@sankyu/react-circle-flags@file:..(react@19.2.3)':
     dependencies:
-      '@use-gesture/react': 10.3.1(react@19.2.3)
       react: 19.2.3
 
   '@shikijs/core@1.29.2':

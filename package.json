@@ -115,15 +115,9 @@
     "react": "^18.3.1",
     "rollup": "^4.54.0",
     "semantic-release": "^25.0.2",
-    "svgo": "^4.0.0",
     "ts-jest": "^29.4.6",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
-    "typedoc": "0.28.15",
-    "typedoc-plugin-markdown": "4.9.0",
     "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@use-gesture/react": "^10.3.1"
   }
 }

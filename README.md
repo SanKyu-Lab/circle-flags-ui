@@ -1,5 +1,12 @@
 # @sankyu/react-circle-flags
 
+[![npm version](https://img.shields.io/npm/v/%40sankyu%2Freact-circle-flags?style=flat-square&label=%40sankyu%2Freact-circle-flags)](https://www.npmjs.com/package/@sankyu/react-circle-flags)
+[![npm downloads](https://img.shields.io/npm/dm/@sankyu/react-circle-flags.svg?style=flat-square)](https://www.npmjs.com/package/@sankyu/react-circle-flags)
+
+[![TypeScript Supported](https://img.shields.io/badge/TypeScript-Supported-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) | [![React Ready](https://img.shields.io/badge/React-%3E%3D16.0.0-61dafb?style=flat-square&logo=react)](https://reactjs.org/) | [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square&logo=opensourceinitiative)](./LICENSE)
+
+---
+
 Welcome to `@sankyu/react-circle-flags`, a modern React library for circular flag components.
 
 ## 📖 Overview

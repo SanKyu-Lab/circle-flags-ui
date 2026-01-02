@@ -1,5 +1,3 @@
-import { optimize } from 'svgo'
-import { SVGO_CONFIG } from './constants'
 import { getCountryName } from './names'
 import { codeToComponentName, codeToEmoji } from './utils'
 
@@ -12,9 +10,8 @@ export function svgToReactComponent(
 ): { componentCode: string; svgSize: number; optimizedSize: number } {
   const svgSize = svg.length
 
-  // Optimize SVG using SVGO
-  const optimizedResult = optimize(svg, SVGO_CONFIG)
-  let processedSvg = optimizedResult.data
+  // No optimization needed - upstream circle-flags SVGs are already optimized
+  let processedSvg = svg
   const optimizedSize = processedSvg.length
 
   // Remove XML declaration if present
