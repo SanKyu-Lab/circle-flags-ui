@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.1.1...v1.2.0) (2026-01-02)
+
+
+### Features
+
+* **ci:** Add GitHub Pages deployment workflow ([c714223](https://github.com/SanKyu-Lab/react-circle-flags/commit/c714223f89cc1a64fb59980256613ba9a92c949c))
+
 ## [1.1.1](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.1.0...v1.1.1) (2026-01-02)
 
 # [1.1.0](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.0.2...v1.1.0) (2026-01-02)
