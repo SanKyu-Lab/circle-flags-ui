@@ -1,3 +1,8 @@
+## [1.3.4](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.3.3...v1.3.4) (2026-01-02)
+
+### Bug Fixes
+
+* **website:** Bundle shiki aurora-x theme ([69368f1](https://github.com/SanKyu-Lab/react-circle-flags/commit/69368f1ea96569c931a078f774bf6296e4ba180e))
 ## [1.3.3](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.3.2...v1.3.3) (2026-01-02)
 
 ### Features
