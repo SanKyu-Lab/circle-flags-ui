@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { readdirSync, readFileSync, writeFileSync, unlinkSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { generateFlagsDts } from './generate-dts.ts'
 
@@ -48,6 +48,13 @@ async function run() {
   } catch (error) {
     console.error('❌ Failed to generate d.ts:', error)
     process.exit(1)
+  }
+
+  // Remove redundant .d.cts file (same as .d.ts)
+  const dctsPath = join(process.cwd(), 'dist/index.d.cts')
+  if (existsSync(dctsPath)) {
+    unlinkSync(dctsPath)
+    console.log('✅ Removed redundant index.d.cts')
   }
 }
 
