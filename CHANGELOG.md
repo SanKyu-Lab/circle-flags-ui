@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.0.1...v1.0.2) (2026-01-02)
+
+
+### Bug Fixes
+
+* **npmrc:** Comment out always-auth setting for npm registry ([265b7dc](https://github.com/SanKyu-Lab/react-circle-flags/commit/265b7dc24d1bc804a55f698f9f79bf58bed0b1f5))
+
 ## [1.0.1](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.0.0...v1.0.1) (2026-01-02)
 
 
