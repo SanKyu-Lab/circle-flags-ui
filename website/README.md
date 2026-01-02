@@ -1,49 +1,92 @@
-# Starlight Starter Kit: Basics
+# React Circle Flags Website
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+The official documentation and demo website for the `@sankyu/react-circle-flags` library.
 
-```
-pnpm create astro@latest -- --template starlight
-```
+## Getting Started
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Prerequisites
 
-## 🚀 Project Structure
+- Node.js 18+
+- pnpm (recommended)
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+### Installation
 
-```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+The website depends on the parent library via local file reference:
+
+```bash
+# From the website directory
+cd website
+pnpm install
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+### Development
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+```bash
+# Start development server at http://localhost:4321
+pnpm dev
+```
 
-Static assets, like favicons, can be placed in the `public/` directory.
+### Build
 
-## 🧞 Commands
+```bash
+# Build parent library first
+cd ..
+pnpm build
 
-All commands are run from the root of the project, from a terminal:
+# Then build website
+cd website
+pnpm build
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+Output is generated in the `dist/` directory.
 
-## 👀 Want to learn more?
+### Preview Production Build
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+```bash
+pnpm preview
+```
+
+## Integration with Parent Library
+
+### TypeScript Path Mapping
+
+The `tsconfig.json` maps imports to the parent library source:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@sankyu/react-circle-flags": ["../src/index.tsx"]
+    }
+  }
+}
+```
+
+This allows importing directly from source:
+
+```typescript
+import { FLAG_REGISTRY, FlagUS } from '@sankyu/react-circle-flags'
+```
+
+### Vite File System Access
+
+`astro.config.mjs` allows accessing the parent directory:
+
+```javascript
+vite: {
+  server: {
+    fs: {
+      allow: ['..']
+    }
+  }
+}
+```
+
+## License
+
+This project is part of the `@sankyu/react-circle-flags` monorepo. See the parent package for license information.
+
+## Related
+
+- **[@sankyu/react-circle-flags](../)**
+- **[circle-flags](https://github.com/HatScripts/circle-flags)** - Original SVG flag collection
