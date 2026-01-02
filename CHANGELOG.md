@@ -1,3 +1,8 @@
+## [1.3.2](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.3.1...v1.3.2) (2026-01-02)
+
+### Bug Fixes
+
+* **gh-pages:** Update deployment site URL and base path in config files ([be1f8ab](https://github.com/SanKyu-Lab/react-circle-flags/commit/be1f8aba7dec80cb1a3041f37788b59a479aae77))
 ## [1.3.1](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.3.0...v1.3.1) (2026-01-02)
 
 ### Bug Fixes
