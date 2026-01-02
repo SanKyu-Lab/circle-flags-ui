@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/react-circle-flags",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Modern React library for circular flag components with SVGs, TypeScript support, and tree-shaking optimization.",
   "type": "module",
   "main": "./dist/index.cjs",
