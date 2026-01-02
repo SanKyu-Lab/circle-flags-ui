@@ -1,1 +1,1 @@
-pnpm dlx --no-install commitlint --edit "$1"
+pnpm dlx commitlint --edit "$1"
