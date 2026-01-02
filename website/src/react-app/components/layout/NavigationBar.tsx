@@ -45,7 +45,7 @@ export default function NavigationBar({
   return (
     <header className="relative max-w-6xl mx-auto px-6 pt-8 pb-4">
       <PillNav
-        logo="/favicon.svg"
+        logo="./favicon.svg"
         initialLoadAnimation={true}
         logoAlt="Circle Flags logo"
         items={items}
@@ -58,9 +58,6 @@ export default function NavigationBar({
         floating={true}
         onItemClick={handleNavClick}
       />
-      <div className="absolute right-0 top-2">
-        {/* Dark-only mode; toggle removed */}
-      </div>
     </header>
   )
 }
