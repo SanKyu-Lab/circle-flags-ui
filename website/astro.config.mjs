@@ -10,7 +10,12 @@ export default defineConfig({
   integrations: [
     react(),
     starlight({
-      title: 'Sankyu Lab - React Circle Flags',
+      title: '@sankyu/react-circle-flags',
+      logo: {
+        src: './src/assets/favicon.svg',
+        alt: 'React Circle Flags',
+      },
+      favicon: '/favicon.svg',
       social: [
         {
           icon: 'github',

@@ -1,6 +1,7 @@
 import CodeExample from '../../code-example/CodeExample'
 import SpotlightCard from '../../animated-ui/SpotlightCard'
 import LinkButton from '../../ui/LinkButton'
+import { Rocket } from 'lucide-react'
 
 export default function QuickStartSection() {
   return (
@@ -12,7 +13,10 @@ export default function QuickStartSection() {
         <div className="relative z-10 space-y-6">
           <div className="flex items-center justify-between gap-3">
             <div className="space-y-1">
-              <h2 className="text-2xl font-bold">Quick Start</h2>
+              <div className="flex items-center gap-2">
+                <Rocket className="h-5 w-5 text-(--accent)" aria-hidden />
+                <h2 className="text-2xl font-bold">Quick Start</h2>
+              </div>
               <p className="text-sm text-(--muted)">Fast as lightning</p>
             </div>
             <span className="rounded-full border border-(--border-accent) bg-(--overlay-soft) px-4 py-1.5 text-xs font-semibold text-(--accent)">

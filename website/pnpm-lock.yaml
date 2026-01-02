@@ -42,7 +42,7 @@ importers:
         specifier: ^3.14.2
         version: 3.14.2
       lucide-react:
-        specifier: ^0.475.0
+        specifier: 0.475.0
         version: 0.475.0(react@19.2.3)
       nuqs:
         specifier: ^2.8.6

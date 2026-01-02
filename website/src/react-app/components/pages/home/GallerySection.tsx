@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Sparkles } from 'lucide-react'
 import { DynamicFlag, FLAG_REGISTRY } from '@sankyu/react-circle-flags'
 import DomeGallery from '../../animated-ui/DomeGallery'
 import SpotlightCard from '../../animated-ui/SpotlightCard'
@@ -32,7 +33,10 @@ export default function GallerySection({ onFilterNavigate }: GallerySectionProps
       <div className="relative z-10 space-y-5">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold mb-1">Flag Gallery</h2>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-(--accent)" aria-hidden />
+              <h2 className="text-xl font-bold">Flag Gallery</h2>
+            </div>
             <p className="text-sm text-(--muted) leading-relaxed">
               Explore a curated dome of frequently used locales. Tap to focus, drag to orbit.
             </p>
