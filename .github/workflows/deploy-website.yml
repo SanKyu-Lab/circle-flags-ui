@@ -59,7 +59,7 @@ jobs:
         with:
           path: ./website
           node-version: '22.x'
-          site: https://sankyu-lab.github.io/react-circle-flags
+          site: https://sankyu-lab.github.io
           package-manager: pnpm@10
 
   deploy:

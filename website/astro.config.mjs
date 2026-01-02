@@ -6,7 +6,7 @@ import starlight from '@astrojs/starlight'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sankyu-lab.github.io',
-  base: '/react-circle-flags',
+  base: '/',
   integrations: [
     react(),
     starlight({

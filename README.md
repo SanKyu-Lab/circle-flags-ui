@@ -14,7 +14,7 @@
 
 :star: **Star us on [GitHub](https://github.com/Sankyu-Lab/react-circle-flags)** | :bug: **Report Issues [here](https://github.com/Sankyu-Lab/react-circle-flags/issues)**
 
-:rocket: **Explore the [Demo Gallery](https://sankyu-lab.github.io/browse)** | :book: **Read the [Documentation](https://sankyu-lab.github.io/react-circle-flags/docs/guides/getting-started/)**
+:rocket: **Explore the [Demo Gallery](https://sankyu-lab.github.io/browse)** | :book: **Read the [Documentation](https://sankyu-lab.github.io/docs/guides/getting-started/)**
 
 </div>
 
