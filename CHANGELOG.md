@@ -1,3 +1,12 @@
+## [1.3.0](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.2.3...v1.3.0) (2026-01-02)
+
+### Features
+
+* **website:** Add site URL for deployment and update README ([ef29ac4](https://github.com/SanKyu-Lab/react-circle-flags/commit/ef29ac405bf86abd2409d7a8d46fb1acd9b95a38))
+
+### Bug Fixes
+
+* **website:** Update favicon path and remove unused toggle ([a1e858f](https://github.com/SanKyu-Lab/react-circle-flags/commit/a1e858f58a7ffd17b14e9a79455d77623cadcdf7))
 ## [1.2.3](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.2.2...v1.2.3) (2026-01-02)
 ## [1.2.2](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.2.0...v1.2.2) (2026-01-02)
 
