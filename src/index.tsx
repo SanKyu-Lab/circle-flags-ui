@@ -25,6 +25,39 @@ function codeToEmoji(code: string): string {
 }
 
 /**
+ * Minimal SVG sanitizer to drop active content before injecting HTML
+ */
+function sanitizeSvg(raw: string): string {
+  if (typeof DOMParser === 'undefined') return raw
+
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(raw, 'image/svg+xml')
+  const svg = doc.documentElement
+
+  if (!svg || doc.querySelector('parsererror')) return raw
+
+  svg.querySelectorAll('script,foreignObject').forEach(el => el.remove())
+
+  svg.querySelectorAll('*').forEach(el => {
+    Array.from(el.attributes).forEach(attr => {
+      const name = attr.name.toLowerCase()
+      const value = attr.value.trim().toLowerCase()
+
+      if (name.startsWith('on')) {
+        el.removeAttribute(attr.name)
+        return
+      }
+
+      if ((name === 'href' || name === 'xlink:href') && value.startsWith('javascript:')) {
+        el.removeAttribute(attr.name)
+      }
+    })
+  })
+
+  return svg.outerHTML
+}
+
+/**
  * Base props for all flag components
  * All individual flag components inherit from this type
  */
@@ -172,7 +205,8 @@ export const CircleFlag = ({
         }
 
         const svg = await response.text()
-        setSvgContent(svg)
+        const sanitizedSvg = sanitizeSvg(svg)
+        setSvgContent(sanitizedSvg)
         setError(false)
       } catch (err) {
         console.warn(`Failed to load flag for country code: ${finalCountryCode}`, err)

@@ -228,6 +228,20 @@ describe('CircleFlag CDN loading', () => {
       expect(container.innerHTML).toContain('width="100%" height="100%"')
     })
   })
+
+  test('should sanitize external SVG content before injection', async () => {
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      text: async () => '<svg><script>alert(1)</script><circle cx="0" cy="0" r="1"/></svg>',
+    })
+
+    render(<CircleFlag countryCode="us" data-testid="flag-sanitized" />)
+
+    await waitFor(() => {
+      const container = screen.getByTestId('flag-sanitized')
+      expect(container.innerHTML).not.toContain('<script>')
+    })
+  })
 })
 
 describe('getSizeName helper', () => {
