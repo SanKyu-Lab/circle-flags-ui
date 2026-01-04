@@ -2,27 +2,27 @@
 import { defineConfig } from 'astro/config'
 import react from '@astrojs/react'
 import starlight from '@astrojs/starlight'
+import { siteConfig } from './src/config/siteConfig'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://sankyu-lab.github.io/react-circle-flags',
-  base: '/react-circle-flags',
+  site: siteConfig.site,
+  base: siteConfig.base,
   integrations: [
     react(),
     starlight({
-      title: '@sankyu/react-circle-flags',
-      description:
-        '400+ circular SVG flag components for React with TypeScript, tree-shaking, and SSR support.',
+      title: siteConfig.title,
+      description: siteConfig.description,
       logo: {
         src: './src/assets/favicon.svg',
         alt: 'React Circle Flags',
       },
-      favicon: '/react-circle-flags/favicon.svg',
+      favicon: siteConfig.favicon,
       social: [
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/SanKyu-Lab/react-circle-flags',
+          href: siteConfig.github.url,
         },
       ],
       sidebar: [
@@ -66,19 +66,19 @@ export default defineConfig({
           items: [
             {
               label: 'GitHub Repository',
-              link: 'https://github.com/SanKyu-Lab/react-circle-flags',
+              link: siteConfig.github.url,
               attrs: { target: '_blank', rel: 'noreferrer' },
             },
             {
               label: 'NPM Package',
-              link: 'https://www.npmjs.com/package/@sankyu/react-circle-flags',
+              link: siteConfig.npm.url,
               attrs: { target: '_blank', rel: 'noreferrer' },
             },
           ],
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/SanKyu-Lab/react-circle-flags/blob/main/website/',
+        baseUrl: `${siteConfig.github.url}/blob/main/website/`,
       },
     }),
   ],

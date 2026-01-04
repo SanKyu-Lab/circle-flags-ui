@@ -1,0 +1,51 @@
+---
+import { siteConfig } from '../config/siteConfig'
+
+interface Props {
+  title: string
+  description: string
+  image?: string
+  canonicalURL?: URL | string
+  keywords?: string
+  author?: string
+  themeColor?: string
+}
+
+const {
+  title,
+  description,
+  image = siteConfig.socialImage,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  keywords = siteConfig.keywords,
+  author = siteConfig.author,
+  themeColor = siteConfig.themeColor,
+} = Astro.props
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href={siteConfig.favicon} />
+<link rel="canonical" href={canonicalURL} />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:site_name" content="@sankyu/react-circle-flags" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+
+<meta name="keywords" content={keywords} />
+<meta name="author" content={author} />
+<meta name="theme-color" content={themeColor} />

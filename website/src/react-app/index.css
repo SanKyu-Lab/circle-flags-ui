@@ -1,5 +1,16 @@
 @import 'tailwindcss';
 
+/* Font imports */
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/700.css';
+@import '@fontsource/syne/700.css';
+@import '@fontsource/syne/800.css';
+@import '@fontsource/fira-code/400.css';
+@import '@fontsource/fira-code/500.css';
+@import '@fontsource/crimson-pro/400.css';
+@import '@fontsource/crimson-pro/600.css';
+
 :root {
   /* Dark theme */
   --bg: oklch(0 0 0);
@@ -73,10 +84,10 @@
   --glow-gold: 0 0 24px var(--flag-gold-glow), 0 0 48px var(--flag-gold-glow);
 
   /* Type system */
-  --font-sans: 'Open Sans', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-display: 'Open Sans', 'Inter', system-ui, sans-serif;
-  --font-mono: 'Menlo', 'SFMono-Regular', ui-monospace, monospace;
-  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Syne', 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'Fira Code', 'Menlo', 'SFMono-Regular', ui-monospace, monospace;
+  --font-serif: 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
 
   /* Letter spacing */
   --tracking-normal: 0em;
