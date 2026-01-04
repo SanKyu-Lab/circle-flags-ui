@@ -1,3 +1,8 @@
+## [1.4.0](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.3.4...v1.4.0) (2026-01-04)
+
+### Features
+
+* **core:** Add `react-circle-flags` compatibility and unify exports ([adb9fa7](https://github.com/SanKyu-Lab/react-circle-flags/commit/adb9fa7f69beb0046c83aa65df85886d1f0a427f))
 ## [1.3.4](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.3.3...v1.3.4) (2026-01-02)
 
 ### Bug Fixes
