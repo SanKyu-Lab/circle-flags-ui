@@ -9,8 +9,8 @@ export interface BuildMeta {
 declare const __REACT_CIRCLE_FLAGS_COMMIT__: string
 declare const __REACT_CIRCLE_FLAGS_BUILT_AT__: string
 
-const parseBuiltAt = (source: string | undefined) => {
-  const parsed = Number.parseInt(source ?? '', 10)
+const parseBuiltAt = (source: string) => {
+  const parsed = Number.parseInt(source, 10)
   return Number.isFinite(parsed) ? parsed : Date.now()
 }
 

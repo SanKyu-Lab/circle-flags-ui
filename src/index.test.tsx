@@ -156,6 +156,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should show error fallback on fetch failure', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
     ;(global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
 
     render(<CircleFlag countryCode="us" data-testid="flag" />)
@@ -180,6 +181,51 @@ describe('CircleFlag CDN loading', () => {
       expect(global.fetch).toHaveBeenCalledWith(
         'https://hatscripts.github.io/circle-flags/flags/io.svg'
       )
+    })
+  })
+
+  test('should mark error state when country code is missing', async () => {
+    render(<CircleFlag data-testid="flag-without-code" />)
+
+    await waitFor(() => {
+      const flag = screen.getByTestId('flag-without-code')
+      expect(flag).toHaveAttribute('aria-label', '🏳️ ')
+    })
+
+    expect(global.fetch).not.toHaveBeenCalled()
+  })
+
+  test('should handle non-ok responses and show fallback', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      statusText: 'Not Found',
+      text: async () => '<svg></svg>',
+    })
+
+    render(<CircleFlag countryCode="us" data-testid="flag-error" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('US')).toBeInTheDocument()
+    })
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Failed to load flag for country code: us',
+      expect.any(Error)
+    )
+  })
+
+  test('should render fetched SVG with injected size attributes', async () => {
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      text: async () => '<svg viewBox="0 0 1 1"><circle cx="0" cy="0" r="1"/></svg>',
+    })
+
+    render(<CircleFlag countryCode="us" data-testid="flag-success" />)
+
+    await waitFor(() => {
+      const container = screen.getByRole('img', { name: '🇺🇸 US' })
+      expect(container.innerHTML).toContain('width="100%" height="100%"')
     })
   })
 })
@@ -229,6 +275,19 @@ describe('DynamicFlag component', () => {
     // Should show fallback with country code text
     expect(flag.textContent).toContain('INVALID')
   })
+
+  test('should log error when registry entry is missing implementation', () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const registry = FLAG_REGISTRY as Record<string, string>
+    registry['missing'] = 'FlagMissing'
+
+    render(<DynamicFlag code="missing" data-testid="missing-flag" />)
+
+    expect(errorSpy).toHaveBeenCalledWith('Flag component not found for code: missing')
+    expect(screen.getByText('Flag not found: missing')).toBeInTheDocument()
+
+    delete registry['missing']
+  })
 })
 
 describe('Registry and metadata', () => {
@@ -241,5 +300,36 @@ describe('Registry and metadata', () => {
     expect(buildMeta.version).toMatch(/^[0-9]+\./)
     expect(buildMeta.commit).toBeTruthy()
     expect(Number.isFinite(buildMeta.builtAt)).toBe(true)
+  })
+
+  test('buildMeta should use provided build-time constants when available', async () => {
+    jest.resetModules()
+    const mockCommit = 'abc123'
+    const mockBuiltAt = '1700000000'
+
+    ;(globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_COMMIT__ = mockCommit
+    ;(globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_BUILT_AT__ = mockBuiltAt
+
+    const metaModule = await import('./meta')
+
+    expect(metaModule.buildMeta.commit).toBe(mockCommit)
+    expect(metaModule.buildMeta.builtAt).toBe(Number(mockBuiltAt))
+
+    delete (globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_COMMIT__
+    delete (globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_BUILT_AT__
+  })
+
+  test('buildMeta should fall back to Date.now when builtAt is invalid', async () => {
+    jest.resetModules()
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(999999)
+    ;(globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_BUILT_AT__ = 'invalid'
+
+    const metaModule = await import('./meta')
+
+    expect(metaModule.buildMeta.builtAt).toBe(999999)
+    expect(metaModule.buildMeta.commit).toBe('dev')
+
+    delete (globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_BUILT_AT__
+    nowSpy.mockRestore()
   })
 })
