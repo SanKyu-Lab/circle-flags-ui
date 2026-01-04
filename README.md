@@ -12,21 +12,21 @@
 
 [![TypeScript Supported](https://img.shields.io/badge/TypeScript-Supported-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![React Ready](https://img.shields.io/badge/React-%3E%3D16.0.0-61dafb?style=flat-square&logo=react)](https://reactjs.org/) [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square&logo=opensourceinitiative)](./LICENSE)
 
+---
+
 :star: **Star us on [GitHub](https://github.com/Sankyu-Lab/react-circle-flags)** | :bug: **Report Issues [here](https://github.com/Sankyu-Lab/react-circle-flags/issues)**
+
+:rocket: **Explore the [Demo Gallery](https://sankyu-lab.github.io/react-circle-flags/browse)** | :book: **Read the [Documentation](https://sankyu-lab.github.io/react-circle-flags/docs/guides/getting-started/)**
 
 </div>
 
 ---
-
-Welcome to `@sankyu/react-circle-flags`, a modern React library for circular flag components.
 
 ## 📖 Overview
 
 This library provides **400+ circular SVG flag components** with **Full-TypeScript support** & **Tree-shaking Optimization**.
 
 Perfect for applications that need fast, crisp country flags without external image requests.
-
-:rocket: **Explore the [Demo Gallery](https://sankyu-lab.github.io/react-circle-flags/browse)** | :book: **Read the [Documentation](https://sankyu-lab.github.io/react-circle-flags/docs/guides/getting-started/)**
 
 ---
 
