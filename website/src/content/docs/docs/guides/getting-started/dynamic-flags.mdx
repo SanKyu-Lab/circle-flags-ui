@@ -24,6 +24,10 @@ export function CountryFlag({ code }: { code: string }) {
 `CircleFlag` loads SVG flags from CDN on demand, adding only ~2 KB to your bundle while supporting all 400+ flags.
 :::
 
+:::note[SVG props scope]
+`CircleFlag` renders a `<div>` wrapper with the fetched SVG inside. SVG-specific props (e.g. `stroke`, `viewBox`) will not apply through the wrapper; stick to sizing (`width`/`height`) and className/style for the wrapper, or use named imports/DynamicFlag when you need direct SVG props.
+:::
+
 **Backward Compatible API:**
 
 For compatibility with `react-circle-flags`, you can also use the `code` prop:

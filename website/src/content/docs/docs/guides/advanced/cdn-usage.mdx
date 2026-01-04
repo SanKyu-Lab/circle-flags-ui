@@ -8,6 +8,11 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 
 Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandboxes, or environments where npm isn't available.
 
+:::caution[Bundle & security]
+- Use the `?exports=CircleFlag` query to avoid downloading the entire flag set over CDN.
+- Flags are sanitized client-side (scripts/foreignObject and javascript: URLs are stripped), but you should still trust the CDN origin you load from.
+:::
+
 ## Quick Start
 
 ### Using esm.sh (Recommended)
@@ -31,7 +36,7 @@ Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandb
 
     <script type="module">
       import { createRoot } from 'react-dom/client'
-      import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
+      import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
 
       function App() {
         return <CircleFlag countryCode="us" width={64} />
@@ -52,14 +57,14 @@ All three CDNs provide excellent ESM support with automatic dependency resolutio
 Fast, reliable, with optimal bundle splitting and caching:
 
 ```js
-// Latest version
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
+// Latest version (CircleFlag-only build)
+import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags?exports=CircleFlag'
 
-// Pinned version (recommended for production)
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0'
+// Pinned version (recommended for production, CircleFlag-only build)
+import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
 
 // Pinned major version (auto-update patches)
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@^1'
+import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@^1?exports=CircleFlag'
 ```
 
 ### Skypack
@@ -67,11 +72,11 @@ import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@^1'
 Formerly Pika, a Snowflake-sponsored CDN:
 
 ```js
-// Latest version
-import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags'
+// Latest version (CircleFlag-only build)
+import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags?exports=CircleFlag'
 
 // Pinned version
-import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags@1.4.0'
+import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
 ```
 
 ### esm.run
@@ -79,11 +84,11 @@ import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags@1
 Lightning-fast ESM CDN, sponsored by jsDelivr:
 
 ```js
-// Latest version
-import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags'
+// Latest version (CircleFlag-only build)
+import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags?exports=CircleFlag'
 
 // Pinned version
-import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags@1.4.0'
+import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
 ```
 
 ## Usage Examples
@@ -91,7 +96,7 @@ import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags@1.4.0'
 ### With CircleFlag (CDN-loaded SVGs)
 
 ```js
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
+import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
 
 // CircleFlag loads SVGs from HatScripts CDN by default
 const App = () => <CircleFlag countryCode="us" width={48} />
@@ -106,7 +111,7 @@ const AppCustom = () => (
 
 ```js
 // App.js
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
+import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
 
 export default function App() {
   return (
