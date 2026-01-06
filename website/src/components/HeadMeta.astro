@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../config/siteConfig'
+import { Font } from 'astro:assets'
 
 interface Props {
   title: string
@@ -26,6 +27,12 @@ const {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href={siteConfig.favicon} />
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Astro Fonts API - Optimized font loading with preload and fallbacks -->
+<Font cssVariable="--font-sans" preload />
+<Font cssVariable="--font-display" preload />
+<Font cssVariable="--font-mono" preload={[{ weight: '400' }]} />
+<Font cssVariable="--font-serif" preload={[{ weight: '400' }]} />
 
 <title>{title}</title>
 <meta name="description" content={description} />
