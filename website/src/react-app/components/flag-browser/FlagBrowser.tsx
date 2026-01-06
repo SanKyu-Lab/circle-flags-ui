@@ -155,6 +155,8 @@ export default function FlagBrowser() {
       <FlagFilters
         searchTerm={searchTerm}
         onSearchChange={value => setQuery({ filter: value || null })}
+        countryCodes={countryCodes}
+        onCountryCodeClear={() => setQuery({ countryCode: null })}
         regionOptions={regionOptions}
         selectedRegion={selectedRegion}
         onRegionChange={value => setQuery({ region: value || null })}

@@ -11,6 +11,8 @@ interface Option {
 interface FlagFiltersProps {
   searchTerm: string
   onSearchChange: (value: string) => void
+  countryCodes?: string[]
+  onCountryCodeClear?: () => void
   regionOptions: Option[]
   selectedRegion: string
   onRegionChange: (value: string) => void
@@ -33,6 +35,8 @@ interface FlagFiltersProps {
 export default function FlagFilters({
   searchTerm,
   onSearchChange,
+  countryCodes = [],
+  onCountryCodeClear,
   regionOptions,
   selectedRegion,
   onRegionChange,
@@ -59,7 +63,8 @@ export default function FlagFilters({
     selectedType !== 'all' ||
     selectedCurrency !== 'all' ||
     languageTerm.trim().length > 0 ||
-    searchTerm.trim().length > 0
+    searchTerm.trim().length > 0 ||
+    countryCodes.length > 0
 
   return (
     <div className="sticky top-0 z-10 bg-(--bg)/95 backdrop-blur-sm border-b border-(--border-weak) pb-6 -mx-6 px-6">
@@ -154,6 +159,23 @@ export default function FlagFilters({
         </div>
 
         <div className="flex flex-wrap gap-3 items-center">
+          {countryCodes.length > 0 && (
+            <div className="flex items-center gap-2 rounded-2xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-2">
+              <span className="text-xs text-(--muted)">
+                Country code:
+                <span className="ml-2 text-(--ink) font-semibold">
+                  {countryCodes.map(code => code.toUpperCase()).join(', ')}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={onCountryCodeClear}
+                className="rounded-full border border-(--border-weak) px-2 py-1 text-[11px] text-(--ink) hover:border-(--accent) transition"
+              >
+                Clear
+              </button>
+            </div>
+          )}
           <div className="flex items-center gap-2 rounded-2xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-2">
             <span className="text-xs text-(--muted)">
               Showing{' '}
