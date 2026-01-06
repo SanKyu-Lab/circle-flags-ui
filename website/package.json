@@ -29,7 +29,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sharp": "^0.34.2",
-    "shiki": "^1.29.2"
+    "shiki": "^3.20.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
