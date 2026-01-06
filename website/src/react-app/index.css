@@ -24,25 +24,20 @@
   --flag-green: oklch(0.7064 0.1822 151.7125);
   --flag-green-glow: oklch(0.7064 0.1822 151.7125 / 0.3);
 
-  /* Accent gradients - cool spectrum */
-  --accent: var(--flag-blue);
+  --accent: oklch(60% 0.18 250);
   --accent-contrast: oklch(1 0 0);
+
   --accent-gradient: linear-gradient(
-    35deg,
-    oklch(0.6723 0.1606 244.9955),
-    oklch(86.336% 0.06958 251.285)
+    135deg,
+    oklch(85% 0.14 210) 0%,
+    /* Cyan-ish */ oklch(65% 0.22 255) 100% /* Vibrant Blue */
   );
-  --accent-gradient-2: linear-gradient(
-    45deg,
-    oklch(0.6692 0.1607 245.011),
-    oklch(0.1928 0.0331 242.5459)
-  );
-  --accent-gradient-3: linear-gradient(
-    180deg,
-    oklch(0.9392 0.0166 250.8453),
-    oklch(0.6692 0.1607 245.011)
-  );
-  --accent-glow: 0 0 32px oklch(0.6818 0.1584 243.354 / 0.35);
+
+  --accent-gradient-2: linear-gradient(135deg, oklch(60% 0.2 250) 0%, oklch(55% 0.22 270) 100%);
+
+  --accent-gradient-3: linear-gradient(180deg, oklch(80% 0.15 230) 0%, oklch(60% 0.2 250) 100%);
+
+  --accent-glow: 0 0 40px oklch(65% 0.22 255 / 0.4);
 
   /* Borders */
   --border: oklch(0.2674 0.0047 248.0045);

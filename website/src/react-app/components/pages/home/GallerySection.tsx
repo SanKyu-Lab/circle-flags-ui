@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
-import { Sparkles } from 'lucide-react'
+import { ExternalLink, Sparkles } from 'lucide-react'
 import { DynamicFlag, FLAG_REGISTRY } from '@sankyu/react-circle-flags'
 import DomeGallery from '../../animated-ui/DomeGallery'
 import SpotlightCard from '../../animated-ui/SpotlightCard'
+import LinkButton from '../../ui/LinkButton'
+import { withBasePath } from 'src/react-app/routing/paths'
 
 interface GallerySectionProps {
   onFilterNavigate?: (code: string) => void
@@ -64,6 +66,12 @@ export default function GallerySection({ onFilterNavigate }: GallerySectionProps
             grayscale={false}
             onItemSelect={code => onFilterNavigate?.(code)}
           />
+        </div>
+        <div className="flex flex-wrap items-center justify-end gap-3 text-sm text-(--muted) pt-4">
+          <LinkButton href={withBasePath('browse')} target="_blank" variant="solid">
+            Browse Full Gallery
+            <ExternalLink className="h-4 w-4" aria-hidden />
+          </LinkButton>
         </div>
       </div>
     </SpotlightCard>

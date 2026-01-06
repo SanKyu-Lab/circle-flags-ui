@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react'
-import { Check, Copy } from 'lucide-react'
+import { Check, Copy, ExternalLink } from 'lucide-react'
 import FlagShowcase from '../../flag-showcase/FlagShowcase'
 import SpotlightCard from '../../animated-ui/SpotlightCard'
 import Tabs from '../../animated-ui/Tabs'
+import LinkButton from '../../ui/LinkButton'
+import { toRouteHref, withBasePath } from '../../../routing/paths'
 
 interface HeroSectionProps {
   flagCount: number
@@ -17,12 +19,6 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
       { id: 'npm', label: 'npm', command: 'npm install @sankyu/react-circle-flags' },
       { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/react-circle-flags' },
       { id: 'bun', label: 'bun', command: 'bun add @sankyu/react-circle-flags' },
-      {
-        id: 'github',
-        label: 'GitHub',
-        href: 'https://github.com/SanKyu-Lab/react-circle-flags',
-        external: true,
-      },
     ],
     []
   )
@@ -69,19 +65,30 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4">
-          <a
-            href="#quick-start"
-            className="btn-glow rounded-full px-8 py-4 text-base font-bold text-(--accent-contrast) shadow-lg"
-          >
+        <div className="flex flex-wrap items-center gap-3">
+          <LinkButton href="#quick-start" variant="solid" className="cursor-pointer">
             Quick Start
-          </a>
-          <button
-            onClick={onBrowseClick}
-            className="cursor-alias rounded-full border-2 border-(--border-accent) px-8 py-4 text-base font-bold text-(--ink) hover:bg-(--overlay-soft) transition-all"
+          </LinkButton>
+          <LinkButton
+            href={toRouteHref('browse')}
+            target="_blank"
+            variant="ghost"
+            onClick={event => {
+              event.preventDefault()
+              onBrowseClick()
+            }}
           >
-            Browse all flags
-          </button>
+            Browse All Flags
+            <ExternalLink className="h-4 w-4" aria-hidden />
+          </LinkButton>
+          <LinkButton
+            href={withBasePath('docs/guides/getting-started/')}
+            target="_blank"
+            variant="ghost"
+          >
+            Read the Docs
+            <ExternalLink className="h-4 w-4" aria-hidden />
+          </LinkButton>
         </div>
 
         <div className="flex flex-wrap items-center gap-3 text-sm font-medium">

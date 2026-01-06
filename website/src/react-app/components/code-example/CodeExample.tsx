@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Check, Copy } from 'lucide-react'
+import { Check, Copy, ExternalLink } from 'lucide-react'
 import Tabs from '../animated-ui/Tabs'
 import LinkButton from '../ui/LinkButton'
 import { useShikiHtml } from '../../utils/useShikiHtml'
@@ -72,12 +72,6 @@ const installCommands = [
     label: 'bun',
     command: 'bun add @sankyu/react-circle-flags',
   },
-  {
-    id: 'github',
-    label: 'GitHub',
-    href: 'https://github.com/SanKyu-Lab/react-circle-flags',
-    external: true,
-  },
 ]
 
 export default function CodeExample() {
@@ -116,16 +110,18 @@ function Header() {
 
   return (
     <div className="space-y-4">
-      <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#08090e]">
+      <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#192732]">
         <Tabs items={installCommands} activeId={activeManager} onChange={setActiveManager} />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs uppercase tracking-[0.2em] text-(--muted)">Install</p>
           <LinkButton
-            href={withBasePath('docs/guides/getting-started/#installation')}
+            href={withBasePath('docs/guides/getting-started/installation/')}
             target="_blank"
-            variant="solid"
+            variant="ghost"
+            className="p-0"
           >
-            Installation guide
+            Installation Guide
+            <ExternalLink className="h-4 w-4" aria-hidden />
           </LinkButton>
         </div>
         {commandText ? (
@@ -152,11 +148,17 @@ function Header() {
           </div>
         ) : null}
       </div>
-      <div className="code-block p-4 bg-[#08090e]">
+      <div className="code-block p-4 bg-[#192732]">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs uppercase tracking-[0.2em] text-(--muted)">Usage</p>
-          <LinkButton href={withBasePath('docs/guides/usage/')} target="_blank" variant="solid">
-            Usage guide
+          <LinkButton
+            href={withBasePath('docs/guides/getting-started/usage/')}
+            target="_blank"
+            variant="ghost"
+            className="p-0"
+          >
+            Usage Guide
+            <ExternalLink className="h-4 w-4" aria-hidden />
           </LinkButton>
         </div>
         {usageHtml ? (

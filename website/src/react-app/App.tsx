@@ -1,4 +1,5 @@
 import { lazy, Suspense, useMemo } from 'react'
+import { ExternalLink } from 'lucide-react'
 import AppBackground from './components/layout/AppBackground'
 import NavigationBar from './components/layout/NavigationBar'
 import HomePage from './components/pages/HomePage'
@@ -26,6 +27,15 @@ export default function App() {
         ariaLabel: 'Documentation',
         target: '_blank',
         rel: 'noreferrer',
+        icon: <ExternalLink className="h-3.5 w-3.5" aria-hidden />,
+      },
+      {
+        label: 'GitHub',
+        href: 'https://github.com/SanKyu-Lab/react-circle-flags',
+        ariaLabel: 'GitHub repository',
+        target: '_blank',
+        rel: 'noreferrer',
+        icon: <ExternalLink className="h-3.5 w-3.5" aria-hidden />,
       },
     ],
     []

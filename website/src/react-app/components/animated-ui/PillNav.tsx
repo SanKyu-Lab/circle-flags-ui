@@ -9,6 +9,7 @@ export type PillNavItem = {
   ariaLabel?: string
   target?: string
   rel?: string
+  icon?: React.ReactNode
 }
 
 export interface PillNavProps {
@@ -351,15 +352,18 @@ const PillNav: React.FC<PillNavProps> = ({
                       circleRefs.current[i] = el
                     }}
                   />
-                  <span className="label-stack relative inline-block leading-none z-2">
+                  <span className="label-stack relative inline-flex items-center gap-2 leading-none z-2">
                     <span
-                      className="pill-label relative z-2 inline-block leading-none"
+                      className="pill-label relative z-2 inline-flex items-center gap-2 leading-none"
                       style={{ willChange: 'transform' }}
                     >
                       {item.label}
+                      {item.icon ? (
+                        <span className="inline-flex items-center opacity-80">{item.icon}</span>
+                      ) : null}
                     </span>
                     <span
-                      className="pill-label-hover absolute left-0 top-0 z-3 inline-block"
+                      className="pill-label-hover absolute left-0 top-0 z-3 inline-flex items-center gap-2"
                       style={{
                         color: 'var(--hover-text, #fff)',
                         willChange: 'transform, opacity',
@@ -367,6 +371,9 @@ const PillNav: React.FC<PillNavProps> = ({
                       aria-hidden="true"
                     >
                       {item.label}
+                      {item.icon ? (
+                        <span className="inline-flex items-center opacity-80">{item.icon}</span>
+                      ) : null}
                     </span>
                   </span>
                   {isActive && (
@@ -486,7 +493,12 @@ const PillNav: React.FC<PillNavProps> = ({
                       setIsMobileMenuOpen(false)
                     }}
                   >
-                    {item.label}
+                    <span className="inline-flex items-center gap-2">
+                      {item.label}
+                      {item.icon ? (
+                        <span className="inline-flex items-center opacity-80">{item.icon}</span>
+                      ) : null}
+                    </span>
                   </a>
                 ) : (
                   <a
@@ -502,7 +514,12 @@ const PillNav: React.FC<PillNavProps> = ({
                       setIsMobileMenuOpen(false)
                     }}
                   >
-                    {item.label}
+                    <span className="inline-flex items-center gap-2">
+                      {item.label}
+                      {item.icon ? (
+                        <span className="inline-flex items-center opacity-80">{item.icon}</span>
+                      ) : null}
+                    </span>
                   </a>
                 )}
               </li>

@@ -1,4 +1,4 @@
-import { Github } from 'lucide-react'
+import { ExternalLink, Github } from 'lucide-react'
 import { withBasePath } from '../../routing/paths'
 import { buildMeta } from '@sankyu/react-circle-flags'
 
@@ -39,7 +39,10 @@ export default function AppFooter() {
             className="cursor-alias rounded-full border border-(--border-weak) bg-(--overlay-soft) px-4 py-1.5 text-(--ink) transition hover:border-(--accent) hover:text-(--accent)"
             rel="noreferrer"
           >
-            Documentation
+            <span className="inline-flex items-center gap-2">
+              Documentation
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+            </span>
           </a>
           <a
             href="https://github.com/SanKyu-Lab/react-circle-flags"

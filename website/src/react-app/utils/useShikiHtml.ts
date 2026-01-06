@@ -18,8 +18,12 @@ export function useShikiHtml(code: string, lang: string) {
         const loadedLanguages = highlighter.getLoadedLanguages()
         const language = loadedLanguages.includes(lang) ? lang : 'plaintext'
         const highlighted = highlighter.codeToHtml(code, { lang: language, theme: auroraX })
+        const normalized = highlighted.replace(
+          /background-color:\s*[^;"]+;?/g,
+          'background-color: transparent;'
+        )
         if (!cancelled) {
-          setHtml(highlighted)
+          setHtml(normalized)
         }
       } catch (error) {
         console.error('Failed to highlight with Shiki', error)
