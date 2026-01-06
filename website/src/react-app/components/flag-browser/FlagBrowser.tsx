@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { parseAsString, useQueryStates } from 'nuqs'
 import { getAllFlags, getAllTypes, TYPE_LABELS, type FlagInfo } from '../../utils/flagData'
 import FlagDetailPanel from './FlagDetailPanel'
@@ -16,6 +16,7 @@ export default function FlagBrowser() {
       type: parseAsString.withDefault(ALL_OPTION),
       currency: parseAsString.withDefault(ALL_OPTION),
       language: parseAsString.withDefault(''),
+      countryCode: parseAsString.withDefault(''),
     },
     { history: 'push' }
   )
@@ -32,6 +33,9 @@ export default function FlagBrowser() {
   const selectedCurrency = query.currency ?? ALL_OPTION
   const searchTerm = query.filter ?? ''
   const languageTerm = query.language ?? ''
+  const countryCodes = query.countryCode
+    ? query.countryCode.split(',').map(code => code.trim().toLowerCase())
+    : []
 
   const allFlags = useMemo(() => getAllFlags(), [])
   const regionOptions = useMemo(() => {
@@ -87,6 +91,8 @@ export default function FlagBrowser() {
       const matchesCurrency = selectedCurrency === ALL_OPTION || flag.currency === selectedCurrency
       const matchesLanguage =
         !languageFilter || flag.languages.some(lang => lang.toLowerCase().includes(languageFilter))
+      const matchesCountryCode =
+        countryCodes.length === 0 || countryCodes.includes(flag.code.toLowerCase())
 
       return (
         matchesSearch &&
@@ -94,7 +100,8 @@ export default function FlagBrowser() {
         matchesContinent &&
         matchesType &&
         matchesCurrency &&
-        matchesLanguage
+        matchesLanguage &&
+        matchesCountryCode
       )
     })
   }, [
@@ -105,7 +112,16 @@ export default function FlagBrowser() {
     selectedType,
     selectedCurrency,
     languageTerm,
+    countryCodes,
   ])
+
+  useEffect(() => {
+    if (countryCodes.length === 0) return
+    const firstMatch = filteredFlags[0]
+    if (firstMatch && selectedFlag?.code !== firstMatch.code) {
+      setSelectedFlag(firstMatch)
+    }
+  }, [countryCodes, filteredFlags, selectedFlag])
 
   const copyToClipboard = async (text: string, code: string) => {
     try {
@@ -129,6 +145,7 @@ export default function FlagBrowser() {
       type: null,
       currency: null,
       language: null,
+      countryCode: null,
     })
     setSelectedFlag(null)
   }
