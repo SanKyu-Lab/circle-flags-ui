@@ -16,6 +16,12 @@ export default function HeroSection({ flagCount, onBrowseClick }: HeroSectionPro
       { id: 'npm', label: 'npm', command: 'npm install @sankyu/react-circle-flags' },
       { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/react-circle-flags' },
       { id: 'bun', label: 'bun', command: 'bun add @sankyu/react-circle-flags' },
+      {
+        id: 'github',
+        label: 'GitHub',
+        href: 'https://github.com/SanKyu-Lab/react-circle-flags',
+        external: true,
+      },
     ],
     []
   )

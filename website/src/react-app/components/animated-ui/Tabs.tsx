@@ -1,11 +1,14 @@
 // This component should not be modified unless absolutely necessary.
 
 import type { FC } from 'react'
+import { ExternalLink } from 'lucide-react'
 
 export interface TabItem {
   id: string
   label: string
   description?: string
+  href?: string
+  external?: boolean
 }
 
 interface TabsProps {
@@ -41,31 +44,61 @@ const Tabs: FC<TabsProps> = ({ items, activeId, onChange, className }) => (
     role="tablist"
     aria-label="Installation managers"
   >
-    {items.map(({ id, label, description }) => {
+    {items.map(({ id, label, description, href, external }) => {
       const isActive = id === activeId
+      const sharedClasses = `${styles.button.base} ${isActive ? styles.button.active : styles.button.inactive}`
 
       return (
-        <button
-          key={id}
-          type="button"
-          role="tab"
-          aria-selected={isActive}
-          aria-controls={`tabpanel-${id}`}
-          tabIndex={isActive ? 0 : -1}
-          onClick={() => id !== activeId && onChange(id)}
-          className={`${styles.button.base} ${isActive ? styles.button.active : styles.button.inactive}`}
-        >
-          <span>{label}</span>
-          {description && (
-            <span className={isActive ? styles.description.active : styles.description.inactive}>
-              {description}
-            </span>
+        <div key={id} role="presentation">
+          {href ? (
+            <a
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`tabpanel-${id}`}
+              tabIndex={isActive ? 0 : -1}
+              href={href}
+              target={external ? '_blank' : undefined}
+              rel={external ? 'noreferrer' : undefined}
+              className={sharedClasses}
+              onClick={() => id !== activeId && onChange(id)}
+            >
+              <span className="inline-flex items-center gap-2">
+                <span>{label}</span>
+                {external ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
+              </span>
+              {description && (
+                <span className={isActive ? styles.description.active : styles.description.inactive}>
+                  {description}
+                </span>
+              )}
+              <span
+                aria-hidden
+                className={`${styles.border.base} ${isActive ? styles.border.active : styles.border.inactive}`}
+              />
+            </a>
+          ) : (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`tabpanel-${id}`}
+              tabIndex={isActive ? 0 : -1}
+              onClick={() => id !== activeId && onChange(id)}
+              className={sharedClasses}
+            >
+              <span>{label}</span>
+              {description && (
+                <span className={isActive ? styles.description.active : styles.description.inactive}>
+                  {description}
+                </span>
+              )}
+              <span
+                aria-hidden
+                className={`${styles.border.base} ${isActive ? styles.border.active : styles.border.inactive}`}
+              />
+            </button>
           )}
-          <span
-            aria-hidden
-            className={`${styles.border.base} ${isActive ? styles.border.active : styles.border.inactive}`}
-          />
-        </button>
+        </div>
       )
     })}
   </div>

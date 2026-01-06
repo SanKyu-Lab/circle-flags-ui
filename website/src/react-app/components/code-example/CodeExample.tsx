@@ -70,6 +70,12 @@ const installCommands = [
     label: 'bun',
     command: 'bun add @sankyu/react-circle-flags',
   },
+  {
+    id: 'github',
+    label: 'GitHub',
+    href: 'https://github.com/SanKyu-Lab/react-circle-flags',
+    external: true,
+  },
 ]
 
 export default function CodeExample() {
@@ -109,14 +115,7 @@ function Header() {
   return (
     <div className="space-y-4">
       <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#08090e]">
-        <Tabs
-          items={installCommands.map(entry => ({
-            id: entry.id,
-            label: entry.label,
-          }))}
-          activeId={activeManager}
-          onChange={setActiveManager}
-        />
+        <Tabs items={installCommands} activeId={activeManager} onChange={setActiveManager} />
         {commandText ? (
           <div className="relative rounded-xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-3">
             {commandHtml ? (
