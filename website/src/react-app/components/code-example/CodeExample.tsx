@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import Tabs from '../animated-ui/Tabs'
+import LinkButton from '../ui/LinkButton'
 import { useShikiHtml } from '../../utils/useShikiHtml'
 import { withBasePath } from '../../routing/paths'
 
@@ -140,14 +141,15 @@ function Header() {
             </button>
           </div>
         ) : null}
-        <a
-          href={withBasePath('docs/guides/getting-started/#installation')}
-          target="_blank"
-          rel="noreferrer"
-          className="text-xs text-(--muted) hover:text-(--accent) transition"
-        >
-          View installation guide →
-        </a>
+        <div className="flex flex-wrap items-center justify-end pt-2">
+          <LinkButton
+            href={withBasePath('docs/guides/getting-started/#installation')}
+            target="_blank"
+            variant="solid"
+          >
+            Installation guide
+          </LinkButton>
+        </div>
       </div>
       <div className="code-block p-4 bg-[#08090e]">
         <p className="text-xs uppercase tracking-[0.2em] text-(--muted)">Usage</p>
@@ -158,14 +160,11 @@ function Header() {
             <code>{usageLines.map(renderLine)}</code>
           </pre>
         )}
-        <a
-          href={withBasePath('docs/guides/usage/')}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-2 inline-block text-xs text-(--muted) hover:text-(--accent) transition"
-        >
-          View usage guide →
-        </a>
+        <div className="flex flex-wrap items-center justify-end pt-2">
+          <LinkButton href={withBasePath('docs/guides/usage/')} target="_blank" variant="solid">
+            Usage guide
+          </LinkButton>
+        </div>
       </div>
     </div>
   )
