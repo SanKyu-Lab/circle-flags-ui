@@ -3,6 +3,7 @@ import { Check, Copy } from 'lucide-react'
 import FlagShowcase from '../../flag-showcase/FlagShowcase'
 import SpotlightCard from '../../animated-ui/SpotlightCard'
 import Tabs from '../../animated-ui/Tabs'
+import pkg from '../../../../package.json'
 
 interface HeroSectionProps {
   flagCount: number
@@ -31,6 +32,7 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
   const [copied, setCopied] = useState(false)
   const activeCommand = installCommands.find(entry => entry.id === manager) ?? installCommands[0]
   const commandText = activeCommand?.command ?? ''
+  const version = pkg.version
 
   const handleCopy = async () => {
     if (!commandText) return
@@ -52,7 +54,7 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
       <div className="space-y-8 animate-slide-in">
         <div className="inline-flex items-center gap-2 rounded-full border border-(--border-accent) bg-(--accent) px-3 py-1.5 shadow-(--shadow-sm)">
           <span className="font-mono text-sm text-(--accent-contrast) font-semibold">
-            @sankyu/react-circle-flags
+            @sankyu/react-circle-flags@{version}
           </span>
           <span className="rounded-full bg-(--accent-contrast)/20 px-2 py-0.5 text-xs text-(--accent-contrast) font-semibold">
             {flagCount}+ icons
