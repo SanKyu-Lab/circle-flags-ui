@@ -1,0 +1,102 @@
+name: Dependabot Auto-Merge & Tag
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+      - closed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  # Job 1: Enable auto-merge when PR is created/updated
+  enable-auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Enable auto-merge with squash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          echo "Enabling auto-merge for PR #$PR_NUMBER with squash strategy..."
+
+          # Enable auto-merge with squash strategy
+          gh pr merge $PR_NUMBER --squash --auto --delete-branch --repo "${{ github.repository }}"
+
+          echo "Auto-merge enabled successfully for PR #$PR_NUMBER"
+
+  # Job 2: Create tag after PR is merged
+  create-tag-after-merge:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.merged == true &&
+      github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine target and create tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
+
+          echo "PR #$PR_NUMBER merged successfully"
+          echo "Labels: $LABELS"
+
+          # Determine if this is a website or npm-library PR
+          if echo "$LABELS" | grep -q "website"; then
+            TARGET="website"
+          elif echo "$LABELS" | grep -q "npm-library"; then
+            TARGET="npm-library"
+          else
+            echo "Could not determine target from labels, skipping tag creation"
+            exit 0
+          fi
+
+          # Create tag name with timestamp
+          TIMESTAMP=$(date -u '+%Y%m%d-%H%M%S')
+
+          if [ "$TARGET" == "website" ]; then
+            TAG_NAME="deps-website/${TIMESTAMP}"
+            TAG_MESSAGE="Dependabot update for website dependencies"
+          else
+            TAG_NAME="deps-npm/${TIMESTAMP}"
+            TAG_MESSAGE="Dependabot update for npm library dependencies"
+          fi
+
+          echo "Creating tag: $TAG_NAME"
+
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create and push tag
+          git tag -a "$TAG_NAME" -m "$TAG_MESSAGE"
+          git push origin "$TAG_NAME"
+
+          echo "Tag $TAG_NAME created and pushed successfully"
+
+          # Create a GitHub release
+          gh release create "$TAG_NAME" \
+            --repo "${{ github.repository }}" \
+            --title "$TAG_MESSAGE" \
+            --notes "Automated dependency updates merged via Dependabot PR #${PR_NUMBER}
+            **Merged commit:** ${{ github.event.pull_request.merge_commit_sha }}
+            **Updated dependencies:** See PR #${PR_NUMBER} for details" \
+                        --latest=false
+
+                      echo "Release created for tag $TAG_NAME"
