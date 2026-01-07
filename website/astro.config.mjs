@@ -4,6 +4,8 @@ import react from '@astrojs/react'
 import starlight from '@astrojs/starlight'
 import { siteConfig } from './src/config/siteConfig'
 import starlightLlmsTxt from 'starlight-llms-txt'
+import starlightTypeDoc from 'starlight-typedoc'
+import starlightAutoSidebar from 'starlight-auto-sidebar'
 
 // https://astro.build/config
 export default defineConfig({
@@ -59,6 +61,30 @@ export default defineConfig({
       title: siteConfig.title,
       description: siteConfig.description,
       plugins: [
+        starlightAutoSidebar(),
+        starlightTypeDoc({
+          entryPoints: ['../src/docs.ts'],
+          tsconfig: '../tsconfig.json',
+          output: 'reference/api',
+          publicPath: '/docs',
+          sidebar: { label: 'API Reference', collapsed: false },
+          typeDoc: {
+            excludePrivate: true,
+            excludeProtected: true,
+            excludeInternal: true,
+            readme: 'none',
+            entryPointStrategy: 'resolve',
+            flattenOutputFiles: true,
+            hideBreadcrumbs: true,
+            fileExtension: '.md',
+            useCodeBlocks: true,
+            expandObjects: true,
+            indexFormat: 'table',
+            exclude: ['**/*.test.ts', '**/*.test.tsx', '**/node_modules/**', '**/dist/**'],
+          },
+          // eslint-disable-next-line no-undef
+          watch: process.env.NODE_ENV === 'development',
+        }),
         starlightLlmsTxt({
           projectName: '@sankyu/react-circle-flags',
           description:
@@ -155,6 +181,10 @@ The package uses a dual-entry build configuration for optimal tree-shaking, ensu
           items: [
             { label: 'From react-circle-flags', slug: 'docs/migration/from-react-circle-flags' },
           ],
+        },
+        {
+          label: 'API Reference',
+          autogenerate: { directory: 'reference/api' },
         },
         {
           label: 'Examples',

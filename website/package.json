@@ -26,7 +26,11 @@
     "react-dom": "^19.2.0",
     "sharp": "^0.34.2",
     "shiki": "^3.20.0",
-    "starlight-llms-txt": "^0.7.0"
+    "starlight-auto-sidebar": "^0.1.4",
+    "starlight-llms-txt": "^0.7.0",
+    "starlight-typedoc": "^0.21.5",
+    "typedoc": "^0.28.15",
+    "typedoc-plugin-markdown": "^4.9.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",

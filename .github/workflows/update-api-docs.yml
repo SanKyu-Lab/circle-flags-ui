@@ -1,0 +1,72 @@
+name: Update API Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**/*.ts"
+      - "src/**/*.tsx"
+      - "src/docs.ts"
+      - "src/index.tsx"
+  workflow_dispatch:
+
+jobs:
+  update-api-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build parent library
+        run: pnpm run build
+
+      - name: Build website (triggers TypeDoc generation)
+        run: |
+          cd website
+          pnpm install --frozen-lockfile
+          pnpm run build
+
+      - name: Format generated API docs
+        run: pnpm run format
+
+      - name: Lint and fix generated API docs
+        run: pnpm run lint:fix
+
+      - name: Check for API docs changes
+        id: check_changes
+        run: |
+          git add website/src/content/docs/reference/api/
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No API documentation changes detected"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "API documentation has changed"
+          fi
+
+      - name: Commit and push API docs
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs(api): update API documentation [skip ci]"
+          git push

@@ -1,6 +1,6 @@
 ---
 title: Bundle Size & Tree-shaking
-description: Keep bundles small by using the right import strategy.
+description: Keep bundles small by choosing the right import strategy.
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
@@ -8,109 +8,34 @@ import { LinkCard } from '@astrojs/starlight/components'
 
 Optimize your bundle size by choosing the right approach for your use case.
 
-## Import strategies
-
-Depending on your needs, you can choose between three approaches:
-
-<LinkCard title="1. Named Imports" href="#1-named-imports" />
-<LinkCard title="2. CircleFlag" href="#2-circleflag" />
-<LinkCard title="3. DynamicFlag" href="#3-dynamicflag" />
+## Import strategies overview
 
 ### 1. Named Imports
 
-**Best for static flags.**
-
+- **Best for:** Static flags known at build time
 - **Bundle impact:** ~950 bytes per flag
 - **Tree-shaking:** ✅ Excellent
 - **Loading:** Synchronous, instant
-- **Best for:** Known flags at build time
 
-Import only the flags you need from the main entry. Modern bundlers will automatically tree-shake unused exports:
+**[View detailed usage with code examples →](./usage/#1-named-imports)**
 
-```tsx
-import { FlagUs, FlagCn, FlagGb } from '@sankyu/react-circle-flags'
+### 2. CircleFlag
 
-export function Header() {
-  return (
-    <div>
-      <FlagUs width={32} height={32} />
-      <FlagCn width={32} height={32} />
-      <FlagGb width={32} height={32} />
-    </div>
-  )
-}
-```
-
-:::tip[Automatic Tree-shaking]
-Modern bundlers (Webpack 5+, Vite, Rollup) analyze the main entry and only include the exports you actually use. Importing 3 flags adds only **~2.8 KB** to your bundle.
-:::
-
-**When to use:**
-
-- You know which flags you need at build time
-- Want synchronous rendering without loading states
-- Working offline or in restricted network environments
-
-### 2. `<CircleFlag />`
-
-**Best for dynamic flags.**
-
+- **Best for:** Dynamic flags with minimal bundle
 - **Bundle impact:** ~2 KB (component only)
 - **Tree-shaking:** ✅ Perfect
 - **Loading:** Async from CDN
-- **Best for:** Dynamic flags with minimal bundle
 
-Load SVG flags from CDN on demand. Perfect for runtime-determined country codes:
+**[View detailed usage with code examples →](./usage/#2-circleflag)**
 
-```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
+### 3. DynamicFlag
 
-export function CountryFlag({ code }: { code: string }) {
-  return <CircleFlag countryCode={code} width={36} height={36} />
-}
-```
-
-**Result:** ~2 KB bundle impact, SVG flags loaded on demand from CDN
-
-**When to use:**
-
-- Country codes determined at runtime (user input, API responses)
-- Want minimal bundle size
-- Can tolerate async loading with brief loading states
-- Have reliable CDN access
-
-### 3. `<DynamicFlag />`
-
-**Loads all flags in a single bundle.**
-
-- **Bundle impact:** ~600 KB
+- **Best for:** CDN-restricted environments, offline apps
+- **Bundle impact:** ~600 KB (all flags bundled)
 - **Tree-shaking:** ❌ None
 - **Loading:** Synchronous, instant
-- **Best for:** CDN-restricted environments
 
-Bundles ALL 400+ flag components. Only use when you absolutely need synchronous rendering of any flag:
-
-```tsx
-import { DynamicFlag } from '@sankyu/react-circle-flags'
-
-export function CountryFlag({ code }: { code: string }) {
-  return <DynamicFlag code={code} width={36} height={36} />
-}
-```
-
-:::caution[Large Bundle Impact]
-This component adds **~600 KB** to your bundle. Only use if:
-
-- You cannot access external CDNs
-- You need instant rendering without any loading states
-- Bundle size is not a primary concern
-  :::
-
-**When to use:**
-
-- Offline-first applications with no CDN access
-- Need to render any flag synchronously
-- Bundle size constraints are relaxed
+**[View detailed usage with code examples →](./usage/#3-dynamicflag)**
 
 ## Bundle size comparison
 
@@ -129,7 +54,7 @@ This component adds **~600 KB** to your bundle. Only use if:
 - **CircleFlag component:** ~2 KB (minified)
 - **DynamicFlag (includes all flags):** ~600 KB (minified)
 - **10 named imports:** ~9.5 KB total (minified)
-  :::
+:::
 
 ## Performance tips
 
@@ -147,38 +72,6 @@ This component adds **~600 KB** to your bundle. Only use if:
     For dynamic flags, prefer CircleFlag over DynamicFlag to avoid bundling unused flags.
   </Card>
 </CardGrid>
-
-## Example: Code splitting with lazy loading
-
-Lazy load flag components per route for optimal initial bundle size:
-
-```tsx
-import { lazy, Suspense } from 'react'
-
-// Lazy load flag component (Next.js App Router example)
-const FlagUs = lazy(() =>
-  import('@sankyu/react-circle-flags').then(mod => ({ default: mod.FlagUs }))
-)
-
-export function CountryPage() {
-  return (
-    <Suspense fallback={<div className="animate-pulse">Loading...</div>}>
-      <FlagUs width={64} height={64} />
-    </Suspense>
-  )
-}
-```
-
-**Alternative: Use CircleFlag for simpler dynamic loading**
-
-```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
-
-// Simpler approach with built-in loading states
-export function CountryPage({ code }: { code: string }) {
-  return <CircleFlag countryCode={code} width={64} height={64} />
-}
-```
 
 ## Hybrid approach: Best of both worlds
 
@@ -220,8 +113,15 @@ npm install --save-dev @next/bundle-analyzer
 
 ## Related
 
-<LinkCard
-  title="Dynamic Flags"
-  description="Learn when and how to use DynamicFlag and CircleFlag for runtime country codes"
-  href="./dynamic-flags/"
-/>
+<CardGrid stagger>
+  <LinkCard
+    title="Basic Usage"
+    description="Learn how to import and use flag components with code examples"
+    href="./usage/"
+  />
+  <LinkCard
+    title="Dynamic Flags"
+    description="Deep dive into CircleFlag and DynamicFlag components"
+    href="./dynamic-flags/"
+  />
+</CardGrid>

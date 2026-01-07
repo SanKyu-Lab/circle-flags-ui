@@ -1,34 +1,126 @@
 ---
 title: Basic Usage
-description: Import and render flag components.
+description: Import and render flag components with different strategies.
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 
-## Import individual flags
+## Import strategies
 
-Import flags from the main entry — **tree-shaking automatically** ensures you only bundle what you use:
+Choose the right approach based on your use case:
+
+<LinkCard title="1. Named Imports" href="#1-named-imports" />
+<LinkCard title="2. CircleFlag" href="#2-circleflag" />
+<LinkCard title="3. DynamicFlag" href="#3-dynamicflag" />
+
+### 1. Named Imports
+
+**Best for static flags.**
+
+- **Bundle impact:** ~950 bytes per flag
+- **Tree-shaking:** ✅ Excellent
+- **Loading:** Synchronous, instant
+- **Best for:** Known flags at build time
+
+Import only the flags you need from the main entry. Modern bundlers will automatically tree-shake unused exports:
 
 ```tsx
 import { FlagUs, FlagCn, FlagGb } from '@sankyu/react-circle-flags'
 
-export default function Header() {
+export function Header() {
   return (
-    <div className="flex items-center gap-3">
-      <FlagUs width={40} height={40} />
-      <FlagCn width={40} height={40} />
-      <FlagGb width={40} height={40} />
+    <div>
+      <FlagUs width={32} height={32} />
+      <FlagCn width={32} height={32} />
+      <FlagGb width={32} height={32} />
     </div>
   )
 }
 ```
 
-:::tip[Tree-shaking Optimization]
-Modern bundlers automatically tree-shake unused flags. Importing 3 flags only adds **~2.8 KB** to your bundle, not the entire library.
+:::tip[Automatic Tree-shaking]
+Modern bundlers (Webpack 5+, Vite, Rollup) analyze the main entry and only include the exports you actually use. Importing 3 flags adds only **~2.8 KB** to your bundle.
+:::
 
-No special configuration needed — it just works!
+**When to use:**
+
+- You know which flags you need at build time
+- Want synchronous rendering without loading states
+- Working offline or in restricted network environments
+
+:::tip[API Reference]
+See full props definition: [FlagComponentProps →](/reference/api/interface.flagcomponentprops/)
+:::
+
+### 2. CircleFlag
+
+**Best for dynamic flags.**
+
+- **Bundle impact:** ~2 KB (component only)
+- **Tree-shaking:** ✅ Perfect
+- **Loading:** Async from CDN
+- **Best for:** Dynamic flags with minimal bundle
+
+Load SVG flags from CDN on demand. Perfect for runtime-determined country codes:
+
+```tsx
+import { CircleFlag } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ code }: { code: string }) {
+  return <CircleFlag countryCode={code} width={36} height={36} />
+}
+```
+
+**Result:** ~2 KB bundle impact, SVG flags loaded on demand from CDN
+
+**When to use:**
+
+- Country codes determined at runtime (user input, API responses)
+- Want minimal bundle size
+- Can tolerate async loading with brief loading states
+- Have reliable CDN access
+
+:::tip[API Reference]
+See full props definition: [CircleFlagProps →](/reference/api/interface.circleflagprops/)
+:::
+
+### 3. DynamicFlag
+
+**Loads all flags in a single bundle.**
+
+- **Bundle impact:** ~600 KB
+- **Tree-shaking:** ❌ None
+- **Loading:** Synchronous, instant
+- **Best for:** CDN-restricted environments
+
+Bundles ALL 400+ flag components. Only use when you absolutely need synchronous rendering of any flag:
+
+```tsx
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ code }: { code: string }) {
+  return <DynamicFlag code={code} width={36} height={36} />
+}
+```
+
+:::caution[Large Bundle Impact]
+This component adds **~600 KB** to your bundle. Only use if:
+
+- You cannot access external CDNs
+- You need instant rendering without any loading states
+- Bundle size is not a primary concern
+:::
+
+**When to use:**
+
+- Offline-first applications with no CDN access
+- Need to render any flag synchronously
+- Bundle size constraints are relaxed
+
+:::tip[API Reference]
+See full props definition: [DynamicFlagProps →](/reference/api/interface.dynamicflagprops/)
 :::
 
 ## Naming convention
@@ -107,10 +199,22 @@ The library works seamlessly with all modern React frameworks:
   </TabItem>
 </Tabs>
 
-## Next step
+## Next steps
 
-<LinkCard
-  title="Styling"
-  description="Learn how to customize flag appearance with CSS classes and inline styles"
-  href="../styling/"
-/>
+<CardGrid stagger>
+  <LinkCard
+    title="Bundle Size Optimization"
+    description="Compare bundle sizes and choose the best strategy"
+    href="../bundle-size/"
+  />
+  <LinkCard
+    title="Styling"
+    description="Customize flag appearance with CSS and inline styles"
+    href="../styling/"
+  />
+  <LinkCard
+    title="Dynamic Flags"
+    description="Learn when to use CircleFlag vs DynamicFlag"
+    href="../dynamic-flags/"
+  />
+</CardGrid>
