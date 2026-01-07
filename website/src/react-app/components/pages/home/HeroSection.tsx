@@ -5,6 +5,7 @@ import SpotlightCard from '../../animated-ui/SpotlightCard'
 import Tabs from '../../animated-ui/Tabs'
 import LinkButton from '../../ui/LinkButton'
 import { toRouteHref, withBasePath } from '../../../routing/paths'
+import { buildMeta } from '@sankyu/react-circle-flags'
 
 interface HeroSectionProps {
   flagCount: number
@@ -48,7 +49,7 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
       <div className="space-y-8 animate-slide-in">
         <div className="inline-flex items-center gap-2 rounded-full border border-(--border-accent) bg-(--accent) px-3 py-1.5 shadow-(--shadow-sm)">
           <span className="font-mono text-sm text-(--accent-contrast) font-semibold">
-            @sankyu/react-circle-flags
+            @sankyu/react-circle-flags@{`v${buildMeta.version}`}
           </span>
           <span className="rounded-full bg-(--accent-contrast)/20 px-2 py-0.5 text-xs text-(--accent-contrast) font-semibold">
             {flagCount}+ icons

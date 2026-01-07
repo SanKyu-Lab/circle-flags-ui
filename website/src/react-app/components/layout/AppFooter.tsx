@@ -3,8 +3,8 @@ import { withBasePath } from '../../routing/paths'
 import { buildMeta } from '@sankyu/react-circle-flags'
 
 export default function AppFooter() {
-  const { version, commit } = buildMeta
-  const shortCommit = commit === 'dev' ? 'dev' : commit.slice(0, 7)
+  const { version, commitHash } = buildMeta
+  const shortCommit = commitHash === 'dev' ? 'dev' : commitHash.slice(0, 7)
 
   return (
     <footer className="relative mt-20 overflow-hidden rounded-2xl border border-(--border-weak) bg-(--bg) px-6 py-8 text-xs text-(--muted) shadow-[0_15px_60px_-25px_rgba(0,0,0,0.3)]">
