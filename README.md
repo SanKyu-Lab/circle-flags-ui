@@ -32,8 +32,6 @@ This library provides **400+ circular SVG flag components** with **Full-TypeScri
 
 Perfect for applications that need fast, crisp country flags without external image requests.
 
----
-
 ## :world_map: Live Demo
 
 [![Edit react-circle-flags-demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/nyy6vp) [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-circle-flags?file=src%2FApp.tsx&terminal=dev)
