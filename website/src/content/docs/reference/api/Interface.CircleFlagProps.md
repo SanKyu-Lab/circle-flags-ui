@@ -5,7 +5,7 @@ prev: false
 title: "CircleFlagProps"
 ---
 
-Defined in: [index.tsx:75](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L75)
+Defined in: [index.tsx:75](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L75)
 
 ## Extends
 
@@ -19,7 +19,7 @@ Defined in: [index.tsx:75](https://github.com/SanKyu-Lab/react-circle-flags/blob
 optional cdnUrl: string;
 ```
 
-Defined in: [index.tsx:81](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L81)
+Defined in: [index.tsx:81](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L81)
 
 Custom CDN URL for loading SVG flags
 
@@ -31,7 +31,7 @@ Custom CDN URL for loading SVG flags
 optional className: string;
 ```
 
-Defined in: [index.tsx:70](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L70)
+Defined in: [index.tsx:70](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L70)
 
 CSS className
 
@@ -47,7 +47,7 @@ CSS className
 optional code: string;
 ```
 
-Defined in: [index.tsx:79](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L79)
+Defined in: [index.tsx:79](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L79)
 
 :::caution[Deprecated]
 Use 'countryCode' instead - kept for backward compatibility
@@ -61,7 +61,7 @@ Use 'countryCode' instead - kept for backward compatibility
 optional countryCode: string;
 ```
 
-Defined in: [index.tsx:77](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L77)
+Defined in: [index.tsx:77](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L77)
 
 ISO country code (e.g., 'us', 'cn', 'gb')
 
@@ -73,7 +73,7 @@ ISO country code (e.g., 'us', 'cn', 'gb')
 optional height: string | number;
 ```
 
-Defined in: [index.tsx:68](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L68)
+Defined in: [index.tsx:68](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L68)
 
 Height of the flag
 
@@ -89,7 +89,7 @@ Height of the flag
 optional title: string;
 ```
 
-Defined in: [index.tsx:83](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L83)
+Defined in: [index.tsx:83](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L83)
 
 Custom title for accessibility
 
@@ -101,7 +101,7 @@ Custom title for accessibility
 optional width: string | number;
 ```
 
-Defined in: [index.tsx:66](https://github.com/SanKyu-Lab/react-circle-flags/blob/b414196759445149e39a926481de5b83f9097cc6/src/index.tsx#L66)
+Defined in: [index.tsx:66](https://github.com/SanKyu-Lab/react-circle-flags/blob/d2429a2200877dbd65819a47db1cc8a3fc862b8f/src/index.tsx#L66)
 
 Width of the flag
 
