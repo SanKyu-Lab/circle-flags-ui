@@ -68,5 +68,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "docs(api): update API documentation [skip ci]"
+          git commit -m "docs(ci): Update API documentation [skip ci]"
           git push

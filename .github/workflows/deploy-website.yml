@@ -1,9 +1,9 @@
 name: Deploy Website to GitHub Pages
 
 on:
-  # Trigger when Release workflow completes successfully
+  # Trigger when Release or API docs workflow completes successfully
   workflow_run:
-    workflows: ["Release"]
+    workflows: ["Release", "Update API Documentation"]
     types:
       - completed
     branches: [main]
