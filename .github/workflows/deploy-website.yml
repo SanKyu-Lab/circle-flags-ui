@@ -3,7 +3,7 @@ name: Deploy Website to GitHub Pages
 on:
   # Trigger when Release or API docs workflow completes successfully
   workflow_run:
-    workflows: ["Release", "Update API Documentation"]
+    workflows: ["Release", "Auto Update API Documentation"]
     types:
       - completed
     branches: [main]
@@ -11,7 +11,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'website/**'
+      - "website/**"
   # Allow manual trigger
   workflow_dispatch:
 
@@ -43,8 +43,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
-          cache: 'pnpm'
+          node-version: "22.x"
+          cache: "pnpm"
 
       - name: Install root dependencies
         run: pnpm install --frozen-lockfile
@@ -58,8 +58,7 @@ jobs:
         uses: withastro/action@v5
         with:
           path: ./website
-          node-version: '22.x'
-          site: https://sankyu-lab.github.io/react-circle-flags
+          node-version: "22.x"
           package-manager: pnpm@10
 
   deploy:

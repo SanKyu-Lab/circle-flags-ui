@@ -1,4 +1,4 @@
-name: Update API Documentation
+name: Auto Update API Documentation
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - "src/**/*.tsx"
       - "src/docs.ts"
       - "src/index.tsx"
+  # Allow manual trigger
   workflow_dispatch:
 
 jobs:
