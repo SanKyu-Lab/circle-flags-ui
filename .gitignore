@@ -61,5 +61,6 @@ docs/
 
 *.md
 !README.md
+!README.zh.md
 !CONTRIBUTING.md
 !website/src/content/docs/reference/api/**
