@@ -6,7 +6,7 @@
 
 <div align="center">
 
-# `@sankyu/react-circle-flags`
+# @sankyu/react-circle-flags
 
 [![npm version](https://img.shields.io/npm/v/%40sankyu%2Freact-circle-flags?style=flat-square&label=%40sankyu%2Freact-circle-flags)](https://www.npmjs.com/package/@sankyu/react-circle-flags) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@sankyu/react-circle-flags?style=flat-square&label=Bundle%20Size)](https://bundlephobia.com/package/@sankyu/react-circle-flags) [![npm downloads](https://img.shields.io/npm/dm/@sankyu/react-circle-flags.svg?style=flat-square&label=NPM%20Downloads)](https://www.npmjs.com/package/@sankyu/react-circle-flags) [![Last Commit](https://img.shields.io/github/last-commit/SanKyu-Lab/react-circle-flags?style=flat-square&label=Last%20Commit)](https://github.com/SanKyu-Lab/react-circle-flags/commits/main)
 
@@ -14,7 +14,7 @@
 
 [![CI](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/ci.yml/badge.svg)](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/ci.yml) [![Release](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/release.yml/badge.svg)](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/release.yml) [![codecov](https://codecov.io/gh/SanKyu-Lab/react-circle-flags/branch/main/graph/badge.svg?token=YHZ46T51AG)](https://codecov.io/gh/SanKyu-Lab/react-circle-flags)
 
-[![TypeScript supported](https://img.shields.io/badge/TypeScript-supported-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![React Ready](https://badgen.net/bundlephobia/tree-shaking/@sankyu/react-circle-flags)](https://reactjs.org/) [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square&logo=opensourceinitiative)](./LICENSE)
+[![TypeScript supported](https://img.shields.io/badge/TypeScript-supported-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![Tree-shakable](https://badgen.net/bundlephobia/tree-shaking/@sankyu/react-circle-flags)](https://bundlephobia.com/package/@sankyu/react-circle-flags) [![MIT License](https://img.shields.io/badge/License-MIT-green?style=flat-square&logo=opensourceinitiative)](./LICENSE)
 
 ---
 
