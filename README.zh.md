@@ -18,6 +18,8 @@
 
 ---
 
+简体中文 | [English Version](./README.md)
+
 :star: **在 [GitHub](https://github.com/Sankyu-Lab/react-circle-flags) 上 Star 我们** | :bug: **在此 [提交问题](https://github.com/Sankyu-Lab/react-circle-flags/issues)**
 
 :rocket: **探索 [演示图库](https://react-circle-flags.js.org/browse)** | :book: **[阅读文档](https://react-circle-flags.js.org/docs/guides/getting-started/)**
