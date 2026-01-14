@@ -1,3 +1,4 @@
+## [1.5.1](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.5.0...v1.5.1) (2026-01-14)
 ## [1.5.0](https://github.com/SanKyu-Lab/react-circle-flags/compare/v1.4.3...v1.5.0) (2026-01-07)
 
 ### Features
