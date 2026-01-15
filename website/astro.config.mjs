@@ -7,6 +7,96 @@ import starlightLlmsTxt from 'starlight-llms-txt'
 import starlightTypeDoc from 'starlight-typedoc'
 import starlightAutoSidebar from 'starlight-auto-sidebar'
 
+const isAstroCheck = process.argv.includes('check')
+
+const starlightPlugins = [
+  starlightAutoSidebar(),
+  ...(isAstroCheck
+    ? []
+    : [
+        starlightTypeDoc({
+          entryPoints: ['../packages/react/src/docs.ts'],
+          tsconfig: '../packages/react/tsconfig.json',
+          output: 'reference/api',
+          // @ts-ignore
+          publicPath: '/docs',
+          sidebar: { label: 'API Reference', collapsed: false },
+          typeDoc: {
+            excludePrivate: true,
+            excludeProtected: true,
+            excludeInternal: true,
+            readme: 'none',
+            entryPointStrategy: 'resolve',
+            flattenOutputFiles: true,
+            hideBreadcrumbs: true,
+            fileExtension: '.md',
+            useCodeBlocks: true,
+            expandObjects: true,
+            indexFormat: 'table',
+            exclude: ['**/*.test.ts', '**/*.test.tsx', '**/node_modules/**', '**/dist/**'],
+          },
+          // eslint-disable-next-line no-undef
+          watch: process.env.NODE_ENV === 'development',
+        }),
+      ]),
+  starlightLlmsTxt({
+    projectName: '@sankyu/react-circle-flags',
+    description:
+      'A React component library providing 400+ circular SVG country flags with full TypeScript support, tree-shaking optimization, and SSR compatibility.',
+    details: `This library converts SVG flags from the HatScripts/circle-flags repository into optimized React components. Each flag component supports standard SVG properties, has a default size of 48px.
+
+The package uses a dual-entry build configuration for optimal tree-shaking, ensuring users only bundle the flag components they actually import.`,
+    customSets: [
+      {
+        label: 'Getting Started Guide',
+        description:
+          'Essential documentation for new users: installation, basic usage, styling, dynamic flags, TypeScript support, and bundle size optimization',
+        paths: ['**/guides/getting-started/**'],
+      },
+      {
+        label: 'Advanced Usage',
+        description: 'Advanced topics including CDN usage and other expert-level configurations',
+        paths: ['**/guides/advanced/**'],
+      },
+      {
+        label: 'Migration Guide',
+        description: 'Instructions for migrating from the original react-circle-flags package',
+        paths: ['**/migration/**'],
+      },
+      {
+        label: 'API Reference',
+        description:
+          'Complete API documentation for all exported components, types, and utility functions',
+        paths: ['**/reference/**'],
+      },
+    ],
+    promote: [
+      'guides/getting-started',
+      'guides/getting-started/installation',
+      'guides/getting-started/usage',
+      'reference/api',
+    ],
+    exclude: ['migration/**'],
+    optionalLinks: [
+      {
+        label: 'GitHub Repository',
+        url: 'https://github.com/SanKyu-Lab/react-circle-flags',
+        description: 'Source code, issue tracker, and contribution guidelines',
+      },
+      {
+        label: 'NPM Package',
+        url: 'https://www.npmjs.com/package/@sankyu/react-circle-flags',
+        description: 'Package information, version history, and installation command',
+      },
+      {
+        label: 'Interactive Demo',
+        url: 'https://react-circle-flags.js.org/',
+        description: 'Live React demo with flag browser and code examples',
+      },
+    ],
+  }),
+]
+
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.site,
@@ -60,91 +150,7 @@ export default defineConfig({
     starlight({
       title: siteConfig.title,
       description: siteConfig.description,
-      plugins: [
-        starlightAutoSidebar(),
-        starlightTypeDoc({
-          entryPoints: ['../src/docs.ts'],
-          tsconfig: '../tsconfig.json',
-          output: 'reference/api',
-          // @ts-ignore
-          publicPath: '/docs',
-          sidebar: { label: 'API Reference', collapsed: false },
-          typeDoc: {
-            excludePrivate: true,
-            excludeProtected: true,
-            excludeInternal: true,
-            readme: 'none',
-            entryPointStrategy: 'resolve',
-            flattenOutputFiles: true,
-            hideBreadcrumbs: true,
-            fileExtension: '.md',
-            useCodeBlocks: true,
-            expandObjects: true,
-            indexFormat: 'table',
-            exclude: ['**/*.test.ts', '**/*.test.tsx', '**/node_modules/**', '**/dist/**'],
-          },
-          // eslint-disable-next-line no-undef
-          watch: process.env.NODE_ENV === 'development',
-        }),
-        starlightLlmsTxt({
-          projectName: '@sankyu/react-circle-flags',
-          description:
-            'A React component library providing 400+ circular SVG country flags with full TypeScript support, tree-shaking optimization, and SSR compatibility.',
-          details: `This library converts SVG flags from the HatScripts/circle-flags repository into optimized React components. Each flag component supports standard SVG properties, has a default size of 48px.
-
-The package uses a dual-entry build configuration for optimal tree-shaking, ensuring users only bundle the flag components they actually import.`,
-          customSets: [
-            {
-              label: 'Getting Started Guide',
-              description:
-                'Essential documentation for new users: installation, basic usage, styling, dynamic flags, TypeScript support, and bundle size optimization',
-              paths: ['**/guides/getting-started/**'],
-            },
-            {
-              label: 'Advanced Usage',
-              description:
-                'Advanced topics including CDN usage and other expert-level configurations',
-              paths: ['**/guides/advanced/**'],
-            },
-            {
-              label: 'Migration Guide',
-              description:
-                'Instructions for migrating from the original react-circle-flags package',
-              paths: ['**/migration/**'],
-            },
-            {
-              label: 'API Reference',
-              description:
-                'Complete API documentation for all exported components, types, and utility functions',
-              paths: ['**/reference/**'],
-            },
-          ],
-          promote: [
-            'guides/getting-started',
-            'guides/getting-started/installation',
-            'guides/getting-started/usage',
-            'reference/api',
-          ],
-          exclude: ['migration/**'],
-          optionalLinks: [
-            {
-              label: 'GitHub Repository',
-              url: 'https://github.com/SanKyu-Lab/react-circle-flags',
-              description: 'Source code, issue tracker, and contribution guidelines',
-            },
-            {
-              label: 'NPM Package',
-              url: 'https://www.npmjs.com/package/@sankyu/react-circle-flags',
-              description: 'Package information, version history, and installation command',
-            },
-            {
-              label: 'Interactive Demo',
-              url: 'https://react-circle-flags.js.org/',
-              description: 'Live React demo with flag browser and code examples',
-            },
-          ],
-        }),
-      ],
+      plugins: starlightPlugins,
       logo: {
         src: './src/assets/favicon.svg',
         alt: 'React Circle Flags',
