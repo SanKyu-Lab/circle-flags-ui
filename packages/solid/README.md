@@ -1,6 +1,6 @@
 # @sankyu/solid-circle-flags
 
-> 🚧 **Work in Progress**
+> 🚧 **Working towards Multi-Framework support!** See our [Roadmap Issue](https://github.com/SanKyu-Lab/circle-flags-ui/issues/14) for details.
 
 Solid.js bindings for circle-flags. Coming soon!
 

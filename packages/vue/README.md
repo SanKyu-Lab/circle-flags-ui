@@ -1,6 +1,6 @@
 # @sankyu/vue-circle-flags
 
-> 🚧 **Work in Progress**
+> 🚧 **Working towards Multi-Framework support!** See our [Roadmap Issue](https://github.com/SanKyu-Lab/circle-flags-ui/issues/14) for details.
 
 Vue 3 bindings for circle-flags. Coming soon!
 
