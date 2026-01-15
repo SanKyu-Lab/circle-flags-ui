@@ -17,7 +17,7 @@
     "@sankyu/react-circle-flags": "file:..",
     "@shikijs/themes": "^3.21.0",
     "@use-gesture/react": "^10.3.1",
-    "astro": "^5.16.7",
+    "astro": "^5.16.9",
     "country-locale-map": "^1.9.11",
     "gsap": "^3.14.2",
     "lucide-react": "0.562.0",
@@ -29,7 +29,7 @@
     "starlight-auto-sidebar": "^0.1.4",
     "starlight-llms-txt": "^0.7.0",
     "starlight-typedoc": "^0.21.5",
-    "typedoc": "^0.28.15",
+    "typedoc": "^0.28.16",
     "typedoc-plugin-markdown": "^4.9.0"
   },
   "devDependencies": {
