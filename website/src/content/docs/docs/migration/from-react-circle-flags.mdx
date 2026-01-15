@@ -84,11 +84,11 @@ Quick guide for migrating from `react-circle-flags` to `@sankyu/react-circle-fla
 
 ## Bundle Size Comparison
 
-| Approach                    | Bundle Size | Network | Offline |
-| --------------------------- | ----------- | ------- | ------- |
-| `react-circle-flags`        | ~200 KB+    | None    | ✅      |
-| `CircleFlag` (CDN)          | ~2 KB       | Per flag| ❌      |
-| Named imports (3 flags)     | ~2.8 KB     | None    | ✅      |
+| Approach                | Bundle Size | Network  | Offline |
+| ----------------------- | ----------- | -------- | ------- |
+| `react-circle-flags`    | ~200 KB+    | None     | ✅      |
+| `CircleFlag` (CDN)      | ~2 KB       | Per flag | ❌      |
+| Named imports (3 flags) | ~2.8 KB     | None     | ✅      |
 
 ## Migration Steps
 
@@ -171,15 +171,15 @@ If country codes are determined at runtime:
 
 ## Key Differences
 
-| Feature                | `react-circle-flags`  | `@sankyu/react-circle-flags` |
-| ---------------------- | --------------------- | ---------------------------- |
-| Default import style   | `<CircleFlag />`      | Named exports or CircleFlag  |
-| Prop format            | `height="35"`         | `height={35}`                |
-| Tree-shaking           | ❌ Limited            | ✅ Excellent                 |
-| TypeScript             | ❌ No types           | ✅ Full types                |
-| Bundle size (3 flags)  | ~200 KB               | ~2.8 KB                      |
-| Dynamic loading        | ❌ No                 | ✅ CircleFlag (CDN)          |
-| Offline support        | ✅ Yes                | ✅ Yes (named imports)       |
+| Feature               | `react-circle-flags` | `@sankyu/react-circle-flags` |
+| --------------------- | -------------------- | ---------------------------- |
+| Default import style  | `<CircleFlag />`     | Named exports or CircleFlag  |
+| Prop format           | `height="35"`        | `height={35}`                |
+| Tree-shaking          | ❌ Limited           | ✅ Excellent                 |
+| TypeScript            | ❌ No types          | ✅ Full types                |
+| Bundle size (3 flags) | ~200 KB              | ~2.8 KB                      |
+| Dynamic loading       | ❌ No                | ✅ CircleFlag (CDN)          |
+| Offline support       | ✅ Yes               | ✅ Yes (named imports)       |
 
 ## Need Help?
 

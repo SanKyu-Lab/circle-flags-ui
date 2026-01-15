@@ -67,7 +67,9 @@ const Tabs: FC<TabsProps> = ({ items, activeId, onChange, className }) => (
                 {external ? <ExternalLink className="h-3.5 w-3.5" aria-hidden /> : null}
               </span>
               {description && (
-                <span className={isActive ? styles.description.active : styles.description.inactive}>
+                <span
+                  className={isActive ? styles.description.active : styles.description.inactive}
+                >
                   {description}
                 </span>
               )}
@@ -88,7 +90,9 @@ const Tabs: FC<TabsProps> = ({ items, activeId, onChange, className }) => (
             >
               <span>{label}</span>
               {description && (
-                <span className={isActive ? styles.description.active : styles.description.inactive}>
+                <span
+                  className={isActive ? styles.description.active : styles.description.inactive}
+                >
                   {description}
                 </span>
               )}

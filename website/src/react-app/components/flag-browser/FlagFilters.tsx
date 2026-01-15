@@ -178,8 +178,7 @@ export default function FlagFilters({
           )}
           <div className="flex items-center gap-2 rounded-2xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-2">
             <span className="text-xs text-(--muted)">
-              Showing{' '}
-              <span className="text-(--accent) font-semibold">{filteredCount}</span> /{' '}
+              Showing <span className="text-(--accent) font-semibold">{filteredCount}</span> /{' '}
               {totalCount}
             </span>
           </div>

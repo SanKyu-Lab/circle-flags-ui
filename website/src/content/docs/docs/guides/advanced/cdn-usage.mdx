@@ -9,9 +9,10 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandboxes, or environments where npm isn't available.
 
 :::caution[Bundle & security]
+
 - Use the `?exports=CircleFlag` query to avoid downloading the entire flag set over CDN.
 - Flags are sanitized client-side (scripts/foreignObject and javascript: URLs are stripped), but you should still trust the CDN origin you load from.
-:::
+  :::
 
 ## Quick Start
 

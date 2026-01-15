@@ -8,10 +8,10 @@ on:
     branches:
       - main
     paths:
-      - "src/**/*.ts"
-      - "src/**/*.tsx"
-      - "src/docs.ts"
-      - "src/index.tsx"
+      - 'src/**/*.ts'
+      - 'src/**/*.tsx'
+      - 'src/docs.ts'
+      - 'src/index.tsx'
   # Allow manual trigger
   workflow_dispatch:
 
@@ -34,8 +34,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          cache: "pnpm"
+          node-version: '22'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

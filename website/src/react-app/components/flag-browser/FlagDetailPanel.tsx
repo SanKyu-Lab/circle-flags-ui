@@ -107,7 +107,10 @@ export default function FlagDetailPanel({
                 {copiedCode === `component-${flag.code}` ? (
                   <Check className="w-3.5 h-3.5 text-(--accent)" aria-hidden />
                 ) : (
-                  <Copy className="w-3.5 h-3.5 text-(--muted) group-hover:text-(--accent)" aria-hidden />
+                  <Copy
+                    className="w-3.5 h-3.5 text-(--muted) group-hover:text-(--accent)"
+                    aria-hidden
+                  />
                 )}
               </button>
 
@@ -126,7 +129,10 @@ export default function FlagDetailPanel({
                 {copiedCode === `import-${flag.code}` ? (
                   <Check className="w-3.5 h-3.5 text-(--accent)" aria-hidden />
                 ) : (
-                  <Copy className="w-3.5 h-3.5 text-(--muted) group-hover:text-(--accent)" aria-hidden />
+                  <Copy
+                    className="w-3.5 h-3.5 text-(--muted) group-hover:text-(--accent)"
+                    aria-hidden
+                  />
                 )}
               </button>
 
@@ -138,7 +144,10 @@ export default function FlagDetailPanel({
                 {copiedCode === `code-${flag.code}` ? (
                   <Check className="w-3.5 h-3.5 text-(--accent)" aria-hidden />
                 ) : (
-                  <Copy className="w-3.5 h-3.5 text-(--muted) group-hover:text-(--accent)" aria-hidden />
+                  <Copy
+                    className="w-3.5 h-3.5 text-(--muted) group-hover:text-(--accent)"
+                    aria-hidden
+                  />
                 )}
               </button>
             </div>

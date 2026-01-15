@@ -25,7 +25,10 @@ export default function FlagBrowser() {
 
   const parsedType = query.type as FilterType
   const selectedType: FilterType =
-    parsedType === 'country' || parsedType === 'subdivision' || parsedType === 'organization' || parsedType === 'other'
+    parsedType === 'country' ||
+    parsedType === 'subdivision' ||
+    parsedType === 'organization' ||
+    parsedType === 'other'
       ? parsedType
       : ALL_OPTION
   const selectedRegion = query.region ?? ALL_OPTION
