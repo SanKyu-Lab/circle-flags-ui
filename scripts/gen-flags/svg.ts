@@ -51,7 +51,7 @@ export function svgToReactComponent(
 
   return {
     componentCode: `import type { ReactElement } from 'react'
-import type { FlagComponentProps } from '../../src/index'
+import type { FlagComponentProps } from '@sankyu/circle-flags-core'
 
 /**
  * ${emoji} *${countryName}* flag component

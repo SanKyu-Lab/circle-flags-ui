@@ -2,7 +2,7 @@ import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { basename } from 'node:path'
-import { CIRCLE_FLAGS_REPO, FLAGS_DIR, OUTPUT_DIR } from './constants'
+import { CIRCLE_FLAGS_REPO, CORE_GENERATED_DIR, FLAGS_DIR, REACT_OUTPUT_DIR } from './constants'
 import { getCountryName } from './names'
 import { svgToReactComponent } from './svg'
 import type { FlagMetadata } from './types'
@@ -57,8 +57,9 @@ export async function generateFlags() {
   // Ensure circle-flags repository is available
   ensureCircleFlagsRepo()
 
-  // Create output directory
-  await mkdir(OUTPUT_DIR, { recursive: true })
+  // Create output directories
+  await mkdir(REACT_OUTPUT_DIR, { recursive: true })
+  await mkdir(CORE_GENERATED_DIR, { recursive: true })
 
   // Read all SVG files
   const files = await readdir(FLAGS_DIR)
@@ -74,7 +75,7 @@ export async function generateFlags() {
   for (const file of svgFiles) {
     const code = basename(file, '.svg')
     const svgPath = `${FLAGS_DIR}/${file}`
-    const outputPath = `${OUTPUT_DIR}/${code}.tsx`
+    const outputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
 
     try {
       const svgContent = await readFile(svgPath, 'utf-8')
@@ -137,9 +138,12 @@ export type FlagComponent = {
   className?: string
   title?: string
 }
+`
 
-// Export a mapping for dynamic flag loading
-export const FLAG_REGISTRY = ${JSON.stringify(
+  await writeFile(`${REACT_OUTPUT_DIR}/index.ts`, indexContent, 'utf-8')
+  console.log('✅ Generated enhanced index.ts with metadata\n')
+
+  const coreRegistryContent = `export const FLAG_REGISTRY = ${JSON.stringify(
     flags.reduce((acc, f) => ({ ...acc, [f.code]: f.componentName }), {}),
     null,
     2
@@ -148,8 +152,8 @@ export const FLAG_REGISTRY = ${JSON.stringify(
 export type FlagCode = keyof typeof FLAG_REGISTRY
 `
 
-  await writeFile(`${OUTPUT_DIR}/index.ts`, indexContent, 'utf-8')
-  console.log('✅ Generated enhanced index.ts with metadata\n')
+  await writeFile(`${CORE_GENERATED_DIR}/registry.ts`, coreRegistryContent, 'utf-8')
+  console.log('✅ Generated core/src/generated/registry.ts\n')
 
   console.log('🎉 Flag generation complete!')
   console.log(`\n📊 Optimization Summary:`)

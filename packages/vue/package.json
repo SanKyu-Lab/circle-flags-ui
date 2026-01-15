@@ -1,0 +1,58 @@
+{
+  "name": "@sankyu/vue-circle-flags",
+  "version": "0.0.0",
+  "private": true,
+  "description": "400+ circular SVG Vue 3 flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "dev": "echo 'TODO: implement vue build'",
+    "build": "echo 'TODO: implement vue build'",
+    "typecheck": "echo 'TODO: implement vue typecheck'"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "flags",
+    "country-flags",
+    "svg",
+    "typescript",
+    "tree-shaking",
+    "circle-flags"
+  ],
+  "author": "Sankyu Lab <opensource.sankyu-lab@xmsl.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SanKyu-Lab/circle-flags-ui.git",
+    "directory": "packages/vue"
+  },
+  "bugs": {
+    "url": "https://github.com/SanKyu-Lab/circle-flags-ui/issues"
+  },
+  "homepage": "https://github.com/SanKyu-Lab/circle-flags-ui/tree/main/packages/vue",
+  "peerDependencies": {
+    "vue": ">=3.0.0"
+  },
+  "dependencies": {
+    "@sankyu/circle-flags-core": "workspace:*"
+  }
+}
