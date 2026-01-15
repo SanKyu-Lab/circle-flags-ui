@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "package.json"
+      - 'packages/react/package.json'
   workflow_dispatch:
 
 permissions:
@@ -34,9 +34,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-          cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
+          node-version: '22.x'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -63,7 +63,7 @@ jobs:
 
       - name: Get package version
         id: package-version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p \"require('./packages/react/package.json').version\")" >> $GITHUB_OUTPUT
 
       - name: Generate CHANGELOG
         run: |
@@ -82,6 +82,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public
+        working-directory: packages/react
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
