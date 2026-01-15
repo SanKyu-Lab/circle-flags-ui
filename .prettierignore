@@ -1,1 +1,64 @@
-.gitignore
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Testing
+coverage/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+## lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
+
+# Temporary files
+*.tmp
+.cache/
+
+# Generated flag components
+circle-flags/
+generated/
+**/generated/
+
+# Generated API docs
+website/src/content/docs/reference/api/**
+website/public/docs/
+website/public/docs/**
+
+# Misc
+.*/
+!.github/
+!.husky/
+.husky/_/
+
+*.bak
+*.old
+*.orig
