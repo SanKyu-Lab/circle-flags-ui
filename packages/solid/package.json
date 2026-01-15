@@ -1,0 +1,58 @@
+{
+  "name": "@sankyu/solid-circle-flags",
+  "version": "0.0.0",
+  "private": true,
+  "description": "400+ circular SVG Solid.js flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "dev": "echo 'TODO: implement solid build'",
+    "build": "echo 'TODO: implement solid build'",
+    "typecheck": "echo 'TODO: implement solid typecheck'"
+  },
+  "keywords": [
+    "solid",
+    "solidjs",
+    "flags",
+    "country-flags",
+    "svg",
+    "typescript",
+    "tree-shaking",
+    "circle-flags"
+  ],
+  "author": "Sankyu Lab <opensource.sankyu-lab@xmsl.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SanKyu-Lab/circle-flags-ui.git",
+    "directory": "packages/solid"
+  },
+  "bugs": {
+    "url": "https://github.com/SanKyu-Lab/circle-flags-ui/issues"
+  },
+  "homepage": "https://github.com/SanKyu-Lab/circle-flags-ui/tree/main/packages/solid",
+  "peerDependencies": {
+    "solid-js": ">=1.0.0"
+  },
+  "dependencies": {
+    "@sankyu/circle-flags-core": "workspace:*"
+  }
+}

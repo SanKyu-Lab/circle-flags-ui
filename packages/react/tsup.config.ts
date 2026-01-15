@@ -2,7 +2,13 @@ import { execSync } from 'child_process'
 import { defineConfig } from 'tsup'
 
 const isProduction = process.env.NODE_ENV === 'production'
-const external = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
+const external = [
+  'react',
+  'react-dom',
+  'react/jsx-runtime',
+  'react/jsx-dev-runtime',
+  '@sankyu/circle-flags-core',
+]
 
 const resolveCommit = () => {
   const env = process.env
@@ -21,7 +27,7 @@ const resolveCircleFlagsCommit = () => {
   if (env.REACT_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT) return env.REACT_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT
 
   try {
-    return execSync('git -C circle-flags rev-parse HEAD', { encoding: 'utf-8' }).trim()
+    return execSync('git -C ../../circle-flags rev-parse HEAD', { encoding: 'utf-8' }).trim()
   } catch {
     return 'unknown'
   }
