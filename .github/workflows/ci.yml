@@ -4,7 +4,7 @@ on:
   # Only allow manual trigger or triggered by Release workflow
   workflow_dispatch:
   workflow_run:
-    workflows: ["Release"]
+    workflows: ['Release']
     types:
       - completed
     branches: [main]
@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -75,8 +75,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-          cache: "pnpm"
+          node-version: '22.x'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -87,7 +87,7 @@ jobs:
           NODE_ENV: production
 
       - name: Check build output
-        run: ls -la dist/
+        run: ls -la packages/react/dist/
 
   format-check:
     runs-on: ubuntu-latest
@@ -106,8 +106,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-          cache: "pnpm"
+          node-version: '22.x'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
