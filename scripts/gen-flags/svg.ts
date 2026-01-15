@@ -50,8 +50,10 @@ export function svgToReactComponent(
   const upperCode = code.toUpperCase()
 
   return {
-    componentCode: `import type { ReactElement } from 'react'
-import type { FlagComponentProps } from '@sankyu/circle-flags-core'
+    componentCode: `import type { ReactElement, SVGProps } from 'react'
+import type { FlagComponentProps as CoreFlagComponentProps } from '@sankyu/circle-flags-core'
+
+type FlagComponentProps = SVGProps<SVGSVGElement> & CoreFlagComponentProps
 
 /**
  * ${emoji} *${countryName}* flag component
