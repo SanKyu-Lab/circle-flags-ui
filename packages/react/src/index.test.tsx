@@ -177,7 +177,9 @@ describe('CircleFlag CDN loading', () => {
     )
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith('https://hatscripts.github.io/circle-flags/flags/io.svg')
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://hatscripts.github.io/circle-flags/flags/io.svg'
+      )
     })
   })
 
