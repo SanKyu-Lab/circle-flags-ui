@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import fetchMock from 'jest-fetch-mock'
 import {
   CircleFlag,
   DynamicFlag,
@@ -138,7 +139,7 @@ describe('Individual flag components', () => {
 
 describe('CircleFlag CDN loading', () => {
   beforeEach(() => {
-    global.fetch = jest.fn()
+    fetchMock.resetMocks()
   })
 
   afterEach(() => {
@@ -146,9 +147,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should show loading state initially', () => {
-    ;(global.fetch as jest.Mock).mockImplementation(
-      () => new Promise(() => {}) // Never resolves
-    )
+    fetchMock.mockImplementation(() => new Promise(() => {})) // Never resolves
 
     render(<CircleFlag countryCode="us" data-testid="flag" />)
     const flag = screen.getByTestId('flag')
@@ -157,7 +156,7 @@ describe('CircleFlag CDN loading', () => {
 
   test('should show error fallback on fetch failure', async () => {
     jest.spyOn(console, 'warn').mockImplementation(() => {})
-    ;(global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
+    fetchMock.mockRejectedValue(new Error('Network error'))
 
     render(<CircleFlag countryCode="us" data-testid="flag" />)
 
@@ -168,7 +167,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should use custom CDN URL when provided', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () => '<svg></svg>',
     })
@@ -178,9 +177,7 @@ describe('CircleFlag CDN loading', () => {
     )
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        'https://hatscripts.github.io/circle-flags/flags/io.svg'
-      )
+      expect(fetchMock).toHaveBeenCalledWith('https://hatscripts.github.io/circle-flags/flags/io.svg')
     })
   })
 
@@ -192,12 +189,12 @@ describe('CircleFlag CDN loading', () => {
       expect(flag).toHaveAttribute('aria-label', '🏳️ ')
     })
 
-    expect(global.fetch).not.toHaveBeenCalled()
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 
   test('should handle non-ok responses and show fallback', async () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: false,
       statusText: 'Not Found',
       text: async () => '<svg></svg>',
@@ -216,7 +213,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should render fetched SVG with injected size attributes', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () => '<svg viewBox="0 0 1 1"><circle cx="0" cy="0" r="1"/></svg>',
     })
@@ -230,7 +227,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should sanitize external SVG content before injection', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () => '<svg><script>alert(1)</script><circle cx="0" cy="0" r="1"/></svg>',
     })
@@ -244,7 +241,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should strip event handler attributes from fetched SVG', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () =>
         '<svg><circle cx="0" cy="0" r="1" onload="alert(1)" onclick="alert(2)"/></svg>',
@@ -260,7 +257,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should strip javascript: hrefs from fetched SVG', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () =>
         '<svg><use href="javascript:alert(1)" xlink:href="javascript:alert(2)"/></svg>',
@@ -316,7 +313,7 @@ describe('CircleFlag CDN loading', () => {
 
     // @ts-expect-error - override for test
     global.DOMParser = MockParser as unknown as typeof DOMParser
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () => '<svg><use href="javascript:alert(1)"/></svg>',
     })
@@ -336,7 +333,7 @@ describe('CircleFlag CDN loading', () => {
     const originalParser = global.DOMParser
     // @ts-expect-error - simulate absence
     global.DOMParser = undefined
-    ;(global.fetch as jest.Mock).mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       text: async () => '<svg><script>alert(1)</script></svg>',
     })

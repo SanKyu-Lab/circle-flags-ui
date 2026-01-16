@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom'
+import fetchMock from 'jest-fetch-mock'
+
+// Enable fetch mocking globally
+fetchMock.enableMocks()
 
 // Ensure SVGElement exists and inheritance is correct
 // This is required for @testing-library/jest-dom matchers (like toBeInTheDocument) to work correctly
