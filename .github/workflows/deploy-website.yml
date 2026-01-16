@@ -54,12 +54,15 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Build and upload website
-        uses: withastro/action@v5
+      - name: Build website
+        run: pnpm --filter website run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./website
-          node-version: '22.x'
-          package-manager: pnpm@10
+          path: ./website/dist
 
   deploy:
     needs: build
@@ -71,3 +74,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
