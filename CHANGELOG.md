@@ -1,4 +1,5 @@
-## [0.0.0](https://github.com/SanKyu-Lab/circle-flags-ui/compare/v1.5.1...v0.0.0) (2026-01-16)
+## [0.0.0](https://github.com/SanKyu-Lab/circle-flags-ui/compare/v1.5.2...v0.0.0) (2026-01-16)
+## [1.5.2](https://github.com/SanKyu-Lab/circle-flags-ui/compare/v1.5.1...v1.5.2) (2026-01-16)
 
 ### Features
 
