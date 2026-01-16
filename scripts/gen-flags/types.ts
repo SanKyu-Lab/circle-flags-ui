@@ -4,4 +4,5 @@ export interface FlagMetadata {
   componentName: string
   svgSize: number
   optimizedSize: number
+  aliasOf?: string // The target code if this is a symlink alias
 }

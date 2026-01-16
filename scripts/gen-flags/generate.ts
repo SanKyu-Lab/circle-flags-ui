@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
+import { lstat, mkdir, readFile, readdir, readlink, writeFile } from 'node:fs/promises'
 import { basename } from 'node:path'
 import { CIRCLE_FLAGS_REPO, CORE_GENERATED_DIR, FLAGS_DIR, REACT_OUTPUT_DIR } from './constants'
 import { buildNameMappings, getNameFromMappings } from './country-data'
@@ -81,30 +81,75 @@ export async function generateFlags() {
     const outputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
 
     try {
-      const svgContent = await readFile(svgPath, 'utf-8')
-      const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
-
-      await writeFile(outputPath, componentCode, 'utf-8')
-
+      const stats = await lstat(svgPath)
       const componentName = codeToComponentName(code)
       const nameFromData = getNameFromMappings(code, nameMappings)
       const displayName = nameFromData || getCountryName(code)
 
-      flags.push({
-        code,
-        name: displayName,
-        componentName,
-        svgSize,
-        optimizedSize,
-      })
+      if (stats.isSymbolicLink()) {
+        const linkTarget = await readlink(svgPath)
+        const targetCode = basename(linkTarget, '.svg').replace(/^other\//, '')
+        const targetComponentName = codeToComponentName(targetCode)
+        const targetFile = `${targetCode}.svg`
 
-      totalOriginalSize += svgSize
-      totalOptimizedSize += optimizedSize
+        if (svgFiles.includes(targetFile)) {
+          const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
+          await writeFile(outputPath, aliasContent, 'utf-8')
 
-      const compression = (((svgSize - optimizedSize) / svgSize) * 100).toFixed(1)
-      process.stdout.write(
-        `✓ ${componentName}: ${svgSize}B → ${optimizedSize}B (${compression}% smaller)\r`
-      )
+          flags.push({
+            code,
+            name: displayName,
+            componentName,
+            svgSize: 0,
+            optimizedSize: 0,
+            aliasOf: targetCode,
+          })
+
+          process.stdout.write(`✓ ${componentName}: alias of ${targetComponentName}\r`)
+        } else {
+          const svgContent = await readFile(svgPath, 'utf-8')
+          const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
+
+          await writeFile(outputPath, componentCode, 'utf-8')
+
+          flags.push({
+            code,
+            name: displayName,
+            componentName,
+            svgSize,
+            optimizedSize,
+          })
+
+          totalOriginalSize += svgSize
+          totalOptimizedSize += optimizedSize
+
+          const compression = (((svgSize - optimizedSize) / svgSize) * 100).toFixed(1)
+          process.stdout.write(
+            `✓ ${componentName}: ${svgSize}B → ${optimizedSize}B (${compression}% smaller)\r`
+          )
+        }
+      } else {
+        const svgContent = await readFile(svgPath, 'utf-8')
+        const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
+
+        await writeFile(outputPath, componentCode, 'utf-8')
+
+        flags.push({
+          code,
+          name: displayName,
+          componentName,
+          svgSize,
+          optimizedSize,
+        })
+
+        totalOriginalSize += svgSize
+        totalOptimizedSize += optimizedSize
+
+        const compression = (((svgSize - optimizedSize) / svgSize) * 100).toFixed(1)
+        process.stdout.write(
+          `✓ ${componentName}: ${svgSize}B → ${optimizedSize}B (${compression}% smaller)\r`
+        )
+      }
     } catch (error) {
       console.error(`\n❌ Error processing ${code}:`, error)
     }
@@ -149,12 +194,17 @@ export type FlagComponent = {
   await writeFile(`${REACT_OUTPUT_DIR}/index.ts`, indexContent, 'utf-8')
   console.log('✅ Generated enhanced index.ts with metadata\n')
 
+  const aliases = flags
+    .filter(f => f.aliasOf)
+    .reduce((acc, f) => ({ ...acc, [f.code]: f.aliasOf }), {})
+
   const coreRegistryContent = `export const FLAG_REGISTRY = ${JSON.stringify(
     flags.reduce((acc, f) => ({ ...acc, [f.code]: f.componentName }), {}),
     null,
     2
   )} as const
 
+${Object.keys(aliases).length > 0 ? `export const FLAG_ALIASES = ${JSON.stringify(aliases, null, 2)} as const\n` : ''}
 export type FlagCode = keyof typeof FLAG_REGISTRY
 `
 
