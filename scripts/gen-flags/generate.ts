@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs'
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { basename } from 'node:path'
 import { CIRCLE_FLAGS_REPO, CORE_GENERATED_DIR, FLAGS_DIR, REACT_OUTPUT_DIR } from './constants'
+import { buildNameMappings, getNameFromMappings } from './country-data'
 import { getCountryName } from './names'
 import { svgToReactComponent } from './svg'
 import type { FlagMetadata } from './types'
@@ -54,14 +55,17 @@ function ensureCircleFlagsRepo() {
 export async function generateFlags() {
   console.log('🚀 Starting optimized flag generation...\n')
 
-  // Ensure circle-flags repository is available
   ensureCircleFlagsRepo()
 
-  // Create output directories
+  console.log('📊 Building name mappings from country-region-data...')
+  const nameMappings = buildNameMappings()
+  console.log(
+    `✅ Built mappings: ${Object.keys(nameMappings.countryNames).length} countries, ${Object.keys(nameMappings.subdivisionNames).length} subdivisions\n`
+  )
+
   await mkdir(REACT_OUTPUT_DIR, { recursive: true })
   await mkdir(CORE_GENERATED_DIR, { recursive: true })
 
-  // Read all SVG files
   const files = await readdir(FLAGS_DIR)
   const svgFiles = files.filter(f => f.endsWith('.svg'))
 
@@ -71,7 +75,6 @@ export async function generateFlags() {
   let totalOriginalSize = 0
   let totalOptimizedSize = 0
 
-  // Process each SVG file
   for (const file of svgFiles) {
     const code = basename(file, '.svg')
     const svgPath = `${FLAGS_DIR}/${file}`
@@ -84,9 +87,12 @@ export async function generateFlags() {
       await writeFile(outputPath, componentCode, 'utf-8')
 
       const componentName = codeToComponentName(code)
+      const nameFromData = getNameFromMappings(code, nameMappings)
+      const displayName = nameFromData || getCountryName(code)
+
       flags.push({
         code,
-        name: getCountryName(code),
+        name: displayName,
         componentName,
         svgSize,
         optimizedSize,
@@ -154,6 +160,14 @@ export type FlagCode = keyof typeof FLAG_REGISTRY
 
   await writeFile(`${CORE_GENERATED_DIR}/registry.ts`, coreRegistryContent, 'utf-8')
   console.log('✅ Generated core/src/generated/registry.ts\n')
+
+  const coreNamesContent = `export const COUNTRY_NAMES = ${JSON.stringify(nameMappings.countryNames, null, 2)} as const
+
+export const SUBDIVISION_NAMES = ${JSON.stringify(nameMappings.subdivisionNames, null, 2)} as const
+`
+
+  await writeFile(`${CORE_GENERATED_DIR}/names.ts`, coreNamesContent, 'utf-8')
+  console.log('✅ Generated core/src/generated/names.ts\n')
 
   console.log('🎉 Flag generation complete!')
   console.log(`\n📊 Optimization Summary:`)

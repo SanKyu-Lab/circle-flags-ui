@@ -17,6 +17,9 @@ importers:
       '@types/node':
         specifier: ^25.0.8
         version: 25.0.8
+      country-region-data:
+        specifier: ^4.0.0
+        version: 4.0.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -32,6 +35,9 @@ importers:
 
   packages/core:
     devDependencies:
+      country-region-data:
+        specifier: ^4.0.0
+        version: 4.0.0
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -2831,6 +2837,9 @@ packages:
 
   country-locale-map@1.9.11:
     resolution: {integrity: sha512-Nrj31H/BmHFLzh2CYZkExQFUIZmqBSJ+nrdSRSjIqh4FMs6VRXOboDPIp7NqXBUoOTJi6Urf2cypPQez0rFYBQ==}
+
+  country-region-data@4.0.0:
+    resolution: {integrity: sha512-DKR+jn4ydM53d6O8K6w8EkehCNMBKcEEtP7NVLdpZIvmTqqxH7eheR1zZUlMA6lFX4VwSmEqll4k4shrOrCybA==}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -9018,6 +9027,8 @@ snapshots:
   country-locale-map@1.9.11:
     dependencies:
       fuzzball: 2.2.3
+
+  country-region-data@4.0.0: {}
 
   cross-spawn@7.0.6:
     dependencies:
