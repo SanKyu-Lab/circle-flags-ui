@@ -63,7 +63,9 @@ jobs:
 
       - name: Get package version
         id: package-version
-        run: echo "version=$(node -p \"require('./packages/react/package.json').version\")" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=$(node -p "require('./packages/react/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Generate CHANGELOG
         run: |
