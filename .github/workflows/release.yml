@@ -47,16 +47,16 @@ jobs:
       - name: Check formatting
         run: pnpm run format:check
 
+      - name: Build packages
+        run: pnpm -r --filter './packages/*' run build
+        env:
+          NODE_ENV: production
+
       - name: Run linter
         run: pnpm run lint
 
       - name: Run type check
         run: pnpm run typecheck
-
-      - name: Build project
-        run: pnpm run build
-        env:
-          NODE_ENV: production
 
       - name: Run tests
         run: pnpm test
