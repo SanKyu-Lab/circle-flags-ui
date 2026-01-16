@@ -1,4 +1,4 @@
-import { FLAG_REGISTRY } from '@sankyu/react-circle-flags'
+import { FLAG_REGISTRY, COUNTRY_NAMES, SUBDIVISION_NAMES } from '@sankyu/react-circle-flags'
 import clm from 'country-locale-map'
 
 export interface FlagInfo {
@@ -36,13 +36,22 @@ const getSubdivisionSuffix = (code: string) => {
 }
 
 function getFlagType(code: string): FlagInfo['type'] {
-  if (['eu', 'un', 'nato'].includes(code)) return 'organization'
-  if (code.includes('-') || code.includes('_')) return 'subdivision'
-  if (code.length === 2) return 'country'
+  if (COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]) return 'country'
+  if (SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]) return 'subdivision'
+  if (['eu', 'un', 'nato', 'european_union'].includes(code)) return 'organization'
   return 'other'
 }
 
 function getCountryName(code: string, componentName: string): string {
+  if (SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]) {
+    const { country, region } = SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]
+    return `${country} - ${region}`
+  }
+
+  if (COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]) {
+    return COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]
+  }
+
   const country = getCountryData(code)
   if (country?.name) {
     const suffix = getSubdivisionSuffix(code)
