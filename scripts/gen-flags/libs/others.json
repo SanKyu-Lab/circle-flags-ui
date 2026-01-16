@@ -37,111 +37,9 @@
   },
   {
     "id": null,
-    "alpha2": "au-act",
-    "alpha3": null,
-    "name": "Australian Capital Territory, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-nsw",
-    "alpha3": null,
-    "name": "New South Wales, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-nt",
-    "alpha3": null,
-    "name": "Northern Territory, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-qld",
-    "alpha3": null,
-    "name": "Queensland, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-sa",
-    "alpha3": null,
-    "name": "South Australia, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-tas",
-    "alpha3": null,
-    "name": "Tasmania, Australia"
-  },
-  {
-    "id": null,
     "alpha2": "au-torres_strait_islands",
     "alpha3": null,
     "name": "Torres Strait Islands, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-vic",
-    "alpha3": null,
-    "name": "Victoria, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "au-wa",
-    "alpha3": null,
-    "name": "Western Australia, Australia"
-  },
-  {
-    "id": null,
-    "alpha2": "bq-bo",
-    "alpha3": null,
-    "name": "Bonaire, Caribbean Netherlands"
-  },
-  {
-    "id": null,
-    "alpha2": "bq-sa",
-    "alpha3": null,
-    "name": "Saba, Caribbean Netherlands"
-  },
-  {
-    "id": null,
-    "alpha2": "bq-se",
-    "alpha3": null,
-    "name": "Sint Eustatius, Caribbean Netherlands"
-  },
-  {
-    "id": null,
-    "alpha2": "ca-bc",
-    "alpha3": null,
-    "name": "British Columbia, Canada"
-  },
-  {
-    "id": null,
-    "alpha2": "ca-qc",
-    "alpha3": null,
-    "name": "Quebec, Canada"
-  },
-  {
-    "id": null,
-    "alpha2": "ch-gr",
-    "alpha3": null,
-    "name": "Grisons, Switzerland"
-  },
-  {
-    "id": null,
-    "alpha2": "cn-hk",
-    "alpha3": null,
-    "name": "Hong Kong, China"
-  },
-  {
-    "id": null,
-    "alpha2": "cn-xj",
-    "alpha3": null,
-    "name": "Xinjiang, China"
-  },
-  {
-    "id": null,
-    "alpha2": "cn-xz",
-    "alpha3": null,
-    "name": "Tibet, China"
   },
   {
     "id": null,
@@ -181,30 +79,6 @@
   },
   {
     "id": null,
-    "alpha2": "ec-w",
-    "alpha3": null,
-    "name": "Galápagos, Ecuador"
-  },
-  {
-    "id": null,
-    "alpha2": "es-ar",
-    "alpha3": null,
-    "name": "Aragon, Spain"
-  },
-  {
-    "id": null,
-    "alpha2": "es-ce",
-    "alpha3": null,
-    "name": "Ceuta, Spain"
-  },
-  {
-    "id": null,
-    "alpha2": "es-cn",
-    "alpha3": null,
-    "name": "Canary Islands, Spain"
-  },
-  {
-    "id": null,
     "alpha2": "es-ct",
     "alpha3": null,
     "name": "Catalonia, Spain"
@@ -223,12 +97,6 @@
   },
   {
     "id": null,
-    "alpha2": "es-ml",
-    "alpha3": null,
-    "name": "Melilla, Spain"
-  },
-  {
-    "id": null,
     "alpha2": "es-pv",
     "alpha3": null,
     "name": "Basque Country, Spain"
@@ -241,69 +109,15 @@
   },
   {
     "id": null,
-    "alpha2": "et-af",
-    "alpha3": null,
-    "name": "Afar, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-am",
-    "alpha3": null,
-    "name": "Amhara, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-be",
-    "alpha3": null,
-    "name": "Benishangul-Gumuz, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-ga",
-    "alpha3": null,
-    "name": "Gambela, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-ha",
-    "alpha3": null,
-    "name": "Harari, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-or",
-    "alpha3": null,
-    "name": "Oromia, Ethiopia"
-  },
-  {
-    "id": null,
     "alpha2": "et-si",
     "alpha3": null,
     "name": "Sidama, Ethiopia"
   },
   {
     "id": null,
-    "alpha2": "et-sn",
-    "alpha3": null,
-    "name": "Southern Nations, Nationalities, and Peoples' Region, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-so",
-    "alpha3": null,
-    "name": "Somali, Ethiopia"
-  },
-  {
-    "id": null,
     "alpha2": "et-sw",
     "alpha3": null,
     "name": "South West Region, Ethiopia"
-  },
-  {
-    "id": null,
-    "alpha2": "et-ti",
-    "alpha3": null,
-    "name": "Tigray, Ethiopia"
   },
   {
     "id": null,
@@ -331,27 +145,9 @@
   },
   {
     "id": null,
-    "alpha2": "fr-bre",
-    "alpha3": null,
-    "name": "Brittany, France"
-  },
-  {
-    "id": null,
-    "alpha2": "fr-cp",
-    "alpha3": null,
-    "name": "Clipperton Island, France"
-  },
-  {
-    "id": null,
     "alpha2": "fx",
     "alpha3": null,
     "name": "Metropolitan France"
-  },
-  {
-    "id": null,
-    "alpha2": "gb-con",
-    "alpha3": null,
-    "name": "Cornwall, United Kingdom"
   },
   {
     "id": null,
@@ -367,12 +163,6 @@
   },
   {
     "id": null,
-    "alpha2": "gb-ork",
-    "alpha3": null,
-    "name": "Orkney, United Kingdom"
-  },
-  {
-    "id": null,
     "alpha2": "gb-sct",
     "alpha3": null,
     "name": "Scotland, United Kingdom"
@@ -382,12 +172,6 @@
     "alpha2": "gb-wls",
     "alpha3": null,
     "name": "Wales, United Kingdom"
-  },
-  {
-    "id": null,
-    "alpha2": "ge-ab",
-    "alpha3": null,
-    "name": "Abkhazia, Georgia"
   },
   {
     "id": null,
@@ -415,189 +199,9 @@
   },
   {
     "id": null,
-    "alpha2": "id-jb",
-    "alpha3": null,
-    "name": "West Java, Indonesia"
-  },
-  {
-    "id": null,
-    "alpha2": "id-jt",
-    "alpha3": null,
-    "name": "Central Java, Indonesia"
-  },
-  {
-    "id": null,
-    "alpha2": "in-as",
-    "alpha3": null,
-    "name": "Assam, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-gj",
-    "alpha3": null,
-    "name": "Gujarat, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-ka",
-    "alpha3": null,
-    "name": "Karnataka, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-mn",
-    "alpha3": null,
-    "name": "Manipur, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-mz",
-    "alpha3": null,
-    "name": "Mizoram, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-or",
-    "alpha3": null,
-    "name": "Odisha, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-tg",
-    "alpha3": null,
-    "name": "Telangana, India"
-  },
-  {
-    "id": null,
-    "alpha2": "in-tn",
-    "alpha3": null,
-    "name": "Tamil Nadu, India"
-  },
-  {
-    "id": null,
     "alpha2": "iq-kr",
     "alpha3": null,
     "name": "Kurdistan, Iraq"
-  },
-  {
-    "id": null,
-    "alpha2": "it-21",
-    "alpha3": null,
-    "name": "Piedmont, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-23",
-    "alpha3": null,
-    "name": "Aosta Valley, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-25",
-    "alpha3": null,
-    "name": "Lombardy, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-32",
-    "alpha3": null,
-    "name": "Trentino-Alto Adige, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-34",
-    "alpha3": null,
-    "name": "Veneto, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-36",
-    "alpha3": null,
-    "name": "Friuli Venezia Giulia, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-42",
-    "alpha3": null,
-    "name": "Liguria, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-45",
-    "alpha3": null,
-    "name": "Emilia-Romagna, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-52",
-    "alpha3": null,
-    "name": "Tuscany, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-55",
-    "alpha3": null,
-    "name": "Umbria, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-57",
-    "alpha3": null,
-    "name": "Marche, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-62",
-    "alpha3": null,
-    "name": "Lazio, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-65",
-    "alpha3": null,
-    "name": "Abruzzo, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-67",
-    "alpha3": null,
-    "name": "Molise, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-72",
-    "alpha3": null,
-    "name": "Campania, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-75",
-    "alpha3": null,
-    "name": "Apulia, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-77",
-    "alpha3": null,
-    "name": "Basilicata, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-78",
-    "alpha3": null,
-    "name": "Calabria, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-82",
-    "alpha3": null,
-    "name": "Sicily, Italy"
-  },
-  {
-    "id": null,
-    "alpha2": "it-88",
-    "alpha3": null,
-    "name": "Sardinia, Italy"
   },
   {
     "id": null,
@@ -643,12 +247,6 @@
   },
   {
     "id": null,
-    "alpha2": "nl-fr",
-    "alpha3": null,
-    "name": "Friesland, Netherlands"
-  },
-  {
-    "id": null,
     "alpha2": "northern_cyprus",
     "alpha3": null,
     "name": "Northern Cyprus"
@@ -667,57 +265,9 @@
   },
   {
     "id": null,
-    "alpha2": "pk-jk",
-    "alpha3": null,
-    "name": "Azad Kashmir, Pakistan"
-  },
-  {
-    "id": null,
-    "alpha2": "pk-sd",
-    "alpha3": null,
-    "name": "Sindh, Pakistan"
-  },
-  {
-    "id": null,
-    "alpha2": "pt-20",
-    "alpha3": null,
-    "name": "Azores, Portugal"
-  },
-  {
-    "id": null,
-    "alpha2": "pt-30",
-    "alpha3": null,
-    "name": "Madeira, Portugal"
-  },
-  {
-    "id": null,
     "alpha2": "quechua",
     "alpha3": null,
     "name": "Quechua"
-  },
-  {
-    "id": null,
-    "alpha2": "ru-ba",
-    "alpha3": null,
-    "name": "Bashkortostan, Russia"
-  },
-  {
-    "id": null,
-    "alpha2": "ru-ce",
-    "alpha3": null,
-    "name": "Chechnya, Russia"
-  },
-  {
-    "id": null,
-    "alpha2": "ru-cu",
-    "alpha3": null,
-    "name": "Chuvashia, Russia"
-  },
-  {
-    "id": null,
-    "alpha2": "ru-da",
-    "alpha3": null,
-    "name": "Dagestan, Russia"
   },
   {
     "id": null,
@@ -727,27 +277,9 @@
   },
   {
     "id": null,
-    "alpha2": "ru-ko",
-    "alpha3": null,
-    "name": "Komi Republic, Russia"
-  },
-  {
-    "id": null,
     "alpha2": "ru-lpr",
     "alpha3": null,
     "name": "Luhansk People's Republic, Russia"
-  },
-  {
-    "id": null,
-    "alpha2": "ru-ta",
-    "alpha3": null,
-    "name": "Tatarstan, Russia"
-  },
-  {
-    "id": null,
-    "alpha2": "ru-ud",
-    "alpha3": null,
-    "name": "Udmurtia, Russia"
   },
   {
     "id": null,
@@ -760,24 +292,6 @@
     "alpha2": "sealand",
     "alpha3": null,
     "name": "Sealand"
-  },
-  {
-    "id": null,
-    "alpha2": "sh-ac",
-    "alpha3": null,
-    "name": "Ascension Island, United Kingdom"
-  },
-  {
-    "id": null,
-    "alpha2": "sh-hl",
-    "alpha3": null,
-    "name": "Saint Helena, United Kingdom"
-  },
-  {
-    "id": null,
-    "alpha2": "sh-ta",
-    "alpha3": null,
-    "name": "Tristan da Cunha, United Kingdom"
   },
   {
     "id": null,
@@ -847,51 +361,9 @@
   },
   {
     "id": null,
-    "alpha2": "us-ak",
-    "alpha3": null,
-    "name": "Alaska, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-al",
-    "alpha3": null,
-    "name": "Alabama, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-ar",
-    "alpha3": null,
-    "name": "Arkansas, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-as",
-    "alpha3": null,
-    "name": "American Samoa, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-az",
-    "alpha3": null,
-    "name": "Arizona, United States"
-  },
-  {
-    "id": null,
     "alpha2": "us-betsy_ross",
     "alpha3": null,
     "name": "Betsy Ross, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-ca",
-    "alpha3": null,
-    "name": "California, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-co",
-    "alpha3": null,
-    "name": "Colorado, United States"
   },
   {
     "id": null,
@@ -901,147 +373,9 @@
   },
   {
     "id": null,
-    "alpha2": "us-dc",
-    "alpha3": null,
-    "name": "District of Columbia, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-fl",
-    "alpha3": null,
-    "name": "Florida, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-ga",
-    "alpha3": null,
-    "name": "Georgia, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-gu",
-    "alpha3": null,
-    "name": "Guam, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-hi",
-    "alpha3": null,
-    "name": "Hawaii, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-in",
-    "alpha3": null,
-    "name": "Indiana, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-md",
-    "alpha3": null,
-    "name": "Maryland, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-mn",
-    "alpha3": null,
-    "name": "Minnesota, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-mo",
-    "alpha3": null,
-    "name": "Missouri, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-mp",
-    "alpha3": null,
-    "name": "Northern Mariana Islands, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-ms",
-    "alpha3": null,
-    "name": "Mississippi, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-nc",
-    "alpha3": null,
-    "name": "North Carolina, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-nm",
-    "alpha3": null,
-    "name": "New Mexico, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-or",
-    "alpha3": null,
-    "name": "Oregon, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-pr",
-    "alpha3": null,
-    "name": "Puerto Rico, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-ri",
-    "alpha3": null,
-    "name": "Rhode Island, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-sc",
-    "alpha3": null,
-    "name": "South Carolina, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-tn",
-    "alpha3": null,
-    "name": "Tennessee, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-tx",
-    "alpha3": null,
-    "name": "Texas, United States"
-  },
-  {
-    "id": null,
     "alpha2": "us-um",
     "alpha3": null,
     "name": "U.S. Minor Outlying Islands, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-vi",
-    "alpha3": null,
-    "name": "U.S. Virgin Islands, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-wa",
-    "alpha3": null,
-    "name": "Washington, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-wi",
-    "alpha3": null,
-    "name": "Wisconsin, United States"
-  },
-  {
-    "id": null,
-    "alpha2": "us-wy",
-    "alpha3": null,
-    "name": "Wyoming, United States"
   },
   {
     "id": null,
