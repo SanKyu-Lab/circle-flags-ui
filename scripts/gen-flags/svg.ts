@@ -51,9 +51,7 @@ export function svgToReactComponent(
 
   return {
     componentCode: `import type { ReactElement, SVGProps } from 'react'
-import type { FlagComponentProps as CoreFlagComponentProps } from '@sankyu/circle-flags-core'
-
-type FlagComponentProps = SVGProps<SVGSVGElement> & CoreFlagComponentProps
+import type { FlagComponentProps } from '@sankyu/circle-flags-core'
 
 /**
  * ${emoji} *${countryName}* flag component
@@ -70,7 +68,7 @@ export const ${componentName} = ({
   className,
   title = ${existingTitle ? `'${existingTitle}'` : `'${upperCode}'`},
   ...props
-}: FlagComponentProps): ReactElement => (
+}: SVGProps<SVGSVGElement> & FlagComponentProps): ReactElement => (
   <svg
     viewBox="${viewBox}"
     width={width}

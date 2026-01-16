@@ -82,6 +82,19 @@ function getContinent(code: string): string {
 }
 
 function getDisplayName(code: string, fallback: string): string {
+  // Prioritize COUNTRY_NAMES and SUBDIVISION_NAMES over Intl.DisplayNames
+  // This ensures historical codes (e.g., 'su' -> 'Soviet Union') display correctly
+  // instead of being mapped to successor states (e.g., 'Russia')
+  if (SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]) {
+    const { country, region } = SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]
+    return `${country} - ${region}`
+  }
+
+  if (COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]) {
+    return COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]
+  }
+
+  // Fallback to Intl.DisplayNames for standard country codes
   const countryCode = getAlpha2(code)
   const subdivision = getSubdivisionSuffix(code)
 
