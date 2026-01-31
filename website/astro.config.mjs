@@ -6,11 +6,20 @@ import { siteConfig } from './src/config/siteConfig'
 import starlightLlmsTxt from 'starlight-llms-txt'
 import starlightTypeDoc from 'starlight-typedoc'
 import starlightAutoSidebar from 'starlight-auto-sidebar'
+import starlightLinksValidator from 'starlight-links-validator'
 
 const isAstroCheck = process.argv.includes('check')
 
 const starlightPlugins = [
   starlightAutoSidebar(),
+  ...(!isAstroCheck
+    ? [
+        starlightLinksValidator({
+          errorOnFallbackPages: false,
+          errorOnRelativeLinks: false,
+        }),
+      ]
+    : []),
   ...(isAstroCheck
     ? []
     : [

@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "astro check",
+    "lint": "astro check && astro build",
     "format": "pnpm -C .. format"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.23",
     "postcss": "^8.5.6",
+    "starlight-links-validator": "^0.19.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   }
