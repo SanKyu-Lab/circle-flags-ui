@@ -7,7 +7,7 @@ A monorepo for circular flag components across multiple UI frameworks.
 | Package                                        | Description                       | npm                                                                                                                         |
 | ---------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | [@sankyu/react-circle-flags](./packages/react) | React circular flag components    | [![npm](https://img.shields.io/npm/v/@sankyu/react-circle-flags)](https://www.npmjs.com/package/@sankyu/react-circle-flags) |
-| [@sankyu/vue-circle-flags](./packages/vue)     | Vue 3 circular flag components    | Coming soon                                                                                                                 |
+| [@sankyu/vue-circle-flags](./packages/vue)     | Vue 3 circular flag components    | [![npm](https://img.shields.io/npm/v/@sankyu/vue-circle-flags)](https://www.npmjs.com/package/@sankyu/vue-circle-flags)     |
 | [@sankyu/solid-circle-flags](./packages/solid) | Solid.js circular flag components | Coming soon                                                                                                                 |
 
 ## Features
@@ -38,7 +38,7 @@ pnpm run test
 
 ## Project Structure
 
-```
+```plaintext
 circle-flags-ui/
 ├── packages/
 │   ├── core/      # Shared types and utilities (private)
