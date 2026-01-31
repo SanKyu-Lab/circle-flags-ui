@@ -63,4 +63,9 @@ docs/
 !README.md
 !README.zh.md
 !CONTRIBUTING.md
+!CHANGELOG.md
+!packages/*/CHANGELOG.md
+!packages/*/.npmrc
+!packages/*/.prettierrc.json
+!packages/*/.prettierignore
 !website/src/content/docs/reference/api/**
