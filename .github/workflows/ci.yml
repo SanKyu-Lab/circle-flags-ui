@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate flags
+        run: pnpm run gen:flags
+
       - name: Run linter
         run: pnpm run lint
 
@@ -45,7 +48,9 @@ jobs:
         run: pnpm run typecheck
 
       - name: Run tests
-        run: pnpm run test:coverage
+        run: |
+          pnpm run test:coverage
+          pnpm --filter @sankyu/vue-circle-flags run test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -87,7 +92,9 @@ jobs:
           NODE_ENV: production
 
       - name: Check build output
-        run: ls -la packages/react/dist/
+        run: |
+          ls -la packages/react/dist/
+          ls -la packages/vue/dist/
 
   format-check:
     runs-on: ubuntu-latest

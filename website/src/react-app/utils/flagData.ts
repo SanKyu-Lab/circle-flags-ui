@@ -132,7 +132,8 @@ function buildFlagInfo(code: string, componentName: string): FlagInfo {
 }
 
 export function getAllFlags(): FlagInfo[] {
-  return Object.entries(FLAG_REGISTRY).map(([code, componentName]) =>
+  // TS lib typing for Object.entries() can return `unknown` depending on the exact object type.
+  return (Object.entries(FLAG_REGISTRY) as Array<[string, string]>).map(([code, componentName]) =>
     buildFlagInfo(code, componentName)
   )
 }

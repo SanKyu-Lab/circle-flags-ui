@@ -204,6 +204,8 @@ export const CircleFlag = ({
 
 export interface DynamicFlagProps extends FlagComponentProps {
   code: string
+  // Explicitly include title to avoid type resolution differences across toolchains (e.g. Astro/TS).
+  title?: string
 }
 
 export const DynamicFlag = ({

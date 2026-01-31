@@ -2,10 +2,16 @@ import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { lstat, mkdir, readFile, readdir, readlink, writeFile } from 'node:fs/promises'
 import { basename } from 'node:path'
-import { CIRCLE_FLAGS_REPO, CORE_GENERATED_DIR, FLAGS_DIR, REACT_OUTPUT_DIR } from './constants'
+import {
+  CIRCLE_FLAGS_REPO,
+  CORE_GENERATED_DIR,
+  FLAGS_DIR,
+  REACT_OUTPUT_DIR,
+  VUE_OUTPUT_DIR,
+} from './constants'
 import { buildNameMappings, getNameFromMappings } from './country-data'
 import { getCountryName } from './names'
-import { svgToReactComponent } from './svg'
+import { svgToReactComponent, svgToVueComponent } from './svg'
 import type { FlagMetadata } from './types'
 import { codeToComponentName } from './utils'
 
@@ -64,6 +70,7 @@ export async function generateFlags() {
   )
 
   await mkdir(REACT_OUTPUT_DIR, { recursive: true })
+  await mkdir(VUE_OUTPUT_DIR, { recursive: true })
   await mkdir(CORE_GENERATED_DIR, { recursive: true })
 
   const files = await readdir(FLAGS_DIR)
@@ -79,6 +86,7 @@ export async function generateFlags() {
     const code = basename(file, '.svg')
     const svgPath = `${FLAGS_DIR}/${file}`
     const outputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
+    const vueOutputPath = `${VUE_OUTPUT_DIR}/${code}.ts`
 
     try {
       const stats = await lstat(svgPath)
@@ -95,6 +103,7 @@ export async function generateFlags() {
         if (svgFiles.includes(targetFile)) {
           const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
           await writeFile(outputPath, aliasContent, 'utf-8')
+          await writeFile(vueOutputPath, aliasContent, 'utf-8')
 
           flags.push({
             code,
@@ -109,8 +118,10 @@ export async function generateFlags() {
         } else {
           const svgContent = await readFile(svgPath, 'utf-8')
           const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
+          const { componentCode: vueComponentCode } = svgToVueComponent(svgContent, code)
 
           await writeFile(outputPath, componentCode, 'utf-8')
+          await writeFile(vueOutputPath, vueComponentCode, 'utf-8')
 
           flags.push({
             code,
@@ -131,8 +142,10 @@ export async function generateFlags() {
       } else {
         const svgContent = await readFile(svgPath, 'utf-8')
         const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
+        const { componentCode: vueComponentCode } = svgToVueComponent(svgContent, code)
 
         await writeFile(outputPath, componentCode, 'utf-8')
+        await writeFile(vueOutputPath, vueComponentCode, 'utf-8')
 
         flags.push({
           code,
@@ -194,6 +207,22 @@ export type FlagComponent = {
   await writeFile(`${REACT_OUTPUT_DIR}/index.ts`, indexContent, 'utf-8')
   console.log('✅ Generated enhanced index.ts with metadata\n')
 
+  const vueIndexContent = `// Auto-generated flag exports for tree-shaking
+// Each flag can be imported individually: import { FlagUs } from '@sankyu/vue-circle-flags'
+//
+// 📊 Package Statistics:
+// • Total flags: ${flags.length}
+// • Original SVG size: ${(totalOriginalSize / 1024).toFixed(1)}KB
+// • Optimized size: ${(totalOptimizedSize / 1024).toFixed(1)}KB
+// • Size reduction: ${(((totalOriginalSize - totalOptimizedSize) / totalOriginalSize) * 100).toFixed(1)}%
+//
+
+${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
+`
+
+  await writeFile(`${VUE_OUTPUT_DIR}/index.ts`, vueIndexContent, 'utf-8')
+  console.log('✅ Generated vue generated/flags/index.ts\n')
+
   const aliases = flags
     .filter(f => f.aliasOf)
     .reduce((acc, f) => ({ ...acc, [f.code]: f.aliasOf }), {})
@@ -211,7 +240,22 @@ export type FlagCode = keyof typeof FLAG_REGISTRY
   await writeFile(`${CORE_GENERATED_DIR}/registry.ts`, coreRegistryContent, 'utf-8')
   console.log('✅ Generated core/src/generated/registry.ts\n')
 
-  const coreNamesContent = `export const COUNTRY_NAMES = ${JSON.stringify(nameMappings.countryNames, null, 2)} as const
+  // country-region-data doesn't cover some circle-flags variants (e.g. "by-historical"),
+  // but downstream consumers/tests expect every flag code to have a display name entry.
+  const extraCountryNames = flags.reduce<Record<string, string>>((acc, flag) => {
+    const code = flag.code
+    if (Object.prototype.hasOwnProperty.call(nameMappings.countryNames, code)) return acc
+    if (Object.prototype.hasOwnProperty.call(nameMappings.subdivisionNames, code)) return acc
+    acc[code] = getCountryName(code)
+    return acc
+  }, {})
+
+  const mergedCountryNames = {
+    ...nameMappings.countryNames,
+    ...extraCountryNames,
+  }
+
+  const coreNamesContent = `export const COUNTRY_NAMES = ${JSON.stringify(mergedCountryNames, null, 2)} as const
 
 export const SUBDIVISION_NAMES = ${JSON.stringify(nameMappings.subdivisionNames, null, 2)} as const
 `

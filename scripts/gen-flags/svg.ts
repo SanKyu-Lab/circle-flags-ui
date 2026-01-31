@@ -90,3 +90,96 @@ ${innerContent
     optimizedSize,
   }
 }
+
+/**
+ * Convert SVG string to Vue 3 component string (render function, no SFC)
+ *
+ * Strategy:
+ * - Keep SVG inner markup as a constant string
+ * - Use `innerHTML` on the <svg> to avoid generating thousands of VNode calls
+ * - Escape user-provided title to avoid injection via <title>
+ */
+export function svgToVueComponent(
+  svg: string,
+  code: string
+): { componentCode: string; svgSize: number; optimizedSize: number } {
+  const svgSize = svg.length
+
+  // No optimization needed - upstream circle-flags SVGs are already optimized
+  let processedSvg = svg
+  const optimizedSize = processedSvg.length
+
+  // Remove XML declaration if present
+  processedSvg = processedSvg.replace(/<\?xml.*?\?>\s*/g, '')
+
+  // Extract viewBox and other attributes
+  const viewBoxMatch = processedSvg.match(/viewBox="([^"]+)"/)
+  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 512 512'
+
+  // Extract any existing title for accessibility
+  const titleMatch = processedSvg.match(/<title[^>]*>([^<]*)<\/title>/)
+  const existingTitle = titleMatch ? titleMatch[1] : null
+
+  // Extract the inner content (everything between <svg> tags)
+  let innerContent = processedSvg
+    .replace(/<svg[^>]*>/, '')
+    .replace(/<\/svg>/, '')
+    .trim()
+
+  // Remove existing title to avoid duplication
+  innerContent = innerContent.replace(/<title[^>]*>[^<]*<\/title>/, '').trim()
+
+  const componentName = codeToComponentName(code)
+  const countryName = getCountryName(code)
+  const emoji = codeToEmoji(code)
+  const upperCode = code.toUpperCase()
+
+  const innerStringLiteral = JSON.stringify(innerContent)
+
+  return {
+    componentCode: `import { defineComponent, h } from 'vue'
+import type { PropType, VNode } from 'vue'
+import type { FlagComponentProps } from '@sankyu/circle-flags-core'
+import { escapeHtml } from '../../src/internal/escape-html'
+
+/**
+ * ${emoji} *${countryName}* flag component
+ *
+ * @example
+ * <${componentName} :width="64" :height="64" class="flag-icon" />
+ */
+const SVG_BODY: string = ${innerStringLiteral}
+
+export const ${componentName} = defineComponent({
+  name: '${componentName}',
+  inheritAttrs: false,
+  props: {
+    width: { type: [Number, String] as PropType<number | string>, default: 48 },
+    height: { type: [Number, String] as PropType<number | string>, default: 48 },
+    className: { type: String, default: undefined },
+    title: { type: String, default: ${existingTitle ? `'${existingTitle}'` : `'${upperCode}'`} },
+  },
+  setup(props, { attrs }): () => VNode {
+    return () => {
+      const attrsAny = attrs as Record<string, unknown>
+      const { class: cls, style, ...rest } = attrsAny
+
+      return h('svg', {
+        ...rest,
+        viewBox: '${viewBox}',
+        width: props.width,
+        height: props.height,
+        class: [props.className, cls],
+        style,
+        role: 'img',
+        'aria-label': props.title,
+        innerHTML: '<title>' + escapeHtml(props.title) + '</title>' + SVG_BODY,
+      })
+    }
+  },
+})
+`,
+    svgSize,
+    optimizedSize,
+  }
+}
