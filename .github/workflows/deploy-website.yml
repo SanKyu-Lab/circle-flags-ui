@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Deploy Website to GitHub Pages
 
 on:
@@ -35,19 +36,11 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup pnpm + Node.js
+        uses: ./.github/actions/setup-pnpm
         with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '22.x'
-          cache: 'pnpm'
-
-      - name: Install root dependencies
-        run: pnpm install --frozen-lockfile
+          node-version: 22.x
+          pnpm-version: '10'
 
       - name: Build library
         run: pnpm run build

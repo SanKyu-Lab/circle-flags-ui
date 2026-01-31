@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-action.json
+name: Setup pnpm + Node.js
+description: Setup pnpm/Node.js with pnpm cache and optionally install dependencies
+
+inputs:
+  node-version:
+    description: Node.js version
+    required: false
+    default: 22.x
+  pnpm-version:
+    description: pnpm version
+    required: false
+    default: '10'
+  registry-url:
+    description: Optional npm registry URL for publish auth (actions/setup-node)
+    required: false
+    default: ''
+  install:
+    description: Whether to run pnpm install
+    required: false
+    default: 'true'
+  install-args:
+    description: Arguments for pnpm install
+    required: false
+    default: '--frozen-lockfile'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Setup Node.js ${{ inputs.node-version }}
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+
+    - name: Setup npm registry auth
+      if: inputs.registry-url != ''
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: ${{ inputs.registry-url }}
+        cache: pnpm
+
+    - name: Install dependencies
+      if: inputs.install == 'true'
+      shell: bash
+      run: pnpm install ${{ inputs.install-args }}
