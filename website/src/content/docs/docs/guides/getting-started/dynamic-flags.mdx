@@ -7,6 +7,24 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 
+:::tip[Best for Most Cases]
+
+When country codes are only known at runtime, use dynamic flag rendering.
+
+For flags known at build time, use [named imports](/docs/guides/getting-started/usage/#1-named-imports) for best bundle size and performance.
+
+:::
+
+## Why use dynamic flags?
+
+In many applications, country codes are not known until runtime. Examples include:
+
+- User-selected countries in forms or settings
+- Country data from APIs or databases
+- Dynamic content based on user location
+
+To handle these scenarios, you need a way to render flags based on ISO country codes at runtime.
+
 When you need to render flags based on runtime data (user input, API responses, database values), you have several options depending on your framework.
 
 ## Option 1: CircleFlag (React - Recommended)
@@ -196,31 +214,36 @@ export function CountryFlag({ code }: { code: string }) {
 
 ## Bundle Size Comparison
 
-<CardGrid>
-  <Card title="CircleFlag (Best)" icon="star">
-    ```tsx
-    import { CircleFlag } from '@sankyu/react-circle-flags'
-    ```
-    - **Bundle impact:** ~2 KB (component only)
-    - **Loading:** Async from CDN
-    - **Tree-shaking:** ✅ Perfect
-    - **Best for:** Minimal bundle size with dynamic flags
-  </Card>
-
-  <Card title="DynamicFlag" icon="warning">
-    ```tsx
-    import { DynamicFlag } from '@sankyu/react-circle-flags'
-    ```
-    - **Bundle impact:** ~600 KB (all flags bundled)
-    - **Loading:** Synchronous, instant
-    - **Tree-shaking:** ❌ None
-    - **Best for:** CDN-restricted environments
-  </Card>
-</CardGrid>
-
 :::tip[Code Normalization]
+
 Both `CircleFlag` and `DynamicFlag` automatically convert country codes to lowercase, so `"US"` and `"us"` work identically.
+
 :::
+
+<Card title="CircleFlag (Best)" icon="star">
+
+```tsx
+import { CircleFlag } from '@sankyu/react-circle-flags'
+```
+
+- **Bundle impact:** ~2 KB (component only)
+- **Loading:** Async from CDN
+- **Tree-shaking:** ✅ Perfect
+- **Best for:** Minimal bundle size with dynamic flags
+
+</Card>
+<Card title="DynamicFlag" icon="warning">
+
+```tsx
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+```
+
+- **Bundle impact:** ~600 KB (all flags bundled)
+- **Loading:** Synchronous, instant
+- **Tree-shaking:** ❌ None
+- **Best for:** CDN-restricted environments
+
+</Card>
 
 ## Advanced: CircleFlag with Custom CDN
 
@@ -239,21 +262,6 @@ export function CountryFlag({ code }: { code: string }) {
     />
   )
 }
-```
-
-## Decision Tree
-
-```
-Need dynamic flags?
-├─ Can use CDN? → ✅ Use CircleFlag (~2 KB)
-└─ Cannot use CDN? → Use DynamicFlag (~600 KB)
-```
-
-**Note:** For flags known at build time, use named imports for best bundle size:
-
-```tsx
-import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
-// ~950 bytes per flag with tree-shaking
 ```
 
 ## Next step

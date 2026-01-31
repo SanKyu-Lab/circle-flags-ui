@@ -17,14 +17,25 @@ Choose the right approach based on your use case:
 
 ### 1. Named Imports
 
-**Best for static flags.**
+:::tip[When to use]
+Use named imports when you:
+
+- ✅ You know which flags you need at build time
+- 🚀 Want synchronous rendering without loading states
+- 📦 Working offline or in restricted network environments
+
+:::
+
+**Best for static flags known at build time.**
 
 - **Bundle impact:** ~950 bytes per flag
 - **Tree-shaking:** ✅ Excellent
 - **Loading:** Synchronous, instant
-- **Best for:** Known flags at build time
 
-Import only the flags you need from the main entry. Modern bundlers will automatically tree-shake unused exports:
+Import only the flags you need from the main entry:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { FlagUs, FlagCn, FlagGb } from '@sankyu/react-circle-flags'
@@ -40,15 +51,25 @@ export function Header() {
 }
 ```
 
-:::tip[Automatic Tree-shaking]
-Modern bundlers (Webpack 5+, Vite, Rollup) analyze the main entry and only include the exports you actually use. Importing 3 flags adds only **~2.8 KB** to your bundle.
-:::
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
 
-**When to use:**
+```vue
+<script setup lang="ts">
+import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
+</script>
 
-- You know which flags you need at build time
-- Want synchronous rendering without loading states
-- Working offline or in restricted network environments
+<template>
+  <div>
+    <FlagUs :width="32" :height="32" />
+    <FlagCn :width="32" :height="32" />
+    <FlagGb :width="32" :height="32" />
+  </div>
+</template>
+```
+
+  </TabItem>
+</Tabs>
 
 :::note[API Reference]
 See full props definition: [FlagComponentProps →](/reference/api/interfaceflagcomponentprops/)
@@ -56,14 +77,26 @@ See full props definition: [FlagComponentProps →](/reference/api/interfaceflag
 
 ### 2. CircleFlag
 
+:::tip[When to use]
+Use CircleFlag when you:
+
+- ✅ Country codes are determined at runtime (e.g., user input, API responses)
+- 📉 Want to minimize bundle size
+- 🌐 Can tolerate async loading with brief loading states
+- 🔌 Have reliable CDN access
+
+:::
+
 **Best for dynamic flags.**
 
 - **Bundle impact:** ~2 KB (component only)
 - **Tree-shaking:** ✅ Perfect
 - **Loading:** Async from CDN
-- **Best for:** Dynamic flags with minimal bundle
 
 Load SVG flags from CDN on demand. Perfect for runtime-determined country codes:
+
+<Tabs groupId="framework">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { CircleFlag } from '@sankyu/react-circle-flags'
@@ -73,14 +106,22 @@ export function CountryFlag({ code }: { code: string }) {
 }
 ```
 
-**Result:** ~2 KB bundle impact, SVG flags loaded on demand from CDN
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
 
-**When to use:**
+```vue
+<script setup lang="ts">
+import { CircleFlag } from '@sankyu/vue-circle-flags'
+const props = defineProps<{ code: string }>()
+</script>
 
-- Country codes determined at runtime (user input, API responses)
-- Want minimal bundle size
-- Can tolerate async loading with brief loading states
-- Have reliable CDN access
+<template>
+  <CircleFlag :countryCode="props.code" :width="36" :height="36" />
+</template>
+```
+
+  </TabItem>
+</Tabs>
 
 :::note[API Reference]
 See full props definition: [CircleFlagProps →](/reference/api/interfacecircleflagprops/)
@@ -88,14 +129,29 @@ See full props definition: [CircleFlagProps →](/reference/api/interfacecirclef
 
 ### 3. DynamicFlag
 
+:::tip[When to use]
+Use DynamicFlag when you:
+
+- ❌ Cannot access external CDNs
+- ⚡ Need instant rendering without any loading states
+- 🛠️ Want to render any flag synchronously at runtime
+
+:::
+
+:::caution[Large Bundle Impact]
+This component adds **~600 KB** to your bundle.
+:::
+
 **Loads all flags in a single bundle.**
 
 - **Bundle impact:** ~600 KB
 - **Tree-shaking:** ❌ None
 - **Loading:** Synchronous, instant
-- **Best for:** CDN-restricted environments
 
 Bundles ALL 400+ flag components. Only use when you absolutely need synchronous rendering of any flag:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { DynamicFlag } from '@sankyu/react-circle-flags'
@@ -105,20 +161,22 @@ export function CountryFlag({ code }: { code: string }) {
 }
 ```
 
-:::caution[Large Bundle Impact]
-This component adds **~600 KB** to your bundle. Only use if:
+</TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
 
-- You cannot access external CDNs
-- You need instant rendering without any loading states
-- Bundle size is not a primary concern
+```vue
+<script setup lang="ts">
+import { DynamicFlag } from '@sankyu/vue-circle-flags'
+const props = defineProps<{ code: string }>()
+</script>
 
-:::
+<template>
+  <DynamicFlag :code="props.code" :width="36" :height="36" />
+</template>
+```
 
-**When to use:**
-
-- Offline-first applications with no CDN access
-- Need to render any flag synchronously
-- Bundle size constraints are relaxed
+  </TabItem>
+</Tabs>
 
 :::note[API Reference]
 See full props definition: [DynamicFlagProps →](/reference/api/interfacedynamicflagprops/)
