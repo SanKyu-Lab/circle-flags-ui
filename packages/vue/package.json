@@ -24,9 +24,12 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "echo 'TODO: implement vue build'",
-    "build": "echo 'TODO: implement vue build'",
-    "typecheck": "echo 'TODO: implement vue typecheck'"
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "postbuild": "node scripts/postbuild.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "vue",
@@ -54,5 +57,13 @@
   },
   "dependencies": {
     "@sankyu/circle-flags-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.1.0",
+    "vue": "^3.4.0"
   }
 }
