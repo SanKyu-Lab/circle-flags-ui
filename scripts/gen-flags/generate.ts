@@ -2,7 +2,13 @@ import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { lstat, mkdir, readFile, readdir, readlink, writeFile } from 'node:fs/promises'
 import { basename } from 'node:path'
-import { CIRCLE_FLAGS_REPO, CORE_GENERATED_DIR, FLAGS_DIR, REACT_OUTPUT_DIR, VUE_OUTPUT_DIR } from './constants'
+import {
+  CIRCLE_FLAGS_REPO,
+  CORE_GENERATED_DIR,
+  FLAGS_DIR,
+  REACT_OUTPUT_DIR,
+  VUE_OUTPUT_DIR,
+} from './constants'
 import { buildNameMappings, getNameFromMappings } from './country-data'
 import { getCountryName } from './names'
 import { svgToReactComponent, svgToVueComponent } from './svg'
