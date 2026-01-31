@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup'
+import { outExtensionMjsCjs } from '../../scripts/tsup/shared.ts'
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -7,7 +8,5 @@ export default defineConfig({
   sourcemap: false,
   clean: true,
   treeshake: true,
-  outExtension: ({ format }) => ({
-    js: format === 'esm' ? '.mjs' : '.cjs',
-  }),
+  outExtension: outExtensionMjsCjs,
 })
