@@ -58,16 +58,14 @@ jobs:
         run: pnpm run gen:flags
 
       - name: Run tests
-        run: |
-          pnpm run test:coverage
-          pnpm --filter @sankyu/vue-circle-flags run test
+        run: pnpm run test:coverage
 
       - name: Upload coverage to Codecov
         if: inputs.upload-coverage == true && env.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@v5
         with:
           token: ${{ env.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
+          files: ./coverage/react/lcov.info,./coverage/vue/lcov.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
