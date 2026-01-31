@@ -24,6 +24,7 @@ module.exports = {
     '!src/**/*.test.{ts,tsx}',
     '!src/**/*.spec.{ts,tsx}',
   ],
+  coverageDirectory: '<rootDir>/../../coverage/react',
   coverageThreshold: {
     global: {
       branches: 70,

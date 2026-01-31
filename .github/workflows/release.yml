@@ -6,7 +6,8 @@ on:
     branches:
       - main
     paths:
-      - 'packages/react/package.json'
+      - 'packages/*/package.json'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,7 +35,7 @@ jobs:
           pnpm-version: '10'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Generate flags
+      - name: Generate artifacts
         run: pnpm run gen
 
       - name: Check formatting
@@ -52,41 +53,136 @@ jobs:
         run: pnpm run typecheck
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm -r --filter './packages/*' --if-present run test
 
-      - name: Get package version
-        id: package-version
+      - name: Detect version bumps
+        id: changed
+        shell: bash
         run: |
-          VERSION=$(node -p "require('./packages/react/package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          set -euo pipefail
 
-      - name: Generate CHANGELOG
-        run: |
-          npx conventional-changelog-cli -p conventionalcommits -i CHANGELOG.md -s -r 0
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          if git diff --cached --quiet; then
-            echo "No changes to CHANGELOG.md"
-          else
-            git commit -m "chore(release): Update changelog for v${{ steps.package-version.outputs.version }} [skip ci]"
-            git push
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          # workflow_dispatch doesn't have a meaningful "before"
+          if [ -z "${BEFORE}" ] || [ "${BEFORE}" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE="$(git rev-list --max-parents=0 HEAD)"
           fi
 
+          files="$(git diff --name-only "${BEFORE}" "${AFTER}" -- 'packages/*/package.json' || true)"
+          packages=()
+
+          while IFS= read -r file; do
+            [ -z "${file}" ] && continue
+
+            if ! git diff "${BEFORE}" "${AFTER}" --unified=0 -- "${file}" | grep -E '^[+-].*\"version\"' >/dev/null; then
+              continue
+            fi
+
+            isPrivate="$(node -p "Boolean(require('./${file}').private)")"
+            if [ "${isPrivate}" = "true" ]; then
+              echo "Skip private package: ${file}"
+              continue
+            fi
+
+            dir="$(dirname "${file}")"
+            name="$(node -p "require('./${file}').name")"
+            version="$(node -p "require('./${file}').version")"
+            slug="$(basename "${dir}")"
+
+            packages+=("${dir}|${name}|${version}|${slug}")
+          done <<< "${files}"
+
+          if [ "${#packages[@]}" -eq 0 ]; then
+            echo "has_packages=false" >> "${GITHUB_OUTPUT}"
+            echo "packages=" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          {
+            echo "has_packages=true"
+            echo "packages<<EOF"
+            printf "%s\n" "${packages[@]}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Publish to npm
+        if: steps.changed.outputs.has_packages == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
-        working-directory: packages/react
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          while IFS='|' read -r dir name version slug; do
+            [ -z "${dir}" ] && continue
+            echo "Publishing ${name}@${version} from ${dir}"
+            (cd "${dir}" && npm publish --access public --provenance)
+          done <<< "${{ steps.changed.outputs.packages }}"
+
+      - name: Create git tags
+        if: steps.changed.outputs.has_packages == 'true'
+        id: tags
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          tags=()
+
+          while IFS='|' read -r dir name version slug; do
+            [ -z "${dir}" ] && continue
+            tag="${slug}-v${version}"
+
+            if git rev-parse "${tag}" >/dev/null 2>&1; then
+              echo "Tag already exists: ${tag}"
+              continue
+            fi
+
+            git tag -a "${tag}" -m "${name}@${version}"
+            git push origin "${tag}"
+            tags+=("${tag}|${name}|${version}|${slug}")
+          done <<< "${{ steps.changed.outputs.packages }}"
+
+          if [ "${#tags[@]}" -eq 0 ]; then
+            echo "tags=" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          {
+            echo "tags<<EOF"
+            printf "%s\n" "${tags[@]}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Create GitHub releases
+        if: steps.tags.outputs.tags != ''
+        uses: actions/github-script@v7
         with:
-          tag_name: v${{ steps.package-version.outputs.version }}
-          release_name: v${{ steps.package-version.outputs.version }}
-          body: |
-            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
-          draft: false
-          prerelease: false
+          script: |
+            const raw = `${{ steps.tags.outputs.tags }}`.trim();
+            if (!raw) {
+              core.info("No tags to release.");
+              return;
+            }
+
+            const lines = raw.split("\n").filter(Boolean);
+
+            for (const line of lines) {
+              const [tag, name, version, slug] = line.split("|");
+              const prerelease = version.includes("-");
+
+              core.info(`Creating GitHub release: ${tag} (prerelease=${prerelease})`);
+
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tag,
+                name: `${name}@${version}`,
+                body: `Published \`${name}@${version}\`.`,
+                draft: false,
+                prerelease,
+              });
+            }
