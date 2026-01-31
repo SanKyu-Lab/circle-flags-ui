@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate flags
+        run: pnpm run gen:flags
+
       - name: Run linter
         run: pnpm run lint
 
