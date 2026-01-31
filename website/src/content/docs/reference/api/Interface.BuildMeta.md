@@ -5,7 +5,7 @@ prev: false
 title: "BuildMeta"
 ---
 
-Defined in: [meta.ts:3](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/meta.ts#L3)
+Defined in: [react/src/meta.ts:3](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/meta.ts#L3)
 
 ## Properties
 
@@ -15,7 +15,7 @@ Defined in: [meta.ts:3](https://github.com/SanKyu-Lab/react-circle-flags/blob/fa
 builtTimestamp: number;
 ```
 
-Defined in: [meta.ts:7](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/meta.ts#L7)
+Defined in: [react/src/meta.ts:7](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/meta.ts#L7)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [meta.ts:7](https://github.com/SanKyu-Lab/react-circle-flags/blob/fa
 circleFlagsCommitHash: string;
 ```
 
-Defined in: [meta.ts:6](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/meta.ts#L6)
+Defined in: [react/src/meta.ts:6](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/meta.ts#L6)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [meta.ts:6](https://github.com/SanKyu-Lab/react-circle-flags/blob/fa
 commitHash: string;
 ```
 
-Defined in: [meta.ts:5](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/meta.ts#L5)
+Defined in: [react/src/meta.ts:5](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/meta.ts#L5)
 
 ***
 
@@ -45,4 +45,4 @@ Defined in: [meta.ts:5](https://github.com/SanKyu-Lab/react-circle-flags/blob/fa
 version: string;
 ```
 
-Defined in: [meta.ts:4](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/meta.ts#L4)
+Defined in: [react/src/meta.ts:4](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/meta.ts#L4)

@@ -5,7 +5,7 @@ prev: false
 title: "CircleFlagProps"
 ---
 
-Defined in: [index.tsx:75](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L75)
+Defined in: [react/src/index.tsx:66](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L66)
 
 ## Extends
 
@@ -19,25 +19,7 @@ Defined in: [index.tsx:75](https://github.com/SanKyu-Lab/react-circle-flags/blob
 optional cdnUrl: string;
 ```
 
-Defined in: [index.tsx:81](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L81)
-
-Custom CDN URL for loading SVG flags
-
-***
-
-### className?
-
-```ts
-optional className: string;
-```
-
-Defined in: [index.tsx:70](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L70)
-
-CSS className
-
-#### Inherited from
-
-[`DynamicFlagProps`](/reference/api/interfacedynamicflagprops/).[`className`](/reference/api/interfacedynamicflagprops/#classname)
+Defined in: [react/src/index.tsx:70](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L70)
 
 ***
 
@@ -47,10 +29,10 @@ CSS className
 optional code: string;
 ```
 
-Defined in: [index.tsx:79](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L79)
+Defined in: [react/src/index.tsx:69](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L69)
 
 :::caution[Deprecated]
-Use 'countryCode' instead - kept for backward compatibility
+Use 'countryCode' instead
 :::
 
 ***
@@ -61,25 +43,7 @@ Use 'countryCode' instead - kept for backward compatibility
 optional countryCode: string;
 ```
 
-Defined in: [index.tsx:77](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L77)
-
-ISO country code (e.g., 'us', 'cn', 'gb')
-
-***
-
-### height?
-
-```ts
-optional height: string | number;
-```
-
-Defined in: [index.tsx:68](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L68)
-
-Height of the flag
-
-#### Inherited from
-
-[`DynamicFlagProps`](/reference/api/interfacedynamicflagprops/).[`height`](/reference/api/interfacedynamicflagprops/#height)
+Defined in: [react/src/index.tsx:67](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L67)
 
 ***
 
@@ -89,22 +53,4 @@ Height of the flag
 optional title: string;
 ```
 
-Defined in: [index.tsx:83](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L83)
-
-Custom title for accessibility
-
-***
-
-### width?
-
-```ts
-optional width: string | number;
-```
-
-Defined in: [index.tsx:66](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L66)
-
-Width of the flag
-
-#### Inherited from
-
-[`DynamicFlagProps`](/reference/api/interfacedynamicflagprops/).[`width`](/reference/api/interfacedynamicflagprops/#width)
+Defined in: [react/src/index.tsx:71](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L71)

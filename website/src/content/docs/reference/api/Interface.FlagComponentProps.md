@@ -5,14 +5,11 @@ prev: false
 title: "FlagComponentProps"
 ---
 
-Defined in: [index.tsx:64](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L64)
-
-Base props for all flag components
-All individual flag components inherit from this type
+Defined in: [react/src/index.tsx:64](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L64)
 
 ## Extends
 
-- `SVGProps`\<`SVGSVGElement`\>
+- `SVGProps`\<`SVGSVGElement`\>.`FlagComponentProps`
 
 ## Extended by
 
@@ -20,66 +17,18 @@ All individual flag components inherit from this type
 
 ## Properties
 
-### className?
-
-```ts
-optional className: string;
-```
-
-Defined in: [index.tsx:70](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L70)
-
-CSS className
-
-#### Overrides
-
-```ts
-SVGProps.className
-```
-
-***
-
-### height?
-
-```ts
-optional height: string | number;
-```
-
-Defined in: [index.tsx:68](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L68)
-
-Height of the flag
-
-#### Overrides
-
-```ts
-SVGProps.height
-```
-
-***
-
 ### title?
 
 ```ts
 optional title: string;
 ```
 
-Defined in: [index.tsx:72](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L72)
+Defined in: [core/src/types.ts:13](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/core/src/types.ts#L13)
 
 Accessible title for screen readers
 
-***
-
-### width?
+#### Inherited from
 
 ```ts
-optional width: string | number;
-```
-
-Defined in: [index.tsx:66](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L66)
-
-Width of the flag
-
-#### Overrides
-
-```ts
-SVGProps.width
+CoreFlagComponentProps.title
 ```

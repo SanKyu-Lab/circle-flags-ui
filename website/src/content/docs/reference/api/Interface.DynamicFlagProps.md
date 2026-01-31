@@ -5,10 +5,7 @@ prev: false
 title: "DynamicFlagProps"
 ---
 
-Defined in: [index.tsx:278](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L278)
-
-Base props for all flag components
-All individual flag components inherit from this type
+Defined in: [react/src/index.tsx:205](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L205)
 
 ## Extends
 
@@ -16,47 +13,13 @@ All individual flag components inherit from this type
 
 ## Properties
 
-### className?
-
-```ts
-optional className: string;
-```
-
-Defined in: [index.tsx:70](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L70)
-
-CSS className
-
-#### Inherited from
-
-[`FlagComponentProps`](/reference/api/interfaceflagcomponentprops/).[`className`](/reference/api/interfaceflagcomponentprops/#classname)
-
-***
-
 ### code
 
 ```ts
 code: string;
 ```
 
-Defined in: [index.tsx:280](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L280)
-
-ISO country code (e.g., 'us', 'cn', 'gb')
-
-***
-
-### height?
-
-```ts
-optional height: string | number;
-```
-
-Defined in: [index.tsx:68](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L68)
-
-Height of the flag
-
-#### Inherited from
-
-[`DynamicFlagProps`](/reference/api/interfacedynamicflagprops/).[`height`](/reference/api/interfacedynamicflagprops/#height)
+Defined in: [react/src/index.tsx:206](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L206)
 
 ***
 
@@ -66,26 +29,10 @@ Height of the flag
 optional title: string;
 ```
 
-Defined in: [index.tsx:72](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L72)
+Defined in: [react/src/index.tsx:208](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L208)
 
 Accessible title for screen readers
 
-#### Inherited from
+#### Overrides
 
 [`FlagComponentProps`](/reference/api/interfaceflagcomponentprops/).[`title`](/reference/api/interfaceflagcomponentprops/#title)
-
-***
-
-### width?
-
-```ts
-optional width: string | number;
-```
-
-Defined in: [index.tsx:66](https://github.com/SanKyu-Lab/react-circle-flags/blob/fad52f94c3fdfdf901a1d9185e9de3910d481098/src/index.tsx#L66)
-
-Width of the flag
-
-#### Inherited from
-
-[`DynamicFlagProps`](/reference/api/interfacedynamicflagprops/).[`width`](/reference/api/interfacedynamicflagprops/#width)
