@@ -240,7 +240,22 @@ export type FlagCode = keyof typeof FLAG_REGISTRY
   await writeFile(`${CORE_GENERATED_DIR}/registry.ts`, coreRegistryContent, 'utf-8')
   console.log('✅ Generated core/src/generated/registry.ts\n')
 
-  const coreNamesContent = `export const COUNTRY_NAMES = ${JSON.stringify(nameMappings.countryNames, null, 2)} as const
+  // country-region-data doesn't cover some circle-flags variants (e.g. "by-historical"),
+  // but downstream consumers/tests expect every flag code to have a display name entry.
+  const extraCountryNames = flags.reduce<Record<string, string>>((acc, flag) => {
+    const code = flag.code
+    if (Object.prototype.hasOwnProperty.call(nameMappings.countryNames, code)) return acc
+    if (Object.prototype.hasOwnProperty.call(nameMappings.subdivisionNames, code)) return acc
+    acc[code] = getCountryName(code)
+    return acc
+  }, {})
+
+  const mergedCountryNames = {
+    ...nameMappings.countryNames,
+    ...extraCountryNames,
+  }
+
+  const coreNamesContent = `export const COUNTRY_NAMES = ${JSON.stringify(mergedCountryNames, null, 2)} as const
 
 export const SUBDIVISION_NAMES = ${JSON.stringify(nameMappings.subdivisionNames, null, 2)} as const
 `

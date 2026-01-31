@@ -10,6 +10,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@sankyu/circle-flags-core$': '<rootDir>/../core/src/index.ts',
+    '^@sankyu/circle-flags-core/(.*)$': '<rootDir>/../core/src/$1',
   },
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.{ts,tsx}',
