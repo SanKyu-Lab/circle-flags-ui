@@ -19,7 +19,7 @@
     "format:check": "prettier --check .",
     "test": "pnpm --filter @sankyu/react-circle-flags run test",
     "test:watch": "pnpm --filter @sankyu/react-circle-flags run test:watch",
-    "test:coverage": "pnpm --filter @sankyu/react-circle-flags run test:coverage",
+    "test:coverage": "pnpm --filter @sankyu/react-circle-flags run test:coverage && pnpm --filter @sankyu/vue-circle-flags run test:coverage",
     "prepare": "husky",
     "clean": "rm -rf packages/*/dist packages/*/generated node_modules/.cache"
   },

@@ -50,14 +50,13 @@ jobs:
       - name: Run tests
         run: |
           pnpm run test:coverage
-          pnpm --filter @sankyu/vue-circle-flags run test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         if: matrix.node-version == '22.x'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
+          files: ./coverage/react/lcov.info,./coverage/vue/lcov.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
