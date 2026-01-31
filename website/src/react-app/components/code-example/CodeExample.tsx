@@ -136,9 +136,7 @@ export default function CodeExample() {
               }`}
             >
               {option.label}
-              {option.id === 'vue' && (
-                <span className="ml-1.5 text-[10px] opacity-75">Beta</span>
-              )}
+              {option.id === 'vue' && <span className="ml-1.5 text-[10px] opacity-75">Beta</span>}
             </button>
           ))}
         </div>

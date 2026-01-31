@@ -30,13 +30,11 @@ export default function FlagDetailPanel({
     return null
   }
 
-  const packageName = activeFramework === 'vue' 
-    ? '@sankyu/vue-circle-flags' 
-    : '@sankyu/react-circle-flags'
+  const packageName =
+    activeFramework === 'vue' ? '@sankyu/vue-circle-flags' : '@sankyu/react-circle-flags'
 
-  const componentCode = activeFramework === 'vue'
-    ? `<${flag.componentName} />`
-    : `<${flag.componentName} />`
+  const componentCode =
+    activeFramework === 'vue' ? `<${flag.componentName} />` : `<${flag.componentName} />`
 
   const importCode = `import { ${flag.componentName} } from '${packageName}'`
 
