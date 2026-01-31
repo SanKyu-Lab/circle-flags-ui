@@ -41,6 +41,9 @@
 
 ## ✨ 核心特性
 
+> [!TIP]
+> 欲了解更多信息，请参阅 [文档](https://react-circle-flags.js.org/docs/guides/getting-started/#-key-features)。
+
 - 🎯 **支持 Tree-shaking 优化** - 仅打包您使用的国旗
 - 📦 **TypeScript** - 包含完整的类型定义
 - ⚡ **零依赖** - 仅需 Vue 3 作为对等依赖
@@ -60,6 +63,9 @@ yarn add @sankyu/vue-circle-flags
 # 或
 bun add @sankyu/vue-circle-flags
 ```
+
+> [!TIP]
+> 欲了解更多信息，请参阅 [安装指南](https://react-circle-flags.js.org/docs/guides/getting-started/installation/)。
 
 ## 🚀 使用
 
@@ -120,6 +126,11 @@ const FlagComponent = computed(() => {
 </template>
 ```
 
+### 其他使用示例
+
+> [!TIP]
+> 欲了解更多信息，请参阅 [使用指南](https://react-circle-flags.js.org/docs/guides/getting-started/usage/)。
+
 ## 📚 API
 
 ### 属性
@@ -173,6 +184,9 @@ console.log(buildMeta.circleFlagsCommitHash) // 例如：<示例-sha256-哈希�
 
 国旗组件接受所有标准 SVG 属性，可使用 Vue 的 class 和 style 绑定轻松设置样式。
 
+> [!TIP]
+> 欲了解更多信息，请参阅 [样式指南](https://react-circle-flags.js.org/docs/guides/getting-started/styling/)。
+
 ```vue
 <script setup lang="ts">
 import { FlagUs } from '@sankyu/vue-circle-flags'
@@ -194,6 +208,9 @@ import { FlagUs } from '@sankyu/vue-circle-flags'
 
 所有国旗组件均使用 TypeScript 完全类型化，开箱即用提供自动完成和类型安全。
 
+> [!TIP]
+> 欲了解更多信息，请参阅 [TypeScript 指南](https://react-circle-flags.js.org/docs/guides/getting-started/typescript/)。
+
 ```typescript
 import type { FlagComponentProps, FlagCode } from '@sankyu/vue-circle-flags'
 
@@ -207,6 +224,9 @@ const invalid: FlagCode = 'xyz' // ✗ 类型错误
 `@sankyu/vue-circle-flags` 专为 Tree-shaking 优化而设计。
 
 导入单个国旗可确保只有使用到的国旗被包含在您的打包文件中。
+
+> [!TIP]
+> 欲了解更多信息，请参阅 [打包大小与 Tree-shaking 优化指南](https://react-circle-flags.js.org/docs/guides/getting-started/bundle-size/)。
 
 ```vue
 <script setup lang="ts">

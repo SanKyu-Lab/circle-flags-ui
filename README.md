@@ -43,7 +43,7 @@ circle-flags-ui/
 ├── packages/
 │   ├── core/      # Shared types and utilities (private)
 │   ├── react/     # @sankyu/react-circle-flags
-│   ├── vue/       # @sankyu/vue-circle-flags (coming soon)
+│   ├── vue/       # @sankyu/vue-circle-flags (beta)
 │   └── solid/     # @sankyu/solid-circle-flags (coming soon)
 ├── scripts/       # Shared build scripts
 └── website/       # Documentation site

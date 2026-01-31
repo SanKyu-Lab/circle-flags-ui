@@ -41,6 +41,9 @@ Perfect for applications that need fast, crisp country flags without external im
 
 ## ✨ Key Features
 
+> [!TIP]
+> For more information, you may refer to the [Documentation](https://react-circle-flags.js.org/docs/guides/getting-started/#-key-features).
+
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
 - ⚡ **Zero dependencies** - Only requires Vue 3 as peer dependency
@@ -60,6 +63,9 @@ yarn add @sankyu/vue-circle-flags
 # or
 bun add @sankyu/vue-circle-flags
 ```
+
+> [!TIP]
+> For more information, you may refer to the [Installation Guide](https://react-circle-flags.js.org/docs/guides/getting-started/installation/).
 
 ## 🚀 Usage
 
@@ -120,6 +126,11 @@ const FlagComponent = computed(() => {
 </template>
 ```
 
+### Other usage examples
+
+> [!TIP]
+> For more information, you may refer to the [Usage Guide](https://react-circle-flags.js.org/docs/guides/getting-started/usage/).
+
 ## 📚 API
 
 ### Props
@@ -173,6 +184,9 @@ See the [Full list of flags](https://react-circle-flags.js.org/browse) in the ga
 
 Flag components accept all standard SVG attributes and can be styled using Vue's class and style bindings.
 
+> [!TIP]
+> For more information, you may refer to the [Styling Guide](https://react-circle-flags.js.org/docs/guides/getting-started/styling/).
+
 ```vue
 <script setup lang="ts">
 import { FlagUs } from '@sankyu/vue-circle-flags'
@@ -194,6 +208,9 @@ import { FlagUs } from '@sankyu/vue-circle-flags'
 
 All flag components are fully typed with TypeScript, providing autocomplete and type safety out of the box.
 
+> [!TIP]
+> For more information, you may refer to the [TypeScript Guide](https://react-circle-flags.js.org/docs/guides/getting-started/typescript/).
+
 ```typescript
 import type { FlagComponentProps, FlagCode } from '@sankyu/vue-circle-flags'
 
@@ -207,6 +224,9 @@ const invalid: FlagCode = 'xyz' // ✗ Type error
 `@sankyu/vue-circle-flags` is designed to be tree-shakable.
 
 Importing individual flags ensures that only the used flags are included in your bundle.
+
+> [!TIP]
+> For more information, you may refer to the [Bundle Size & Tree-shaking Guide](https://react-circle-flags.js.org/docs/guides/getting-started/bundle-size/).
 
 ```vue
 <script setup lang="ts">

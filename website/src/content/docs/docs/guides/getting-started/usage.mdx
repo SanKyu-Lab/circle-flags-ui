@@ -146,7 +146,7 @@ All flag components follow a consistent naming pattern:
 
 ## Framework examples
 
-The library works seamlessly with all modern React frameworks:
+The library works seamlessly with all modern frameworks:
 
 <Tabs syncKey="framework">
   <TabItem label="Next.js" icon="vercel">
@@ -185,7 +185,7 @@ The library works seamlessly with all modern React frameworks:
     ```
 
   </TabItem>
-  <TabItem label="Vite" icon="seti:javascript">
+  <TabItem label="Vite (React)" icon="seti:javascript">
     ```tsx
     import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
 
@@ -202,6 +202,42 @@ The library works seamlessly with all modern React frameworks:
     }
 
     export default App
+    ```
+
+  </TabItem>
+  <TabItem label="Nuxt.js" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
+    </script>
+
+    <template>
+      <main>
+        <h1>Country Flags</h1>
+        <div class="flex gap-4">
+          <FlagUs :width="64" :height="64" />
+          <FlagCn :width="64" :height="64" />
+        </div>
+      </main>
+    </template>
+    ```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
+    </script>
+
+    <template>
+      <div>
+        <h1>Country Flags</h1>
+        <div class="flex gap-4">
+          <FlagUs :width="48" :height="48" />
+          <FlagCn :width="48" :height="48" />
+        </div>
+      </div>
+    </template>
     ```
 
   </TabItem>

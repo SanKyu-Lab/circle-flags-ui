@@ -11,20 +11,46 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
 
 ## SVG prop typing
 
-All flag components accept standard React SVG props:
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    All flag components accept standard React SVG props:
 
-```tsx
-import type { SVGProps } from 'react'
-import { FlagUs } from '@sankyu/react-circle-flags'
+    ```tsx
+    import type { SVGProps } from 'react'
+    import { FlagUs } from '@sankyu/react-circle-flags'
 
-interface Props {
-  flagProps?: SVGProps<SVGSVGElement>
-}
+    interface Props {
+      flagProps?: SVGProps<SVGSVGElement>
+    }
 
-export function FlagItem({ flagProps }: Props) {
-  return <FlagUs {...flagProps} />
-}
-```
+    export function FlagItem({ flagProps }: Props) {
+      return <FlagUs {...flagProps} />
+    }
+    ```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    All flag components accept standard Vue SVG props:
+
+    ```vue
+    <script setup lang="ts">
+    import type { SVGAttributes } from 'vue'
+    import { FlagUs } from '@sankyu/vue-circle-flags'
+
+    interface Props {
+      flagProps?: SVGAttributes
+    }
+
+    const props = defineProps<Props>()
+    </script>
+
+    <template>
+      <FlagUs v-bind="props.flagProps" />
+    </template>
+    ```
+
+  </TabItem>
+</Tabs>
 
 :::note[Type Inference]
 TypeScript will automatically infer all available props when you use flag components. No additional type imports are required for basic usage.
@@ -100,20 +126,42 @@ TypeScript will automatically infer all available props when you use flag compon
 
 The library exports helpful types for advanced use cases:
 
-```tsx
-import type { FlagCode, FlagComponentProps } from '@sankyu/react-circle-flags'
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    ```tsx
+    import type { FlagCode, FlagComponentProps } from '@sankyu/react-circle-flags'
 
-// FlagCode: Union type of all available flag codes
-const validCode: FlagCode = 'us' // ✓ Valid
-const invalidCode: FlagCode = 'invalid' // ✗ Type error
+    // FlagCode: Union type of all available flag codes
+    const validCode: FlagCode = 'us' // ✓ Valid
+    const invalidCode: FlagCode = 'invalid' // ✗ Type error
 
-// FlagComponentProps: Standard props for flag components
-const props: FlagComponentProps = {
-  width: 64,
-  height: 64,
-  className: 'my-flag',
-}
-```
+    // FlagComponentProps: Standard props for flag components
+    const props: FlagComponentProps = {
+      width: 64,
+      height: 64,
+      className: 'my-flag',
+    }
+    ```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```typescript
+    import type { FlagCode, FlagComponentProps } from '@sankyu/vue-circle-flags'
+
+    // FlagCode: Union type of all available flag codes
+    const validCode: FlagCode = 'us' // ✓ Valid
+    const invalidCode: FlagCode = 'invalid' // ✗ Type error
+
+    // FlagComponentProps: Standard props for flag components
+    const props: FlagComponentProps = {
+      width: 64,
+      height: 64,
+      class: 'my-flag',
+    }
+    ```
+
+  </TabItem>
+</Tabs>
 
 ## Type safety with DynamicFlag
 

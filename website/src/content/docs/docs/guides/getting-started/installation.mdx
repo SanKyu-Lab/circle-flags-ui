@@ -7,44 +7,98 @@ import { Tabs, TabItem } from '@astrojs/starlight/components'
 import { Icon } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
 
-## Install the package
+## Choose your framework
 
-Choose your preferred package manager to install the library:
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
 
-<Tabs syncKey="pkg">
-  <TabItem label="npm" icon="seti:npm">
+    ## Install the package
 
-    ```bash
-    npm install @sankyu/react-circle-flags
-    ```
+    Choose your preferred package manager to install the library:
+
+    <Tabs syncKey="pkg">
+      <TabItem label="npm" icon="seti:npm">
+
+        ```bash
+        npm install @sankyu/react-circle-flags
+        ```
+
+      </TabItem>
+      <TabItem label="pnpm" icon="pnpm">
+
+        ```bash
+        pnpm add @sankyu/react-circle-flags
+        ```
+
+      </TabItem>
+      <TabItem label="yarn" icon="seti:yarn">
+
+        ```bash
+        yarn add @sankyu/react-circle-flags
+        ```
+
+      </TabItem>
+      <TabItem label="bun" icon="bun">
+
+        ```bash
+        bun add @sankyu/react-circle-flags
+        ```
+
+      </TabItem>
+    </Tabs>
+
+    :::note[React Peer Dependency]
+    The package expects **React** to already be installed in your project.
+    :::
 
   </TabItem>
-  <TabItem label="pnpm" icon="pnpm">
-    
-    ```bash
-    pnpm add @sankyu/react-circle-flags
-    ```
+  <TabItem label="Vue 3" icon="seti:vue">
 
-  </TabItem>
-  <TabItem label="yarn" icon="seti:yarn">
-    
-    ```bash
-    yarn add @sankyu/react-circle-flags
-    ```
+    ## Install the package
 
-  </TabItem>
-  <TabItem label="bun" icon="bun">
-    
-    ```bash
-    bun add @sankyu/react-circle-flags
-    ```
-    
+    :::caution[Beta Release]
+    `@sankyu/vue-circle-flags` is currently in **beta**. APIs may change in future releases.
+    :::
+
+    Choose your preferred package manager to install the library:
+
+    <Tabs syncKey="pkg">
+      <TabItem label="npm" icon="seti:npm">
+
+        ```bash
+        npm install @sankyu/vue-circle-flags
+        ```
+
+      </TabItem>
+      <TabItem label="pnpm" icon="pnpm">
+
+        ```bash
+        pnpm add @sankyu/vue-circle-flags
+        ```
+
+      </TabItem>
+      <TabItem label="yarn" icon="seti:yarn">
+
+        ```bash
+        yarn add @sankyu/vue-circle-flags
+        ```
+
+      </TabItem>
+      <TabItem label="bun" icon="bun">
+
+        ```bash
+        bun add @sankyu/vue-circle-flags
+        ```
+
+      </TabItem>
+    </Tabs>
+
+    :::note[Vue 3 Peer Dependency]
+    The package expects **Vue 3** to already be installed in your project.
+    :::
+
   </TabItem>
 </Tabs>
-
-:::note[React Peer Dependency]
-The package expects **React** to already be installed in your project.
-:::
 
 ## Next step
 

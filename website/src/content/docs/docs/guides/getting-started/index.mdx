@@ -7,13 +7,20 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
 import { Icon } from '@astrojs/starlight/components'
 
-Welcome to `@sankyu/react-circle-flags`, a modern React library for circular flag components.
+Welcome to **circle-flags-ui**, a modern library for circular flag components supporting multiple frameworks.
 
 ## 📖 Overview
 
 This library provides **400+ circular SVG flag components** with **Full-TypeScript support** & **Tree-shaking Optimization**.
 
 Perfect for applications that need fast, crisp country flags without external image requests.
+
+## 📦 Available Packages
+
+| Package                      | Framework | Status    |
+| ---------------------------- | --------- | --------- |
+| `@sankyu/react-circle-flags` | React     | ✅ Stable |
+| `@sankyu/vue-circle-flags`   | Vue 3     | 🚧 Beta   |
 
 ## 🚀 Quick start
 
@@ -71,10 +78,10 @@ You can also load the library directly from CDN without npm install. Perfect for
     ESM + CJS outputs with named exports for optimal bundle size.
   </Card>
   <Card title="SSR Compatible" icon="approve-check">
-    Works seamlessly with Next.js, Remix, Astro, and other SSR frameworks.
+    Works seamlessly with Next.js, Nuxt.js, Remix, Astro, and other SSR frameworks.
   </Card>
   <Card title="Inline SVG" icon="document">
-    No external requests — flags are embedded as React components.
+    No external requests — flags are embedded as framework components.
   </Card>
   <Card title="Standard Props" icon="setting">
     Accepts all standard SVG properties for easy customization.
@@ -92,11 +99,12 @@ You can also load the library directly from CDN without npm install. Perfect for
   <Card title="Developer Experience" icon="star">
     - Full TypeScript definitions  
     - Consistent naming pattern  
-    - Standard React SVG props  
+    - Standard SVG props  
   </Card>
   <Card title="Framework Support" icon="rocket">
    
     - Next.js (App Router & Pages)
+    - Nuxt.js
     - Remix
     - Vite
     - ...and more!

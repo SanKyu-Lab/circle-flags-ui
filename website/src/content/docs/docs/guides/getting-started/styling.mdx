@@ -108,6 +108,39 @@ Flag components accept all standard SVG props, making them easy to style with an
     ```
 
   </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { FlagUs } from '@sankyu/vue-circle-flags'
+    </script>
+
+    <template>
+      <!-- Using class -->
+      <FlagUs class="w-12 h-12 rounded-full shadow-lg hover:scale-110 transition-transform" />
+
+      <!-- Using inline styles -->
+      <FlagUs :style="{ width: '48px', height: '48px', borderRadius: '50%' }" />
+
+      <!-- With scoped styles -->
+      <FlagUs class="flag" />
+    </template>
+
+    <style scoped>
+    .flag {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .flag:hover {
+      transform: scale(1.1);
+    }
+    </style>
+    ```
+
+  </TabItem>
 </Tabs>
 
 ## Common customizations
