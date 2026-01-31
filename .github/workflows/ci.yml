@@ -5,7 +5,7 @@ on:
   # Only allow manual trigger or triggered by Release workflow
   workflow_dispatch:
   workflow_run:
-    workflows: ["Release"]
+    workflows: ['Release']
     types:
       - completed
     branches: [main]

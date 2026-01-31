@@ -4,7 +4,7 @@ name: Deploy Website to GitHub Pages
 on:
   # Trigger when Release or API docs workflow completes successfully
   workflow_run:
-    workflows: ["Release", "Auto Update API Documentation"]
+    workflows: ['Release', 'Auto Update API Documentation']
     types:
       - completed
     branches: [main]
@@ -12,7 +12,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "website/**"
+      - 'website/**'
   # Allow manual trigger
   workflow_dispatch:
 
