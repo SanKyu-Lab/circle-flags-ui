@@ -7,6 +7,28 @@ import LinkButton from '../../ui/LinkButton'
 import { toRouteHref, withBasePath } from '../../../routing/paths'
 import { buildMeta } from '@sankyu/react-circle-flags'
 
+type Framework = 'react' | 'vue'
+
+const frameworkOptions: { id: Framework; label: string; badge?: string }[] = [
+  { id: 'react', label: 'React' },
+  { id: 'vue', label: 'Vue 3', badge: 'Beta' },
+]
+
+const installCommandsByFramework = {
+  react: [
+    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/react-circle-flags' },
+    { id: 'npm', label: 'npm', command: 'npm install @sankyu/react-circle-flags' },
+    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/react-circle-flags' },
+    { id: 'bun', label: 'bun', command: 'bun add @sankyu/react-circle-flags' },
+  ],
+  vue: [
+    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/vue-circle-flags' },
+    { id: 'npm', label: 'npm', command: 'npm install @sankyu/vue-circle-flags' },
+    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/vue-circle-flags' },
+    { id: 'bun', label: 'bun', command: 'bun add @sankyu/vue-circle-flags' },
+  ],
+}
+
 interface HeroSectionProps {
   flagCount: number
   onBrowseClick: () => void
@@ -14,15 +36,8 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: HeroSectionProps) {
-  const installCommands = useMemo(
-    () => [
-      { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/react-circle-flags' },
-      { id: 'npm', label: 'npm', command: 'npm install @sankyu/react-circle-flags' },
-      { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/react-circle-flags' },
-      { id: 'bun', label: 'bun', command: 'bun add @sankyu/react-circle-flags' },
-    ],
-    []
-  )
+  const [activeFramework, setActiveFramework] = useState<Framework>('react')
+  const installCommands = installCommandsByFramework[activeFramework]
 
   const [manager, setManager] = useState(installCommands[0]?.id ?? 'pnpm')
   const [copied, setCopied] = useState(false)
@@ -59,7 +74,7 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
         <div className="space-y-5">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05]">
             <span className="gradient-text block">Circular flags</span>
-            <span className="text-(--ink) block">built for React.</span>
+            <span className="text-(--ink) block">for React & Vue.</span>
           </h1>
           <p className="text-lg sm:text-xl text-(--muted) max-w-2xl leading-relaxed">
             Self-contained flags. Zero external requests. Zero layout shifts.
@@ -94,7 +109,8 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
 
         <div className="flex flex-wrap items-center gap-3 text-sm font-medium">
           {[
-            { icon: '⚛️', label: 'React-ready' },
+            { icon: '⚛️', label: 'React' },
+            { icon: '💚', label: 'Vue 3' },
             { icon: '💎', label: 'TypeScript' },
             { icon: '🪶', label: 'ESM + CJS' },
             { icon: '🎨', label: 'Accessible SVGs' },
@@ -110,6 +126,28 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
         </div>
 
         <div className="space-y-3 rounded-2xl border border-(--border-strong) bg-(--surface-2) p-4 shadow-(--shadow-md)">
+          {/* Framework Selector */}
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs uppercase tracking-wider text-(--muted)">Framework</span>
+            <div className="flex rounded-lg border border-(--border-weak) bg-(--overlay-soft) p-1">
+              {frameworkOptions.map(option => (
+                <button
+                  key={option.id}
+                  onClick={() => setActiveFramework(option.id)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    activeFramework === option.id
+                      ? 'bg-(--accent) text-white'
+                      : 'text-(--muted) hover:text-(--ink)'
+                  }`}
+                >
+                  {option.label}
+                  {option.badge && (
+                    <span className="ml-1.5 text-[10px] opacity-75">{option.badge}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
           <Tabs
             items={installCommands.map(entry => ({
               id: entry.id,

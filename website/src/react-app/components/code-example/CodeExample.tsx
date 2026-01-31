@@ -51,35 +51,28 @@ const renderLine = (line: CodeToken[], index: number) => (
   </div>
 )
 
-const installCommands = [
-  {
-    id: 'pnpm',
-    label: 'pnpm',
-    command: 'pnpm add @sankyu/react-circle-flags',
-  },
-  {
-    id: 'npm',
-    label: 'npm',
-    command: 'npm install @sankyu/react-circle-flags',
-  },
-  {
-    id: 'yarn',
-    label: 'yarn',
-    command: 'yarn add @sankyu/react-circle-flags',
-  },
-  {
-    id: 'bun',
-    label: 'bun',
-    command: 'bun add @sankyu/react-circle-flags',
-  },
+const frameworkOptions = [
+  { id: 'react', label: 'React' },
+  { id: 'vue', label: 'Vue 3' },
 ]
 
-export default function CodeExample() {
-  const [activeManager, setActiveManager] = useState(installCommands[0]?.id ?? 'pnpm')
-  const [copied, setCopied] = useState(false)
-  const usageCode = useMemo(
-    () =>
-      `import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
+const installCommands = {
+  react: [
+    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/react-circle-flags' },
+    { id: 'npm', label: 'npm', command: 'npm install @sankyu/react-circle-flags' },
+    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/react-circle-flags' },
+    { id: 'bun', label: 'bun', command: 'bun add @sankyu/react-circle-flags' },
+  ],
+  vue: [
+    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/vue-circle-flags' },
+    { id: 'npm', label: 'npm', command: 'npm install @sankyu/vue-circle-flags' },
+    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/vue-circle-flags' },
+    { id: 'bun', label: 'bun', command: 'bun add @sankyu/vue-circle-flags' },
+  ],
+}
+
+const usageCodeByFramework = {
+  react: `import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
 
 function Header() {
   return (
@@ -89,11 +82,29 @@ function Header() {
     </div>
   )
 }`,
-    []
-  )
-  const usageHtml = useShikiHtml(usageCode, 'tsx')
+  vue: `<script setup lang="ts">
+import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <FlagUs :width="40" :height="40" />
+    <FlagCn :width="40" :height="40" />
+  </div>
+</template>`,
+}
+
+export default function CodeExample() {
+  const [activeFramework, setActiveFramework] = useState<'react' | 'vue'>('react')
+  const [activeManager, setActiveManager] = useState('pnpm')
+  const [copied, setCopied] = useState(false)
+
+  const currentInstallCommands = installCommands[activeFramework]
+  const usageCode = usageCodeByFramework[activeFramework]
+  const usageHtml = useShikiHtml(usageCode, activeFramework === 'vue' ? 'vue' : 'tsx')
+
   const activeCommand =
-    installCommands.find(entry => entry.id === activeManager) ?? installCommands[0]
+    currentInstallCommands.find(entry => entry.id === activeManager) ?? currentInstallCommands[0]
   const commandText = activeCommand?.command ?? ''
   const commandHtml = useShikiHtml(commandText ? `$ ${commandText}` : '', 'bash')
 
@@ -110,8 +121,31 @@ function Header() {
 
   return (
     <div className="space-y-4">
+      {/* Framework Selector */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs uppercase tracking-[0.2em] text-(--muted)">Framework</span>
+        <div className="flex rounded-lg border border-(--border-weak) bg-(--overlay-soft) p-1">
+          {frameworkOptions.map(option => (
+            <button
+              key={option.id}
+              onClick={() => setActiveFramework(option.id as 'react' | 'vue')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                activeFramework === option.id
+                  ? 'bg-(--accent) text-white'
+                  : 'text-(--muted) hover:text-(--ink)'
+              }`}
+            >
+              {option.label}
+              {option.id === 'vue' && (
+                <span className="ml-1.5 text-[10px] opacity-75">Beta</span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#192732]">
-        <Tabs items={installCommands} activeId={activeManager} onChange={setActiveManager} />
+        <Tabs items={currentInstallCommands} activeId={activeManager} onChange={setActiveManager} />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs uppercase tracking-[0.2em] text-(--muted)">Install</p>
           <LinkButton

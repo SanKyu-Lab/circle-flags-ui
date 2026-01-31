@@ -5,10 +5,11 @@ description: Render flags from runtime ISO codes.
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
+import { Tabs, TabItem } from '@astrojs/starlight/components'
 
-When you need to render flags based on runtime data (user input, API responses, database values), you have two options:
+When you need to render flags based on runtime data (user input, API responses, database values), you have several options depending on your framework.
 
-## Option 1: CircleFlag (Recommended)
+## Option 1: CircleFlag (React - Recommended)
 
 Use `CircleFlag` for **minimal bundle size** with on-demand CDN loading:
 
@@ -38,7 +39,35 @@ For compatibility with `react-circle-flags`, you can also use the `code` prop:
 <CircleFlag code="us" width={36} />
 ```
 
-## Option 2: DynamicFlag
+## Option 2: Vue Dynamic Import
+
+For Vue 3, use `defineAsyncComponent` to dynamically load flags:
+
+```vue
+<script setup lang="ts">
+import { ref, computed, defineAsyncComponent } from 'vue'
+
+const countryCode = ref('us')
+
+const FlagComponent = computed(() => {
+  const code = countryCode.value.toLowerCase()
+  const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
+  return defineAsyncComponent(() =>
+    import('@sankyu/vue-circle-flags').then(module => module[componentName])
+  )
+})
+</script>
+
+<template>
+  <component :is="FlagComponent" :width="36" :height="36" />
+</template>
+```
+
+:::tip[Vue Dynamic Loading]
+This approach only loads the flags you need at runtime, keeping your bundle size minimal.
+:::
+
+## Option 3: DynamicFlag (React)
 
 Use `DynamicFlag` when you need synchronous rendering and **cannot use CDN**:
 
@@ -77,55 +106,93 @@ export function CountryFlag({ code }: { code: string }) {
 
 ## Real-world example
 
-### With CircleFlag (Recommended)
+<Tabs syncKey="framework">
+  <TabItem label="React (CircleFlag)" icon="seti:react">
+    ```tsx
+    import { CircleFlag } from '@sankyu/react-circle-flags'
 
-```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
+    interface User {
+      name: string
+      countryCode: string
+    }
 
-interface User {
-  name: string
-  countryCode: string
-}
+    export function UserProfile({ user }: { user: User }) {
+      return (
+        <div className="flex items-center gap-3">
+          <CircleFlag
+            countryCode={user.countryCode.toLowerCase()}
+            width={32}
+            height={32}
+            title={`${user.name}'s country`}
+          />
+          <span>{user.name}</span>
+        </div>
+      )
+    }
+    ```
 
-export function UserProfile({ user }: { user: User }) {
-  return (
-    <div className="flex items-center gap-3">
-      <CircleFlag
-        countryCode={user.countryCode.toLowerCase()}
-        width={32}
-        height={32}
-        title={`${user.name}'s country`}
-      />
-      <span>{user.name}</span>
-    </div>
-  )
-}
-```
+  </TabItem>
+  <TabItem label="React (DynamicFlag)" icon="seti:react">
+    ```tsx
+    import { DynamicFlag } from '@sankyu/react-circle-flags'
 
-### With DynamicFlag
+    interface User {
+      name: string
+      countryCode: string
+    }
 
-```tsx
-import { DynamicFlag } from '@sankyu/react-circle-flags'
+    export function UserProfile({ user }: { user: User }) {
+      return (
+        <div className="flex items-center gap-3">
+          <DynamicFlag
+            code={user.countryCode.toLowerCase()}
+            width={32}
+            height={32}
+            title={`${user.name}'s country`}
+          />
+          <span>{user.name}</span>
+        </div>
+      )
+    }
+    ```
 
-interface User {
-  name: string
-  countryCode: string
-}
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { computed, defineAsyncComponent } from 'vue'
 
-export function UserProfile({ user }: { user: User }) {
-  return (
-    <div className="flex items-center gap-3">
-      <DynamicFlag
-        code={user.countryCode.toLowerCase()}
-        width={32}
-        height={32}
-        title={`${user.name}'s country`}
-      />
-      <span>{user.name}</span>
-    </div>
-  )
-}
-```
+    interface User {
+      name: string
+      countryCode: string
+    }
+
+    const props = defineProps<{ user: User }>()
+
+    const FlagComponent = computed(() => {
+      const code = props.user.countryCode.toLowerCase()
+      const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
+      return defineAsyncComponent(() =>
+        import('@sankyu/vue-circle-flags').then(module => module[componentName])
+      )
+    })
+    </script>
+
+    <template>
+      <div class="flex items-center gap-3">
+        <component
+          :is="FlagComponent"
+          :width="32"
+          :height="32"
+          :title="`${user.name}'s country`"
+        />
+        <span>{{ user.name }}</span>
+      </div>
+    </template>
+    ```
+
+  </TabItem>
+</Tabs>
 
 ## Bundle Size Comparison
 

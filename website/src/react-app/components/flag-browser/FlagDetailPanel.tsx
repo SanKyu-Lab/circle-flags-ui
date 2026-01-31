@@ -1,7 +1,15 @@
+import { useState } from 'react'
 import { Check, Copy, X } from 'lucide-react'
 import type { FlagInfo } from '../../utils/flagData'
 import { TYPE_LABELS } from '../../utils/flagData'
 import { flagComponentMap } from './flagComponent'
+
+type Framework = 'react' | 'vue'
+
+const frameworkOptions: { id: Framework; label: string; badge?: string }[] = [
+  { id: 'react', label: 'React' },
+  { id: 'vue', label: 'Vue 3', badge: 'Beta' },
+]
 
 interface FlagDetailPanelProps {
   flag: FlagInfo
@@ -16,10 +24,21 @@ export default function FlagDetailPanel({
   onCopy,
   onClose,
 }: FlagDetailPanelProps) {
+  const [activeFramework, setActiveFramework] = useState<Framework>('react')
   const FlagComponent = flagComponentMap[flag.componentName]
   if (!FlagComponent) {
     return null
   }
+
+  const packageName = activeFramework === 'vue' 
+    ? '@sankyu/vue-circle-flags' 
+    : '@sankyu/react-circle-flags'
+
+  const componentCode = activeFramework === 'vue'
+    ? `<${flag.componentName} />`
+    : `<${flag.componentName} />`
+
+  const importCode = `import { ${flag.componentName} } from '${packageName}'`
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-2xl px-6 z-50">
@@ -98,13 +117,36 @@ export default function FlagDetailPanel({
               ))}
             </div>
 
+            {/* Framework Selector */}
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-[10px] uppercase tracking-wider text-(--muted)">Copy for</span>
+              <div className="flex rounded-md border border-(--border-weak) bg-(--overlay-soft) p-0.5">
+                {frameworkOptions.map(option => (
+                  <button
+                    key={option.id}
+                    onClick={() => setActiveFramework(option.id)}
+                    className={`px-2 py-1 text-[11px] font-medium rounded transition-all ${
+                      activeFramework === option.id
+                        ? 'bg-(--accent) text-white'
+                        : 'text-(--muted) hover:text-(--ink)'
+                    }`}
+                  >
+                    {option.label}
+                    {option.badge && (
+                      <span className="ml-1 text-[9px] opacity-75">{option.badge}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => onCopy(`<${flag.componentName} />`, `component-${flag.code}`)}
+                onClick={() => onCopy(componentCode, `component-${flag.code}-${activeFramework}`)}
                 className="group flex items-center gap-2 rounded-lg border border-(--border-weak) bg-(--overlay-soft) px-3 py-2 text-xs font-mono transition-colors hover:border-(--accent) hover:bg-(--accent)/5"
               >
-                <span className="text-(--ink)">{`<${flag.componentName} />`}</span>
-                {copiedCode === `component-${flag.code}` ? (
+                <span className="text-(--ink)">{componentCode}</span>
+                {copiedCode === `component-${flag.code}-${activeFramework}` ? (
                   <Check className="w-3.5 h-3.5 text-(--accent)" aria-hidden />
                 ) : (
                   <Copy
@@ -115,18 +157,13 @@ export default function FlagDetailPanel({
               </button>
 
               <button
-                onClick={() =>
-                  onCopy(
-                    `import { ${flag.componentName} } from '@sankyu/react-circle-flags'`,
-                    `import-${flag.code}`
-                  )
-                }
+                onClick={() => onCopy(importCode, `import-${flag.code}-${activeFramework}`)}
                 className="group flex items-center gap-2 rounded-lg border border-(--border-weak) bg-(--overlay-soft) px-3 py-2 text-xs font-mono transition-colors hover:border-(--accent) hover:bg-(--accent)/5"
               >
                 <span className="text-(--ink) truncate">
-                  import {'{'}...{'}'}
+                  import {'{'}...{'}'} <span className="text-(--muted)">({activeFramework})</span>
                 </span>
-                {copiedCode === `import-${flag.code}` ? (
+                {copiedCode === `import-${flag.code}-${activeFramework}` ? (
                   <Check className="w-3.5 h-3.5 text-(--accent)" aria-hidden />
                 ) : (
                   <Copy

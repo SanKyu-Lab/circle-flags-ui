@@ -5,6 +5,7 @@ description: Keep bundles small by choosing the right import strategy.
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
+import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 Optimize your bundle size by choosing the right approach for your use case.
 
@@ -75,26 +76,63 @@ Optimize your bundle size by choosing the right approach for your use case.
 
 ## Hybrid approach: Best of both worlds
 
-Combine named imports for known flags with CircleFlag for dynamic ones:
+Combine named imports for known flags with dynamic loading for runtime flags:
 
-```tsx
-import { FlagUs } from '@sankyu/react-circle-flags'
-import { CircleFlag } from '@sankyu/react-circle-flags'
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    ```tsx
+    import { FlagUs } from '@sankyu/react-circle-flags'
+    import { CircleFlag } from '@sankyu/react-circle-flags'
 
-export function Header({ userCountry }: { userCountry?: string }) {
-  return (
-    <div className="flex gap-2">
-      {/* Static flags: bundled (~950 bytes) */}
-      <FlagUs width={32} height={32} />
+    export function Header({ userCountry }: { userCountry?: string }) {
+      return (
+        <div className="flex gap-2">
+          {/* Static flags: bundled (~950 bytes) */}
+          <FlagUs width={32} height={32} />
 
-      {/* Dynamic flag: loaded from CDN (~0 KB) */}
-      {userCountry && <CircleFlag countryCode={userCountry} width={32} height={32} />}
-    </div>
-  )
-}
-```
+          {/* Dynamic flag: loaded from CDN (~0 KB) */}
+          {userCountry && <CircleFlag countryCode={userCountry} width={32} height={32} />}
+        </div>
+      )
+    }
+    ```
 
-**Total bundle impact:** ~2.9 KB (FlagUs + CircleFlag component)
+    **Total bundle impact:** ~2.9 KB (FlagUs + CircleFlag component)
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { computed, defineAsyncComponent } from 'vue'
+    import { FlagUs } from '@sankyu/vue-circle-flags'
+
+    const props = defineProps<{ userCountry?: string }>()
+
+    const DynamicFlag = computed(() => {
+      if (!props.userCountry) return null
+      const code = props.userCountry.toLowerCase()
+      const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
+      return defineAsyncComponent(() =>
+        import('@sankyu/vue-circle-flags').then(module => module[componentName])
+      )
+    })
+    </script>
+
+    <template>
+      <div class="flex gap-2">
+        <!-- Static flags: bundled (~950 bytes) -->
+        <FlagUs :width="32" :height="32" />
+
+        <!-- Dynamic flag: loaded on demand -->
+        <component v-if="DynamicFlag" :is="DynamicFlag" :width="32" :height="32" />
+      </div>
+    </template>
+    ```
+
+    **Total bundle impact:** ~950 bytes (FlagUs only, dynamic flag loaded on demand)
+
+  </TabItem>
+</Tabs>
 
 ## Analyzing your bundle
 
