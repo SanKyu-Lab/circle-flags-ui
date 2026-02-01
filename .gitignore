@@ -69,3 +69,4 @@ docs/
 !packages/*/.prettierrc.json
 !packages/*/.prettierignore
 !website/src/content/docs/reference/api/**
+bun.lock
