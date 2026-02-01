@@ -56,6 +56,9 @@ jobs:
         if: inputs.ensure-generated-clean == true
         run: git diff --exit-code
 
+      - name: Build packages
+        run: pnpm -r --filter './packages/*' run build
+
       - name: Run linter
         run: pnpm run lint
 
