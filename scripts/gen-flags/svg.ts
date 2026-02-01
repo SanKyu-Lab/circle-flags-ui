@@ -183,3 +183,98 @@ export const ${componentName} = defineComponent({
     optimizedSize,
   }
 }
+
+/**
+ * Convert SVG string to Solid.js component string
+ *
+ * Strategy:
+ * - Use Solid's JSX with innerHTML for efficient rendering
+ * - Keep SVG inner markup as a constant string
+ * - Escape user-provided title to avoid injection
+ */
+export function svgToSolidComponent(
+  svg: string,
+  code: string
+): { componentCode: string; svgSize: number; optimizedSize: number } {
+  const svgSize = svg.length
+
+  // No optimization needed - upstream circle-flags SVGs are already optimized
+  let processedSvg = svg
+  const optimizedSize = processedSvg.length
+
+  // Remove XML declaration if present
+  processedSvg = processedSvg.replace(/<\?xml.*?\?>\s*/g, '')
+
+  // Extract viewBox and other attributes
+  const viewBoxMatch = processedSvg.match(/viewBox="([^"]+)"/)
+  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 512 512'
+
+  // Extract any existing title for accessibility
+  const titleMatch = processedSvg.match(/<title[^>]*>([^<]*)<\/title>/)
+  const existingTitle = titleMatch ? titleMatch[1] : null
+
+  // Extract the inner content (everything between <svg> tags)
+  let innerContent = processedSvg
+    .replace(/<svg[^>]*>/, '')
+    .replace(/<\/svg>/, '')
+    .trim()
+
+  // Remove existing title to avoid duplication
+  innerContent = innerContent.replace(/<title[^>]*>[^<]*<\/title>/, '').trim()
+
+  const componentName = codeToComponentName(code)
+  const countryName = getCountryName(code)
+  const emoji = codeToEmoji(code)
+  const upperCode = code.toUpperCase()
+
+  const innerStringLiteral = JSON.stringify(innerContent)
+
+  return {
+    componentCode: `import { mergeProps, splitProps } from 'solid-js'
+import type { Component, JSX } from 'solid-js'
+import type { FlagComponentProps } from '@sankyu/circle-flags-core'
+import { escapeHtml } from '../../src/internal/escape-html'
+
+/**
+ * ${emoji} *${countryName}* flag component
+ *
+ * @example
+ * <${componentName} width={64} height={64} class="flag-icon" />
+ */
+const SVG_BODY: string = ${innerStringLiteral}
+
+export interface ${componentName}Props extends Omit<JSX.SvgSVGAttributes<SVGSVGElement>, 'width' | 'height'>, FlagComponentProps {
+  width?: number | string
+  height?: number | string
+}
+
+export const ${componentName}: Component<${componentName}Props> = (props) => {
+  const merged = mergeProps(
+    {
+      width: 48,
+      height: 48,
+      title: ${existingTitle ? `'${existingTitle}'` : `'${upperCode}'`},
+    },
+    props
+  )
+
+  const [local, rest] = splitProps(merged, ['width', 'height', 'class', 'className', 'title'])
+
+  return (
+    <svg
+      {...rest}
+      viewBox="${viewBox}"
+      width={local.width}
+      height={local.height}
+      class={local.class || local.className}
+      role="img"
+      aria-label={local.title}
+      innerHTML={'<title>' + escapeHtml(local.title) + '</title>' + SVG_BODY}
+    />
+  )
+}
+`,
+    svgSize,
+    optimizedSize,
+  }
+}

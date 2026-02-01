@@ -65,7 +65,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ env.CODECOV_TOKEN }}
-          files: ./coverage/react/lcov.info,./coverage/vue/lcov.info
+          files: ./coverage/react/lcov.info,./coverage/vue/lcov.info,./coverage/solid/lcov.info
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false

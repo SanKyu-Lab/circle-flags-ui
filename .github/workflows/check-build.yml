@@ -49,3 +49,4 @@ jobs:
         run: |
           ls -la packages/react/dist/
           ls -la packages/vue/dist/
+          ls -la packages/solid/dist/
