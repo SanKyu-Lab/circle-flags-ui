@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/react-circle-flags",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "400+ circular SVG React flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -57,7 +57,7 @@
     "react": ">=16.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "workspace:*"
+    "@sankyu/circle-flags-core": "^1.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.28.6",

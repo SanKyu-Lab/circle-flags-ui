@@ -48,7 +48,7 @@ importers:
   packages/react:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: workspace:*
+        specifier: ^1.5.4
         version: link:../core
     devDependencies:
       '@babel/core':
@@ -136,7 +136,7 @@ importers:
   packages/solid:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: workspace:*
+        specifier: ^1.5.4
         version: link:../core
       solid-js:
         specifier: '>=1.0.0'
@@ -145,7 +145,7 @@ importers:
   packages/vue:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: workspace:*
+        specifier: ^1.5.4
         version: link:../core
     devDependencies:
       '@vitest/coverage-v8':
