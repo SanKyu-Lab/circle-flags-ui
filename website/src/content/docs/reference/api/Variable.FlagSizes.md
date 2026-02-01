@@ -17,7 +17,7 @@ const FlagSizes: {
 };
 ```
 
-Defined in: [core/src/utils.ts:41](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/core/src/utils.ts#L41)
+Defined in: [core/src/utils.ts:41](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/core/src/utils.ts#L41)
 
 Standard flag sizes
 
