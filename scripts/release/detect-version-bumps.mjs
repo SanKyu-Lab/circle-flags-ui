@@ -1,27 +1,21 @@
-import { execFileSync } from 'node:child_process'
 import { appendFileSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import mri from 'mri'
+import { Command } from 'commander'
+import { simpleGit } from 'simple-git'
 
-const argv = mri(process.argv.slice(2), {
-  string: ['before', 'after', 'github-output'],
-  boolean: ['help'],
-  alias: {
-    h: 'help',
-  },
-})
+const program = new Command()
+  .name('detect-version-bumps')
+  .description('Detect packages/*/package.json version changes and emit a matrix payload.')
+  .option('--before <sha>', 'Git ref before the change')
+  .option('--after <sha>', 'Git ref after the change')
+  .option('--github-output <path>', 'Write outputs to GitHub Actions $GITHUB_OUTPUT file')
 
-const usage =
-  'node scripts/release/detect-version-bumps.mjs [--before <sha>] [--after <sha>] [--github-output <path>]'
+program.parse()
+const options = program.opts()
 
-if (argv.help) {
-  process.stdout.write(`${usage}\n`)
-  process.exit(0)
-}
-
-const before = argv.before ?? process.env.GITHUB_EVENT_BEFORE ?? ''
-const after = argv.after ?? process.env.GITHUB_SHA ?? ''
-const githubOutput = argv['github-output']
+const before = options.before ?? process.env.GITHUB_EVENT_BEFORE ?? ''
+const after = options.after ?? process.env.GITHUB_SHA ?? ''
+const githubOutput = options.githubOutput
 
 if (!after) {
   console.error('Missing --after (or GITHUB_SHA)')
@@ -29,22 +23,18 @@ if (!after) {
 }
 
 const repoRoot = resolve(process.cwd())
+const git = simpleGit({ baseDir: repoRoot })
 
-const execGit = gitArgs =>
-  execFileSync('git', gitArgs, {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  }).trim()
+const execGit = async gitArgs => (await git.raw(gitArgs)).trim()
 
-const resolveBefore = () => {
+const resolveBefore = async () => {
   if (before && before !== '0000000000000000000000000000000000000000') return before
   return execGit(['rev-list', '--max-parents=0', 'HEAD'])
 }
 
-const resolvedBefore = resolveBefore()
+const resolvedBefore = await resolveBefore()
 
-const filesRaw = execGit([
+const filesRaw = await execGit([
   'diff',
   '--name-only',
   resolvedBefore,
@@ -57,7 +47,7 @@ const files = filesRaw ? filesRaw.split('\n').filter(Boolean) : []
 const packages = []
 
 for (const file of files) {
-  const diff = execGit(['diff', resolvedBefore, after, '--unified=0', '--', file])
+  const diff = await execGit(['diff', resolvedBefore, after, '--unified=0', '--', file])
   if (!/^[+-].*"version"\s*:/m.test(diff)) continue
 
   const json = JSON.parse(readFileSync(resolve(repoRoot, file), 'utf8'))

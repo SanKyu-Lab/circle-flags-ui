@@ -1,64 +1,59 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
-import { execFileSync } from 'node:child_process'
-import mri from 'mri'
+import { Command } from 'commander'
+import conventionalcommits from 'conventional-changelog-conventionalcommits'
+import { CommitParser } from 'conventional-commits-parser'
+import { simpleGit } from 'simple-git'
 
-const argv = mri(process.argv.slice(2), {
-  string: ['package-dir', 'package-name', 'version', 'tag', 'prev-tag', 'notes-path'],
-  boolean: ['help'],
-  alias: {
-    h: 'help',
-  },
-})
+const program = new Command()
+  .name('generate-package-changelog')
+  .description('Generate per-package CHANGELOG.md and optional release notes markdown.')
+  .requiredOption('--package-dir <dir>')
+  .requiredOption('--package-name <name>')
+  .requiredOption('--version <version>')
+  .option('--tag <tag>', 'Tag created for this version')
+  .option('--prev-tag <tag>', 'Previous tag', '')
+  .option('--notes-path <path>')
+
+program.parse()
+const options = program.opts()
 
 const usage =
   'node scripts/release/generate-package-changelog.mjs --package-dir <dir> --package-name <name> --version <version> [--tag <tag>] [--prev-tag <tag>] [--notes-path <path>]'
 
-if (argv.help) {
-  process.stdout.write(`${usage}\n`)
-  process.exit(0)
-}
-
-const packageDirArg = argv['package-dir']
-const packageName = argv['package-name']
-const version = argv.version
-const currentTag = argv.tag
-const prevTagArg = argv['prev-tag'] ?? ''
-const notesPath = argv['notes-path']
-
-if (!packageDirArg || !packageName || !version) {
-  console.error(usage)
-  process.exit(2)
-}
+const packageDirArg = options.packageDir
+const packageName = options.packageName
+const version = options.version
+const currentTag = options.tag
+const prevTagArg = options.prevTag ?? ''
+const notesPath = options.notesPath
 
 const repoRoot = resolve(process.cwd())
 const packageDir = resolve(repoRoot, packageDirArg)
 const slug = packageDir.split('/').filter(Boolean).at(-1)
+const git = simpleGit({ baseDir: repoRoot })
+const preset = await conventionalcommits()
+const parser = new CommitParser(preset.parser)
 
-const execGit = (gitArgs, options = {}) =>
-  execFileSync('git', gitArgs, {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-    ...options,
-  }).trim()
+const execGit = async gitArgs => (await git.raw(gitArgs)).trim()
 
 const findPrevTag = () => {
   if (prevTagArg) return prevTagArg
   if (!slug) return ''
 
-  const tagsRaw = execGit(['tag', '--list', `${slug}-v*`, '--sort=-v:refname'])
-  const tags = tagsRaw ? tagsRaw.split('\n').filter(Boolean) : []
-  if (!tags.length) return ''
-  if (!currentTag) return tags[0] ?? ''
-  return tags.find(tag => tag !== currentTag) ?? ''
+  return execGit(['tag', '--list', `${slug}-v*`, '--sort=-v:refname']).then(tagsRaw => {
+    const tags = tagsRaw ? tagsRaw.split('\n').filter(Boolean) : []
+    if (!tags.length) return ''
+    if (!currentTag) return tags[0] ?? ''
+    return tags.find(tag => tag !== currentTag) ?? ''
+  })
 }
 
-const prevTag = findPrevTag()
+const prevTag = await findPrevTag()
 const rangeArgs = prevTag ? [`${prevTag}..HEAD`] : ['HEAD']
 
 const logFormat = '%H%x1f%s%x1f%b%x1e'
-const logRaw = execGit([
+const logRaw = await execGit([
   'log',
   ...rangeArgs,
   `--format=${logFormat}`,
@@ -78,21 +73,6 @@ const commits = logRaw
       })
   : []
 
-const parseConventional = subject => {
-  const match = /^(?<type>[a-zA-Z]+)(?:\((?<scope>[^)]+)\))?(?<breaking>!)?:\s*(?<desc>.+)$/.exec(
-    subject.trim()
-  )
-  if (!match?.groups) return null
-  return {
-    type: match.groups.type.toLowerCase(),
-    scope: match.groups.scope ?? '',
-    breaking: Boolean(match.groups.breaking),
-    desc: match.groups.desc ?? '',
-  }
-}
-
-const hasBreakingInBody = body => /BREAKING CHANGE:/i.test(body)
-
 const buckets = {
   breaking: [],
   feat: [],
@@ -105,11 +85,11 @@ const buckets = {
 }
 
 for (const commit of commits) {
-  const parsed = parseConventional(commit.subject)
-  const breaking = Boolean(parsed?.breaking) || hasBreakingInBody(commit.body)
+  const parsed = parser.parse(`${commit.subject}\n\n${commit.body}`.trimEnd())
+  const breaking = Boolean(parsed.notes?.length)
 
-  const desc = parsed?.desc?.trim() || commit.subject.trim()
-  const scope = parsed?.scope ? `**${parsed.scope}**: ` : ''
+  const desc = parsed.subject?.trim() || commit.subject.trim()
+  const scope = parsed.scope ? `**${parsed.scope}**: ` : ''
   const shortHash = commit.hash.slice(0, 7)
   const line = `- ${scope}${desc} (${shortHash})`
 
@@ -118,7 +98,7 @@ for (const commit of commits) {
     continue
   }
 
-  switch (parsed?.type) {
+  switch (parsed.type) {
     case 'feat':
       buckets.feat.push(line)
       break
