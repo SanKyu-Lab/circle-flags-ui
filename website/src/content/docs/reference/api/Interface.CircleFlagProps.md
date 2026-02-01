@@ -5,7 +5,7 @@ prev: false
 title: "CircleFlagProps"
 ---
 
-Defined in: [react/src/index.tsx:66](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L66)
+Defined in: [react/src/index.tsx:66](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L66)
 
 ## Extends
 
@@ -19,7 +19,7 @@ Defined in: [react/src/index.tsx:66](https://github.com/SanKyu-Lab/circle-flags-
 optional cdnUrl: string;
 ```
 
-Defined in: [react/src/index.tsx:70](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L70)
+Defined in: [react/src/index.tsx:70](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L70)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [react/src/index.tsx:70](https://github.com/SanKyu-Lab/circle-flags-
 optional code: string;
 ```
 
-Defined in: [react/src/index.tsx:69](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L69)
+Defined in: [react/src/index.tsx:69](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L69)
 
 :::caution[Deprecated]
 Use 'countryCode' instead
@@ -43,7 +43,7 @@ Use 'countryCode' instead
 optional countryCode: string;
 ```
 
-Defined in: [react/src/index.tsx:67](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L67)
+Defined in: [react/src/index.tsx:67](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L67)
 
 ***
 
@@ -53,4 +53,4 @@ Defined in: [react/src/index.tsx:67](https://github.com/SanKyu-Lab/circle-flags-
 optional title: string;
 ```
 
-Defined in: [react/src/index.tsx:71](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L71)
+Defined in: [react/src/index.tsx:71](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L71)

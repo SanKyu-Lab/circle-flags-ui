@@ -8,10 +8,11 @@ import {
   FLAGS_DIR,
   REACT_OUTPUT_DIR,
   VUE_OUTPUT_DIR,
+  SOLID_OUTPUT_DIR,
 } from './constants'
 import { buildNameMappings, getNameFromMappings } from './country-data'
 import { getCountryName } from './names'
-import { svgToReactComponent, svgToVueComponent } from './svg'
+import { svgToReactComponent, svgToVueComponent, svgToSolidComponent } from './svg'
 import type { FlagMetadata } from './types'
 import { codeToComponentName } from './utils'
 
@@ -71,6 +72,7 @@ export async function generateFlags() {
 
   await mkdir(REACT_OUTPUT_DIR, { recursive: true })
   await mkdir(VUE_OUTPUT_DIR, { recursive: true })
+  await mkdir(SOLID_OUTPUT_DIR, { recursive: true })
   await mkdir(CORE_GENERATED_DIR, { recursive: true })
 
   const files = await readdir(FLAGS_DIR)
@@ -87,6 +89,7 @@ export async function generateFlags() {
     const svgPath = `${FLAGS_DIR}/${file}`
     const outputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
     const vueOutputPath = `${VUE_OUTPUT_DIR}/${code}.ts`
+    const solidOutputPath = `${SOLID_OUTPUT_DIR}/${code}.tsx`
 
     try {
       const stats = await lstat(svgPath)
@@ -104,6 +107,7 @@ export async function generateFlags() {
           const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
           await writeFile(outputPath, aliasContent, 'utf-8')
           await writeFile(vueOutputPath, aliasContent, 'utf-8')
+          await writeFile(solidOutputPath, aliasContent, 'utf-8')
 
           flags.push({
             code,
@@ -119,9 +123,11 @@ export async function generateFlags() {
           const svgContent = await readFile(svgPath, 'utf-8')
           const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
           const { componentCode: vueComponentCode } = svgToVueComponent(svgContent, code)
+          const { componentCode: solidComponentCode } = svgToSolidComponent(svgContent, code)
 
           await writeFile(outputPath, componentCode, 'utf-8')
           await writeFile(vueOutputPath, vueComponentCode, 'utf-8')
+          await writeFile(solidOutputPath, solidComponentCode, 'utf-8')
 
           flags.push({
             code,
@@ -143,9 +149,11 @@ export async function generateFlags() {
         const svgContent = await readFile(svgPath, 'utf-8')
         const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
         const { componentCode: vueComponentCode } = svgToVueComponent(svgContent, code)
+        const { componentCode: solidComponentCode } = svgToSolidComponent(svgContent, code)
 
         await writeFile(outputPath, componentCode, 'utf-8')
         await writeFile(vueOutputPath, vueComponentCode, 'utf-8')
+        await writeFile(solidOutputPath, solidComponentCode, 'utf-8')
 
         flags.push({
           code,
@@ -222,6 +230,22 @@ ${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
 
   await writeFile(`${VUE_OUTPUT_DIR}/index.ts`, vueIndexContent, 'utf-8')
   console.log('✅ Generated vue generated/flags/index.ts\n')
+
+  const solidIndexContent = `// Auto-generated flag exports for tree-shaking
+// Each flag can be imported individually: import { FlagUs } from '@sankyu/solid-circle-flags'
+//
+// 📊 Package Statistics:
+// • Total flags: ${flags.length}
+// • Original SVG size: ${(totalOriginalSize / 1024).toFixed(1)}KB
+// • Optimized size: ${(totalOptimizedSize / 1024).toFixed(1)}KB
+// • Size reduction: ${(((totalOriginalSize - totalOptimizedSize) / totalOriginalSize) * 100).toFixed(1)}%
+//
+
+${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
+`
+
+  await writeFile(`${SOLID_OUTPUT_DIR}/index.ts`, solidIndexContent, 'utf-8')
+  console.log('✅ Generated solid generated/flags/index.ts\n')
 
   const aliases = flags
     .filter(f => f.aliasOf)

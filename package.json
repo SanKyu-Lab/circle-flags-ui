@@ -38,15 +38,15 @@
     "pnpm": ">=9.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.3.1",
-    "@commitlint/config-conventional": "^20.3.1",
-    "@types/node": "^25.0.8",
+    "@commitlint/cli": "^20.4.0",
+    "@commitlint/config-conventional": "^20.4.0",
+    "@types/node": "^25.1.0",
     "commander": "^14.0.1",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "conventional-commits-parser": "^6.2.0",
     "country-region-data": "^4.0.0",
     "husky": "^9.1.7",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "simple-git": "^3.28.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"

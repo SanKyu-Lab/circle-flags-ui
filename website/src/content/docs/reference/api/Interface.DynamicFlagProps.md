@@ -5,7 +5,7 @@ prev: false
 title: "DynamicFlagProps"
 ---
 
-Defined in: [react/src/index.tsx:205](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L205)
+Defined in: [react/src/index.tsx:205](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L205)
 
 ## Extends
 
@@ -19,7 +19,7 @@ Defined in: [react/src/index.tsx:205](https://github.com/SanKyu-Lab/circle-flags
 code: string;
 ```
 
-Defined in: [react/src/index.tsx:206](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L206)
+Defined in: [react/src/index.tsx:206](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L206)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [react/src/index.tsx:206](https://github.com/SanKyu-Lab/circle-flags
 optional title: string;
 ```
 
-Defined in: [react/src/index.tsx:208](https://github.com/SanKyu-Lab/circle-flags-ui/blob/588ede1bca361296f172f70d4593c5bc7fc12414/packages/react/src/index.tsx#L208)
+Defined in: [react/src/index.tsx:208](https://github.com/SanKyu-Lab/circle-flags-ui/blob/2b8d5c821b5bc060e422805c06952779babe5475/packages/react/src/index.tsx#L208)
 
 Accessible title for screen readers
 

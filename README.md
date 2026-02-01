@@ -8,7 +8,7 @@ A monorepo for circular flag components across multiple UI frameworks.
 | ---------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | [@sankyu/react-circle-flags](./packages/react) | React circular flag components    | [![npm](https://img.shields.io/npm/v/@sankyu/react-circle-flags)](https://www.npmjs.com/package/@sankyu/react-circle-flags) |
 | [@sankyu/vue-circle-flags](./packages/vue)     | Vue 3 circular flag components    | [![npm](https://img.shields.io/npm/v/@sankyu/vue-circle-flags)](https://www.npmjs.com/package/@sankyu/vue-circle-flags)     |
-| [@sankyu/solid-circle-flags](./packages/solid) | Solid.js circular flag components | Coming soon                                                                                                                 |
+| [@sankyu/solid-circle-flags](./packages/solid) | Solid.js circular flag components | [![npm](https://img.shields.io/npm/v/@sankyu/solid-circle-flags)](https://www.npmjs.com/package/@sankyu/solid-circle-flags) |
 
 ## Features
 
@@ -44,7 +44,7 @@ circle-flags-ui/
 │   ├── core/      # Shared types and utilities (private)
 │   ├── react/     # @sankyu/react-circle-flags
 │   ├── vue/       # @sankyu/vue-circle-flags (beta)
-│   └── solid/     # @sankyu/solid-circle-flags (coming soon)
+│   └── solid/     # @sankyu/solid-circle-flags (beta)
 ├── scripts/       # Shared build scripts
 └── website/       # Documentation site
 ```
