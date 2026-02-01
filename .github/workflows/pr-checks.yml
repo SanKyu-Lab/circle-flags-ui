@@ -15,14 +15,5 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  format:
-    uses: ./.github/workflows/check-format.yml
-
-  lint-typecheck:
-    uses: ./.github/workflows/check-lint-typecheck.yml
-
-  test:
-    uses: ./.github/workflows/check-test.yml
-
-  build:
-    uses: ./.github/workflows/check-build.yml
+  checks:
+    uses: ./.github/workflows/checks.yml
