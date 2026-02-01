@@ -18,6 +18,7 @@ permissions:
 
 jobs:
   checks:
+    name: Checks
     if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, 'skip ci') }}
     uses: ./.github/workflows/checks.yml
     with:

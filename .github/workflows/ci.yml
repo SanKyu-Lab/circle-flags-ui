@@ -12,6 +12,7 @@ on:
 
 jobs:
   checks:
+    name: Checks
     # Only run if workflow_run was successful, or if triggered manually
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     uses: ./.github/workflows/checks.yml
