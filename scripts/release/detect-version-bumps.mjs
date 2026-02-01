@@ -1,19 +1,27 @@
 import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { appendFileSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import mri from 'mri'
 
-const args = process.argv.slice(2)
-const getArg = name => {
-  const idx = args.indexOf(name)
-  if (idx === -1) return null
-  const value = args[idx + 1]
-  if (!value || value.startsWith('--')) return null
-  return value
+const argv = mri(process.argv.slice(2), {
+  string: ['before', 'after', 'github-output'],
+  boolean: ['help'],
+  alias: {
+    h: 'help',
+  },
+})
+
+const usage =
+  'node scripts/release/detect-version-bumps.mjs [--before <sha>] [--after <sha>] [--github-output <path>]'
+
+if (argv.help) {
+  process.stdout.write(`${usage}\n`)
+  process.exit(0)
 }
 
-const before = getArg('--before') ?? process.env.GITHUB_EVENT_BEFORE ?? ''
-const after = getArg('--after') ?? process.env.GITHUB_SHA ?? ''
-const githubOutput = getArg('--github-output')
+const before = argv.before ?? process.env.GITHUB_EVENT_BEFORE ?? ''
+const after = argv.after ?? process.env.GITHUB_SHA ?? ''
+const githubOutput = argv['github-output']
 
 if (!after) {
   console.error('Missing --after (or GITHUB_SHA)')
@@ -83,7 +91,4 @@ out.push(packagesMd)
 out.push('EOF')
 out.push('')
 
-execFileSync('bash', ['-lc', `cat >> "${githubOutput}" <<'OUT'\n${out.join('\n')}\nOUT\n`], {
-  cwd: repoRoot,
-  stdio: 'ignore',
-})
+appendFileSync(githubOutput, `${out.join('\n')}\n`, 'utf8')

@@ -1,27 +1,33 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join, relative, resolve } from 'node:path'
+import { join, relative, resolve } from 'node:path'
 import { execFileSync } from 'node:child_process'
+import mri from 'mri'
 
-const args = process.argv.slice(2)
-const getArg = name => {
-  const idx = args.indexOf(name)
-  if (idx === -1) return null
-  const value = args[idx + 1]
-  if (!value || value.startsWith('--')) return null
-  return value
+const argv = mri(process.argv.slice(2), {
+  string: ['package-dir', 'package-name', 'version', 'tag', 'prev-tag', 'notes-path'],
+  boolean: ['help'],
+  alias: {
+    h: 'help',
+  },
+})
+
+const usage =
+  'node scripts/release/generate-package-changelog.mjs --package-dir <dir> --package-name <name> --version <version> [--tag <tag>] [--prev-tag <tag>] [--notes-path <path>]'
+
+if (argv.help) {
+  process.stdout.write(`${usage}\n`)
+  process.exit(0)
 }
 
-const packageDirArg = getArg('--package-dir')
-const packageName = getArg('--package-name')
-const version = getArg('--version')
-const currentTag = getArg('--tag')
-const prevTagArg = getArg('--prev-tag') ?? ''
-const notesPath = getArg('--notes-path')
+const packageDirArg = argv['package-dir']
+const packageName = argv['package-name']
+const version = argv.version
+const currentTag = argv.tag
+const prevTagArg = argv['prev-tag'] ?? ''
+const notesPath = argv['notes-path']
 
 if (!packageDirArg || !packageName || !version) {
-  console.error(
-    'Usage: node scripts/release/generate-package-changelog.mjs --package-dir <dir> --package-name <name> --version <version> [--tag <tag>] [--prev-tag <tag>] [--notes-path <path>]'
-  )
+  console.error(usage)
   process.exit(2)
 }
 
