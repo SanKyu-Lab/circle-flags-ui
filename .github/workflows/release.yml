@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - 'packages/*/package.json'
-      - '.github/workflows/release.yml'
+      - "packages/*/package.json"
+      - ".github/workflows/release.yml"
   workflow_dispatch:
 
 permissions:
@@ -78,21 +78,17 @@ jobs:
 
       - name: Determine previous tag
         id: prev
-        shell: bash
         run: |
-          set -euo pipefail
-          slug="${{ matrix.pkg.slug }}"
-          current_tag="${{ matrix.pkg.tag }}"
-
-          prev_tag="$(git tag --list "${slug}-v*" --sort=-v:refname | grep -v "^${current_tag}$" | head -n 1 || true)"
-          echo "prev_tag=${prev_tag}" >> "${GITHUB_OUTPUT}"
+          node scripts/gha/determine-prev-tag.mjs \
+            --slug "${{ matrix.pkg.slug }}" \
+            --current-tag "${{ matrix.pkg.tag }}"
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: 22.x
-          pnpm-version: '10'
-          registry-url: 'https://registry.npmjs.org'
+          pnpm-version: "10"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Build package
         shell: bash
@@ -138,23 +134,10 @@ jobs:
 
       - name: Create and push git tag
         id: tag
-        shell: bash
         run: |
-          set -euo pipefail
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          tag="${{ matrix.pkg.tag }}"
-          if git rev-parse "${tag}" >/dev/null 2>&1; then
-            echo "Tag already exists: ${tag}"
-            echo "created=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          git tag -a "${tag}" -m "${{ matrix.pkg.name }}@${{ matrix.pkg.version }}"
-          git push origin "${tag}"
-          echo "created=true" >> "$GITHUB_OUTPUT"
+          node scripts/gha/create-and-push-tag.mjs \
+            --tag "${{ matrix.pkg.tag }}" \
+            --message "${{ matrix.pkg.name }}@${{ matrix.pkg.version }}"
 
       - name: Create GitHub release
         if: steps.tag.outputs.created == 'true'
@@ -218,21 +201,10 @@ jobs:
           merge-multiple: true
 
       - name: Commit and push changelogs
-        shell: bash
         run: |
-          set -euo pipefail
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add packages/*/CHANGELOG.md || true
-          if git diff --staged --quiet; then
-            echo "No changelog changes to commit."
-            exit 0
-          fi
-
-          git commit -m "docs(changelog): update package changelogs [skip ci]"
-          git push
+          node scripts/gha/stage-commit-push.mjs \
+            --path "packages/*/CHANGELOG.md" \
+            --message "docs(changelog): Update package changelogs [skip ci]"
 
   summary:
     name: Release summary

@@ -76,38 +76,10 @@ jobs:
           pnpm-version: ${{ inputs.pnpm-version }}
 
       - name: Run checks
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          case "${{ matrix.check.id }}" in
-            format)
-              pnpm run format:check
-              ;;
-            lint-typecheck)
-              pnpm run gen:flags
-              if [ "${{ inputs.ensure-generated-clean }}" = "true" ]; then
-                git diff --exit-code
-              fi
-              pnpm run lint
-              pnpm run typecheck
-              ;;
-            test)
-              pnpm run gen:flags
-              pnpm run test:coverage
-              ;;
-            build)
-              NODE_ENV=production pnpm run build
-              echo ""
-              echo "Build output:"
-              ls -la packages/react/dist/
-              ls -la packages/vue/dist/
-              ;;
-            *)
-              echo "Unknown check: ${{ matrix.check.id }}"
-              exit 1
-              ;;
-          esac
+        run: >
+          node scripts/gha/run-checks.mjs
+          --check-id "${{ matrix.check.id }}"
+          ${{ inputs.ensure-generated-clean && '--ensure-generated-clean' || '' }}
 
       - name: Upload coverage to Codecov
         if: matrix.check.id == 'test' && inputs.upload-coverage == true

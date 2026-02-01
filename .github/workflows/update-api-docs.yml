@@ -56,20 +56,11 @@ jobs:
 
       - name: Check for API docs changes
         id: check_changes
-        run: |
-          git add website/src/content/docs/reference/api/
-          if git diff --staged --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No API documentation changes detected"
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            echo "API documentation has changed"
-          fi
+        run: node scripts/gha/check-staged-changes.mjs --path website/src/content/docs/reference/api/
 
       - name: Commit and push API docs
         if: steps.check_changes.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "docs(ci): Update API documentation [skip ci]"
-          git push
+        run: >
+          node scripts/gha/stage-commit-push.mjs
+          --path website/src/content/docs/reference/api/
+          --message "docs(ci): Update API documentation [skip ci]"
