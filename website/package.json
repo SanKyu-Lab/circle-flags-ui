@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "astro check && astro build",
+    "lint": "astro check && SKIP_TYPEDOC=true astro build",
     "format": "pnpm -C .. format"
   },
   "dependencies": {

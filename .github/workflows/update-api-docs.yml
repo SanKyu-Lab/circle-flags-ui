@@ -9,10 +9,16 @@ on:
     branches:
       - main
     paths:
-      - 'src/**/*.ts'
-      - 'src/**/*.tsx'
-      - 'src/docs.ts'
-      - 'src/index.tsx'
+      # Only trigger when API source files change
+      - 'packages/react/src/**/*.ts'
+      - 'packages/react/src/**/*.tsx'
+      - 'packages/vue/src/**/*.ts'
+      - 'packages/solid/src/**/*.ts'
+      - 'packages/core/src/**/*.ts'
+      # Exclude test files
+      - '!**/*.test.ts'
+      - '!**/*.test.tsx'
+      - '!**/tests/**'
   # Allow manual trigger
   workflow_dispatch:
 

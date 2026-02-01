@@ -9,6 +9,7 @@ import starlightAutoSidebar from 'starlight-auto-sidebar'
 import starlightLinksValidator from 'starlight-links-validator'
 
 const isAstroCheck = process.argv.includes('check')
+const skipTypeDoc = process.env.SKIP_TYPEDOC === 'true'
 
 const starlightPlugins = [
   starlightAutoSidebar(),
@@ -20,7 +21,7 @@ const starlightPlugins = [
         }),
       ]
     : []),
-  ...(isAstroCheck
+  ...(isAstroCheck || skipTypeDoc
     ? []
     : [
         starlightTypeDoc({
