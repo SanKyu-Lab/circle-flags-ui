@@ -44,56 +44,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
-          BEFORE="${{ github.event.before }}"
-          AFTER="${{ github.sha }}"
-
-          # workflow_dispatch doesn't have a meaningful "before"
-          if [ -z "${BEFORE}" ] || [ "${BEFORE}" = "0000000000000000000000000000000000000000" ]; then
-            BEFORE="$(git rev-list --max-parents=0 HEAD)"
-          fi
-
-          files="$(git diff --name-only "${BEFORE}" "${AFTER}" -- 'packages/*/package.json' || true)"
-          packages=()
-
-          while IFS= read -r file; do
-            [ -z "${file}" ] && continue
-
-            if ! git diff "${BEFORE}" "${AFTER}" --unified=0 -- "${file}" | grep -E '^[+-].*\"version\"' >/dev/null; then
-              continue
-            fi
-
-            isPrivate="$(node -p "Boolean(require('./${file}').private)")"
-            if [ "${isPrivate}" = "true" ]; then
-              echo "Skip private package: ${file}"
-              continue
-            fi
-
-            dir="$(dirname "${file}")"
-            name="$(node -p "require('./${file}').name")"
-            version="$(node -p "require('./${file}').version")"
-            slug="$(basename "${dir}")"
-
-            packages+=("${dir}|${name}|${version}|${slug}")
-          done <<< "${files}"
-
-          if [ "${#packages[@]}" -eq 0 ]; then
-            echo "has_packages=false" >> "${GITHUB_OUTPUT}"
-            echo "packages_json=[]" >> "${GITHUB_OUTPUT}"
-            echo "packages_md=" >> "${GITHUB_OUTPUT}"
-            exit 0
-          fi
-
-          packages_json="$(printf "%s\n" "${packages[@]}" | node -e 'const fs=require("fs"); const input=fs.readFileSync(0,"utf8").trim(); const lines=input?input.split("\n").filter(Boolean):[]; const pkgs=lines.map(line=>{const [dir,name,version,slug]=line.split("|"); return {dir,name,version,slug,tag: slug+"-v"+version};}); process.stdout.write(JSON.stringify(pkgs));')"
-          packages_md="$(printf "%s\n" "${packages[@]}" | node -e 'const fs=require("fs"); const input=fs.readFileSync(0,"utf8").trim(); const lines=input?input.split("\n").filter(Boolean):[]; const md=lines.map(line=>{const [_dir,name,version,slug]=line.split("|"); return "- `"+name+"@"+version+"` → `"+slug+"-v"+version+"`";}).join("\n"); process.stdout.write(md);')"
-
-          {
-            echo "has_packages=true"
-            echo "packages_json=${packages_json}"
-            echo "packages_md<<EOF"
-            echo "${packages_md}"
-            echo "EOF"
-          } >> "${GITHUB_OUTPUT}"
+          node scripts/release/detect-version-bumps.mjs --github-output "${GITHUB_OUTPUT}"
 
       - name: Write summary
         if: always()
@@ -170,13 +121,20 @@ jobs:
             --package-name "${{ matrix.pkg.name }}" \
             --version "${{ matrix.pkg.version }}" \
             --tag "${{ matrix.pkg.tag }}" \
-            --prev-tag "${{ steps.prev.outputs.prev_tag }}"
+            --prev-tag "${{ steps.prev.outputs.prev_tag }}" \
+            --notes-path ".release-notes.md"
 
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v4
         with:
           name: changelog-${{ matrix.pkg.slug }}
           path: ${{ matrix.pkg.dir }}/CHANGELOG.md
+
+      - name: Upload release notes artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-${{ matrix.pkg.slug }}
+          path: .release-notes.md
 
       - name: Create and push git tag
         id: tag
@@ -203,10 +161,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require("fs");
             const tag = `${{ matrix.pkg.tag }}`;
             const name = `${{ matrix.pkg.name }}`;
             const version = `${{ matrix.pkg.version }}`;
             const prerelease = version.includes("-");
+            const body = fs.readFileSync(".release-notes.md", "utf8");
 
             core.info(`Creating GitHub release: ${tag} (prerelease=${prerelease})`);
 
@@ -215,7 +175,7 @@ jobs:
               repo: context.repo.repo,
               tag_name: tag,
               name: `${name}@${version}`,
-              body: `Published \`${name}@${version}\`.`,
+              body,
               draft: false,
               prerelease,
             });
@@ -229,6 +189,12 @@ jobs:
             echo ""
             echo "- Package: \`${{ matrix.pkg.name }}@${{ matrix.pkg.version }}\`"
             echo "- Tag: \`${{ matrix.pkg.tag }}\`"
+            if [ -f ".release-notes.md" ]; then
+              echo ""
+              echo "### Release notes"
+              echo ""
+              cat ".release-notes.md"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
   changelog:

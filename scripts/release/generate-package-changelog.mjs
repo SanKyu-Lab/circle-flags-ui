@@ -16,10 +16,11 @@ const packageName = getArg('--package-name')
 const version = getArg('--version')
 const currentTag = getArg('--tag')
 const prevTagArg = getArg('--prev-tag') ?? ''
+const notesPath = getArg('--notes-path')
 
 if (!packageDirArg || !packageName || !version) {
   console.error(
-    'Usage: node scripts/release/generate-package-changelog.mjs --package-dir <dir> --package-name <name> --version <version> [--tag <tag>] [--prev-tag <tag>]'
+    'Usage: node scripts/release/generate-package-changelog.mjs --package-dir <dir> --package-name <name> --version <version> [--tag <tag>] [--prev-tag <tag>] [--notes-path <path>]'
   )
   process.exit(2)
 }
@@ -51,7 +52,14 @@ const prevTag = findPrevTag()
 const rangeArgs = prevTag ? [`${prevTag}..HEAD`] : ['HEAD']
 
 const logFormat = '%H%x1f%s%x1f%b%x1e'
-const logRaw = execGit(['log', ...rangeArgs, `--format=${logFormat}`, '--', packageDirArg])
+const logRaw = execGit([
+  'log',
+  ...rangeArgs,
+  `--format=${logFormat}`,
+  '--',
+  packageDirArg,
+  `:(exclude)${packageDirArg}/CHANGELOG.md`,
+])
 
 const commits = logRaw
   ? logRaw
@@ -155,10 +163,9 @@ const changelogPath = join(packageDir, 'CHANGELOG.md')
 const existing = existsSync(changelogPath) ? readFileSync(changelogPath, 'utf8') : ''
 const base = existing.trim() ? existing : header
 
-if (new RegExp(`^##\\s+${version.replaceAll('.', '\\.')}(\\s|$)`, 'm').test(base)) {
-  process.stdout.write('CHANGELOG already contains this version, skipping.\n')
-  process.exit(0)
-}
+const alreadyHasVersion = new RegExp(`^##\\s+${version.replaceAll('.', '\\.')}(\\s|$)`, 'm').test(
+  base
+)
 
 let entry = `## ${version} - ${today}\n\n`
 if (!sections.length) {
@@ -168,6 +175,10 @@ if (!sections.length) {
     entry += `### ${title}\n\n${lines.join('\n')}\n\n`
   }
 }
+
+const notes = `## ${packageName}@${version}\n\n${
+  prevTag ? `- Previous tag: \`${prevTag}\`\n` : '- Previous tag: (none)\n'
+}\n${entry.trimEnd()}\n`
 
 const insertAfterHeader = content => {
   if (!content.startsWith('# Changelog'))
@@ -186,8 +197,15 @@ const insertAfterHeader = content => {
   return `${before}\n\n${entry}\n${after}`.trimEnd() + '\n'
 }
 
-const next = insertAfterHeader(base)
-writeFileSync(changelogPath, next)
+if (!alreadyHasVersion) {
+  const next = insertAfterHeader(base)
+  writeFileSync(changelogPath, next)
+}
+
+if (notesPath) {
+  const resolvedNotesPath = resolve(repoRoot, notesPath)
+  writeFileSync(resolvedNotesPath, notes)
+}
 
 process.stdout.write(
   `Updated ${relative(repoRoot, changelogPath)} (prevTag=${prevTag || '(none)'})\n`
