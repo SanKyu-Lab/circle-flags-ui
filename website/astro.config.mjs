@@ -2,6 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config'
 import react from '@astrojs/react'
 import starlight from '@astrojs/starlight'
+import { fileURLToPath } from 'node:url'
 import { siteConfig } from './src/config/siteConfig'
 import starlightLlmsTxt from 'starlight-llms-txt'
 import starlightTypeDoc from 'starlight-typedoc'
@@ -9,7 +10,13 @@ import starlightAutoSidebar from 'starlight-auto-sidebar'
 import starlightLinksValidator from 'starlight-links-validator'
 
 const isAstroCheck = process.argv.includes('check')
-const skipTypeDoc = process.env.SKIP_TYPEDOC === 'true'
+const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
+const shouldRunTypeDoc = isCI && process.env.SKIP_TYPEDOC !== 'true'
+
+const reactPkgEntry = fileURLToPath(new URL('../packages/react/src/index.tsx', import.meta.url))
+const reactPkgSrcDir = fileURLToPath(new URL('../packages/react/src/', import.meta.url))
+const corePkgEntry = fileURLToPath(new URL('../packages/core/src/index.ts', import.meta.url))
+const corePkgSrcDir = fileURLToPath(new URL('../packages/core/src/', import.meta.url))
 
 const starlightPlugins = [
   starlightAutoSidebar(),
@@ -21,7 +28,7 @@ const starlightPlugins = [
         }),
       ]
     : []),
-  ...(isAstroCheck || skipTypeDoc
+  ...(isAstroCheck || !shouldRunTypeDoc
     ? []
     : [
         starlightTypeDoc({
@@ -36,6 +43,7 @@ const starlightPlugins = [
             excludeProtected: true,
             excludeInternal: true,
             readme: 'none',
+            gitRevision: 'main',
             entryPointStrategy: 'resolve',
             flattenOutputFiles: true,
             hideBreadcrumbs: true,
@@ -239,6 +247,14 @@ export default defineConfig({
     format: 'directory',
   },
   vite: {
+    resolve: {
+      alias: [
+        { find: '@sankyu/react-circle-flags', replacement: reactPkgEntry },
+        { find: /^@sankyu\/react-circle-flags\/(.*)$/, replacement: `${reactPkgSrcDir}$1` },
+        { find: '@sankyu/circle-flags-core', replacement: corePkgEntry },
+        { find: /^@sankyu\/circle-flags-core\/(.*)$/, replacement: `${corePkgSrcDir}$1` },
+      ],
+    },
     server: {
       fs: {
         allow: ['..'],

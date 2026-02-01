@@ -17,16 +17,71 @@ permissions:
   id-token: write
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
+  checks:
+    name: Checks
+    if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, 'skip ci') }}
+    uses: ./.github/workflows/checks.yml
+    with:
+      upload-coverage: false
 
+  detect:
+    name: Detect packages to release
+    runs-on: ubuntu-latest
+    needs: checks
+    outputs:
+      has_packages: ${{ steps.changed.outputs.has_packages }}
+      packages_json: ${{ steps.changed.outputs.packages_json }}
+      packages_md: ${{ steps.changed.outputs.packages_md }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect version bumps
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/release/detect-version-bumps.mjs --github-output "${GITHUB_OUTPUT}"
+
+      - name: Write summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Packages to release"
+            echo ""
+            if [ "${{ steps.changed.outputs.has_packages }}" != "true" ]; then
+              echo "- (none)"
+            else
+              echo "${{ steps.changed.outputs.packages_md }}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: detect
+    if: needs.detect.outputs.has_packages == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg: ${{ fromJSON(needs.detect.outputs.packages_json) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine previous tag
+        id: prev
+        run: |
+          node scripts/gha/determine-prev-tag.mjs \
+            --slug "${{ matrix.pkg.slug }}" \
+            --current-tag "${{ matrix.pkg.tag }}"
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
@@ -35,154 +90,142 @@ jobs:
           pnpm-version: '10'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Generate artifacts
-        run: pnpm run gen
-
-      - name: Check formatting
-        run: pnpm run format:check
-
-      - name: Build packages
-        run: pnpm -r --filter './packages/*' run build
-        env:
-          NODE_ENV: production
-
-      - name: Run linter
-        run: pnpm run lint
-
-      - name: Run type check
-        run: pnpm run typecheck
-
-      - name: Run tests
-        run: pnpm -r --filter './packages/*' --if-present run test
-
-      - name: Detect version bumps
-        id: changed
+      - name: Build package
         shell: bash
         run: |
           set -euo pipefail
-
-          BEFORE="${{ github.event.before }}"
-          AFTER="${{ github.sha }}"
-
-          # workflow_dispatch doesn't have a meaningful "before"
-          if [ -z "${BEFORE}" ] || [ "${BEFORE}" = "0000000000000000000000000000000000000000" ]; then
-            BEFORE="$(git rev-list --max-parents=0 HEAD)"
-          fi
-
-          files="$(git diff --name-only "${BEFORE}" "${AFTER}" -- 'packages/*/package.json' || true)"
-          packages=()
-
-          while IFS= read -r file; do
-            [ -z "${file}" ] && continue
-
-            if ! git diff "${BEFORE}" "${AFTER}" --unified=0 -- "${file}" | grep -E '^[+-].*\"version\"' >/dev/null; then
-              continue
-            fi
-
-            isPrivate="$(node -p "Boolean(require('./${file}').private)")"
-            if [ "${isPrivate}" = "true" ]; then
-              echo "Skip private package: ${file}"
-              continue
-            fi
-
-            dir="$(dirname "${file}")"
-            name="$(node -p "require('./${file}').name")"
-            version="$(node -p "require('./${file}').version")"
-            slug="$(basename "${dir}")"
-
-            packages+=("${dir}|${name}|${version}|${slug}")
-          done <<< "${files}"
-
-          if [ "${#packages[@]}" -eq 0 ]; then
-            echo "has_packages=false" >> "${GITHUB_OUTPUT}"
-            echo "packages=" >> "${GITHUB_OUTPUT}"
-            exit 0
-          fi
-
-          {
-            echo "has_packages=true"
-            echo "packages<<EOF"
-            printf "%s\n" "${packages[@]}"
-            echo "EOF"
-          } >> "${GITHUB_OUTPUT}"
+          pnpm run gen:flags
+          pnpm -r --filter "${{ matrix.pkg.name }}..." run build
+        env:
+          NODE_ENV: production
 
       - name: Publish to npm
-        if: steps.changed.outputs.has_packages == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
+          echo "Publishing ${{ matrix.pkg.name }}@${{ matrix.pkg.version }} from ${{ matrix.pkg.dir }}"
+          (cd "${{ matrix.pkg.dir }}" && npm publish --access public --provenance)
 
-          while IFS='|' read -r dir name version slug; do
-            [ -z "${dir}" ] && continue
-            echo "Publishing ${name}@${version} from ${dir}"
-            (cd "${dir}" && npm publish --access public --provenance)
-          done <<< "${{ steps.changed.outputs.packages }}"
-
-      - name: Create git tags
-        if: steps.changed.outputs.has_packages == 'true'
-        id: tags
+      - name: Generate package changelog
         shell: bash
         run: |
           set -euo pipefail
+          node scripts/release/generate-package-changelog.mjs \
+            --package-dir "${{ matrix.pkg.dir }}" \
+            --package-name "${{ matrix.pkg.name }}" \
+            --version "${{ matrix.pkg.version }}" \
+            --tag "${{ matrix.pkg.tag }}" \
+            --prev-tag "${{ steps.prev.outputs.prev_tag }}" \
+            --notes-path ".release-notes.md"
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Upload changelog artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog-${{ matrix.pkg.slug }}
+          path: ${{ matrix.pkg.dir }}/CHANGELOG.md
 
-          tags=()
+      - name: Upload release notes artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-${{ matrix.pkg.slug }}
+          path: .release-notes.md
 
-          while IFS='|' read -r dir name version slug; do
-            [ -z "${dir}" ] && continue
-            tag="${slug}-v${version}"
+      - name: Create and push git tag
+        id: tag
+        run: |
+          node scripts/gha/create-and-push-tag.mjs \
+            --tag "${{ matrix.pkg.tag }}" \
+            --message "${{ matrix.pkg.name }}@${{ matrix.pkg.version }}"
 
-            if git rev-parse "${tag}" >/dev/null 2>&1; then
-              echo "Tag already exists: ${tag}"
-              continue
-            fi
-
-            git tag -a "${tag}" -m "${name}@${version}"
-            git push origin "${tag}"
-            tags+=("${tag}|${name}|${version}|${slug}")
-          done <<< "${{ steps.changed.outputs.packages }}"
-
-          if [ "${#tags[@]}" -eq 0 ]; then
-            echo "tags=" >> "${GITHUB_OUTPUT}"
-            exit 0
-          fi
-
-          {
-            echo "tags<<EOF"
-            printf "%s\n" "${tags[@]}"
-            echo "EOF"
-          } >> "${GITHUB_OUTPUT}"
-
-      - name: Create GitHub releases
-        if: steps.tags.outputs.tags != ''
+      - name: Create GitHub release
+        if: steps.tag.outputs.created == 'true'
         uses: actions/github-script@v7
         with:
           script: |
-            const raw = `${{ steps.tags.outputs.tags }}`.trim();
-            if (!raw) {
-              core.info("No tags to release.");
-              return;
-            }
+            const fs = require("fs");
+            const tag = `${{ matrix.pkg.tag }}`;
+            const name = `${{ matrix.pkg.name }}`;
+            const version = `${{ matrix.pkg.version }}`;
+            const prerelease = version.includes("-");
+            const body = fs.readFileSync(".release-notes.md", "utf8");
 
-            const lines = raw.split("\n").filter(Boolean);
+            core.info(`Creating GitHub release: ${tag} (prerelease=${prerelease})`);
 
-            for (const line of lines) {
-              const [tag, name, version, slug] = line.split("|");
-              const prerelease = version.includes("-");
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: `${name}@${version}`,
+              body,
+              draft: false,
+              prerelease,
+            });
 
-              core.info(`Creating GitHub release: ${tag} (prerelease=${prerelease})`);
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Published"
+            echo ""
+            echo "- Package: \`${{ matrix.pkg.name }}@${{ matrix.pkg.version }}\`"
+            echo "- Tag: \`${{ matrix.pkg.tag }}\`"
+            if [ -f ".release-notes.md" ]; then
+              echo ""
+              echo "### Release notes"
+              echo ""
+              cat ".release-notes.md"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
-              await github.rest.repos.createRelease({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                tag_name: tag,
-                name: `${name}@${version}`,
-                body: `Published \`${name}@${version}\`.`,
-                draft: false,
-                prerelease,
-              });
-            }
+  changelog:
+    name: Commit changelogs
+    runs-on: ubuntu-latest
+    needs:
+      - detect
+      - publish
+    if: needs.detect.outputs.has_packages == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download changelog artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: changelog-*
+          merge-multiple: true
+
+      - name: Commit and push changelogs
+        run: |
+          node scripts/gha/stage-commit-push.mjs \
+            --path "packages/*/CHANGELOG.md" \
+            --message "docs(changelog): Update package changelogs [skip ci]"
+
+  summary:
+    name: Release summary
+    runs-on: ubuntu-latest
+    needs:
+      - detect
+      - publish
+      - changelog
+    if: ${{ always() && needs.detect.result != 'skipped' }}
+    steps:
+      - name: Write summary
+        shell: bash
+        run: |
+          {
+            echo "## Release summary"
+            echo ""
+            if [ "${{ needs.detect.outputs.has_packages }}" != "true" ]; then
+              echo "- (no packages to publish)"
+              exit 0
+            fi
+            echo "### Packages"
+            echo ""
+            echo "${{ needs.detect.outputs.packages_md }}"
+          } >> "$GITHUB_STEP_SUMMARY"

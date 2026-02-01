@@ -11,23 +11,11 @@ on:
     branches: [main]
 
 jobs:
-  format:
+  checks:
+    name: Checks
     # Only run if workflow_run was successful, or if triggered manually
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    uses: ./.github/workflows/check-format.yml
-
-  lint-typecheck:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    uses: ./.github/workflows/check-lint-typecheck.yml
-
-  test:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    uses: ./.github/workflows/check-test.yml
+    uses: ./.github/workflows/checks.yml
     secrets: inherit
     with:
       upload-coverage: true
-
-  build:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    needs: test
-    uses: ./.github/workflows/check-build.yml

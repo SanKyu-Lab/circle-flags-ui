@@ -56,7 +56,7 @@
     "solid-js": ">=1.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "workspace:*"
+    "@sankyu/circle-flags-core": "^1.5.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",

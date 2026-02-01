@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Check Tests
+name: Checks
 
 on:
   workflow_call:
@@ -12,6 +12,10 @@ on:
         type: string
         required: false
         default: '10'
+      ensure-generated-clean:
+        type: boolean
+        required: false
+        default: true
       upload-coverage:
         type: boolean
         required: false
@@ -31,6 +35,11 @@ on:
         type: string
         required: false
         default: '10'
+      ensure-generated-clean:
+        description: Fail if generated files changed
+        type: boolean
+        required: false
+        default: true
       upload-coverage:
         description: Upload coverage to Codecov (requires CODECOV_TOKEN)
         type: boolean
@@ -38,10 +47,22 @@ on:
         default: false
 
 jobs:
-  test:
+  check:
+    name: ${{ matrix.check.name }}
     runs-on: ubuntu-latest
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        check:
+          - id: format
+            name: Format
+          - id: lint-typecheck
+            name: Lint + Typecheck
+          - id: test
+            name: Tests
+          - id: build
+            name: Build
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -54,14 +75,16 @@ jobs:
           node-version: ${{ inputs.node-version }}
           pnpm-version: ${{ inputs.pnpm-version }}
 
-      - name: Generate flags
-        run: pnpm run gen:flags
-
-      - name: Run tests
-        run: pnpm run test:coverage
+      - name: Run checks
+        run: >
+          node scripts/gha/run-checks.mjs
+          --check-id "${{ matrix.check.id }}"
+          ${{ inputs.ensure-generated-clean && '--ensure-generated-clean' || '' }}
 
       - name: Upload coverage to Codecov
-        if: inputs.upload-coverage == true && env.CODECOV_TOKEN != ''
+        if: matrix.check.id == 'test' && inputs.upload-coverage == true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v5
         with:
           token: ${{ env.CODECOV_TOKEN }}
@@ -69,3 +92,17 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
+
+      - name: Write job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## ${{ matrix.check.name }}"
+            echo ""
+            echo "- Check: \`${{ matrix.check.id }}\`"
+            echo "- Node: \`${{ inputs.node-version }}\`"
+            echo "- pnpm: \`${{ inputs.pnpm-version }}\`"
+            echo "- ensure-generated-clean: \`${{ inputs.ensure-generated-clean }}\`"
+            echo "- upload-coverage: \`${{ inputs.upload-coverage }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
