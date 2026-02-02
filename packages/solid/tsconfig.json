@@ -10,7 +10,8 @@
     "baseUrl": ".",
     "paths": {
       "@sankyu/circle-flags-core": ["../core/src"],
-      "@sankyu/circle-flags-core/*": ["../core/src/*"]
+      "@sankyu/circle-flags-core/*": ["../core/src/*"],
+      "@sankyu/solid-circle-flags/*": ["src/*"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,
