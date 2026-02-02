@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://react-circle-flags.js.org/">
-    <img src="https://raw.githubusercontent.com/SanKyu-Lab/react-circle-flags/main/website/public/favicon.svg" alt="@sankyu/solid-circle-flags" width="120" height="120" />
+    <img src="https://raw.githubusercontent.com/SanKyu-Lab/react-circle-flags/main/.github/assets/favicon.svg" alt="@sankyu/solid-circle-flags" width="120" height="120" />
   </a>
 </div>
 
