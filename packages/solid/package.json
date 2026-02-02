@@ -11,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./internal/escape-html": {
+      "types": "./dist/internal/escape-html.d.ts",
+      "import": "./dist/internal/escape-html.mjs",
+      "require": "./dist/internal/escape-html.cjs"
     }
   },
   "files": [
