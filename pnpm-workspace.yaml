@@ -1,6 +1,7 @@
 packages:
   - 'packages/*'
   - 'website'
+  - 'examples/*'
 
 onlyBuiltDependencies:
   - core-js
