@@ -1,4 +1,4 @@
-// DO NOT EDIT.
+// DO NOT CHANGE ANY PART OF THIS FILE
 // This file is auto-generated from examples/shared/lib.
 
 export const FLAG_GRID_CODES = [

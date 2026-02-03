@@ -1,4 +1,4 @@
-// DO NOT EDIT.
+// DO NOT CHANGE ANY PART OF THIS FILE
 // This file is auto-generated from examples/shared/lib.
 
 const BROWSE_BASE_URL = 'https://react-circle-flags.js.org/browse'
