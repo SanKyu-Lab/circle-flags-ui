@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - "packages/*/package.json"
-      - ".github/workflows/release.yml"
+      - 'packages/*/package.json'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 permissions:
