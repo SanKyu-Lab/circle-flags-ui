@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - 'packages/*/package.json'
-      - '.github/workflows/release.yml'
+      - "packages/*/package.json"
+      - ".github/workflows/release.yml"
   workflow_dispatch:
 
 permissions:
@@ -41,9 +41,6 @@ jobs:
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
-        with:
-          node-version: 22.x
-          pnpm-version: '10'
 
       - name: Detect version bumps
         id: changed
@@ -86,10 +83,6 @@ jobs:
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
-        with:
-          node-version: 22.x
-          pnpm-version: '10'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Determine previous tag
         id: prev
