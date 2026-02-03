@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - "packages/*/package.json"
-      - ".github/workflows/release.yml"
+      - 'packages/*/package.json'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 permissions:
@@ -206,7 +206,7 @@ jobs:
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: 22.x
-          pnpm-version: "10"
+          pnpm-version: '10'
 
       - name: Download changelog artifacts
         uses: actions/download-artifact@v4
