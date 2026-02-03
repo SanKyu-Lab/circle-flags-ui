@@ -11,10 +11,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@example-shared/*": ["../shared/src/*"],
-      "@sankyu/react-circle-flags": ["../packages/react/src/index.tsx"],
-      "@sankyu/react-circle-flags/*": ["../packages/react/src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

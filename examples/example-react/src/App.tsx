@@ -25,7 +25,7 @@ import {
 import type { ComponentType, SVGProps } from 'react'
 import { FlagGrid } from './components/FlagGrid'
 import { BuildInfoCard } from './components/BuildInfoCard'
-import { createFlagGridRows, type FlagGridCode } from '@example-shared/flag-grid'
+import { createFlagGridRows, type FlagGridCode } from './libs/shared/flag-grid'
 
 const FLAG_COMPONENTS = {
   US: FlagUs,

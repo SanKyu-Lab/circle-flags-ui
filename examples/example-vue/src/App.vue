@@ -26,7 +26,7 @@ import {
 } from '@sankyu/vue-circle-flags'
 import FlagGrid from './components/FlagGrid.vue'
 import BuildInfoCard from './components/BuildInfoCard.vue'
-import { createFlagGridRows, type FlagGridCode } from '@example-shared/flag-grid'
+import { createFlagGridRows, type FlagGridCode } from './libs/shared/flag-grid'
 
 const FLAG_COMPONENTS = {
   US: FlagUs,

@@ -7,7 +7,7 @@ import {
   getGithubReleaseTagUrl,
   getNpmPackageUrl,
   shortCommit,
-} from '@example-shared/build-info'
+} from '../libs/shared/build-info'
 
 interface BuildInfoCardProps {
   packageName: string

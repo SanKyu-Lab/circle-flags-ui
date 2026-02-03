@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "gen": "tsx scripts/gen.ts",
+    "sync:examples": "tsx scripts/sync-example-shared.ts",
     "gen:flags": "tsx scripts/gen-flags.ts",
     "gen:svgs": "tsx scripts/gen-svgs.ts",
     "postinstall": "pnpm run gen",

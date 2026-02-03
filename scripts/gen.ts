@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs'
 import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { generateFlags } from './gen-flags.ts'
+import { syncExampleShared } from './sync-example-shared.ts'
 
 const FLAGS_DIR = join(process.cwd(), 'generated/flags')
 const FLAGS_INDEX = join(FLAGS_DIR, 'index.ts')
@@ -16,6 +17,8 @@ async function hasGeneratedFlags() {
 }
 
 async function main() {
+  await syncExampleShared()
+
   const hasFlags = await hasGeneratedFlags()
   if (hasFlags) {
     console.log('✅ Detected generated/flags, skipping generation')

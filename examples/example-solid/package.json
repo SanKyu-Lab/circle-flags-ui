@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "workspace:^",
     "@sankyu/solid-circle-flags": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "solid-js": "^1.9.10",
@@ -20,10 +19,5 @@
     "typescript": "~5.9.3",
     "vite": "npm:rolldown-vite@7.2.5",
     "vite-plugin-solid": "^2.11.10"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "npm:rolldown-vite@7.2.5"
-    }
   }
 }

@@ -1,6 +1,6 @@
 import { For } from 'solid-js'
 import type { Component, JSX } from 'solid-js'
-import { openBrowse } from '@example-shared/browse'
+import { openBrowse } from '../libs/shared/browse'
 
 interface FlagItem {
   Component: Component<JSX.SvgSVGAttributes<SVGSVGElement>>

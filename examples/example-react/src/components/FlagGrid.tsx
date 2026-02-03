@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from 'react'
-import { openBrowse } from '@example-shared/browse'
+import { openBrowse } from '../libs/shared/browse'
 
 interface FlagItem {
   Component: ComponentType<SVGProps<SVGSVGElement>>

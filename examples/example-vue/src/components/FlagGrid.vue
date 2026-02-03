@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
-import { openBrowse } from '@example-shared/browse'
+import { openBrowse } from '../libs/shared/browse'
 
 interface FlagItem {
   component: Component
