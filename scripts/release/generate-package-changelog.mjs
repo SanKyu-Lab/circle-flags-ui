@@ -14,12 +14,12 @@ const program = new Command()
   .option('--tag <tag>', 'Tag created for this version')
   .option('--prev-tag <tag>', 'Previous tag', '')
   .option('--notes-path <path>')
+  .option('--github-token <token>', 'GitHub token for fetching PR info')
+  .option('--repo-owner <owner>', 'GitHub repo owner', 'SanKyu-Lab')
+  .option('--repo-name <name>', 'GitHub repo name', 'circle-flags-ui')
 
 program.parse()
 const options = program.opts()
-
-const usage =
-  'node scripts/release/generate-package-changelog.mjs --package-dir <dir> --package-name <name> --version <version> [--tag <tag>] [--prev-tag <tag>] [--notes-path <path>]'
 
 const packageDirArg = options.packageDir
 const packageName = options.packageName
@@ -27,6 +27,9 @@ const version = options.version
 const currentTag = options.tag
 const prevTagArg = options.prevTag ?? ''
 const notesPath = options.notesPath
+const githubToken = options.githubToken ?? process.env.GITHUB_TOKEN
+const repoOwner = options.repoOwner
+const repoName = options.repoName
 
 const repoRoot = resolve(process.cwd())
 const packageDir = resolve(repoRoot, packageDirArg)
@@ -73,6 +76,70 @@ const commits = logRaw
       })
   : []
 
+// Fetch PR info using GitHub API with retry
+const prInfoCache = new Map()
+
+const fetchPrInfo = async (commitHash, retries = 2) => {
+  if (!githubToken) return null
+
+  if (prInfoCache.has(commitHash)) {
+    return prInfoCache.get(commitHash)
+  }
+
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const response = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/commits/${commitHash}/pulls`,
+        {
+          headers: {
+            Authorization: `Bearer ${githubToken}`,
+            Accept: 'application/vnd.github.groot-preview+json',
+          },
+        }
+      )
+
+      // Handle rate limiting
+      if (response.status === 403) {
+        const resetTime = response.headers.get('x-ratelimit-reset')
+        if (resetTime && i < retries) {
+          const waitTime = parseInt(resetTime) * 1000 - Date.now() + 1000
+          if (waitTime > 0) {
+            await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 5000)))
+            continue
+          }
+        }
+      }
+
+      if (!response.ok) {
+        prInfoCache.set(commitHash, null)
+        return null
+      }
+
+      const pulls = await response.json()
+      if (pulls && pulls.length > 0) {
+        const pr = pulls[0]
+        const info = {
+          number: pr.number,
+          author: pr.user?.login,
+        }
+        prInfoCache.set(commitHash, info)
+        return info
+      }
+
+      prInfoCache.set(commitHash, null)
+      return null
+    } catch {
+      if (i === retries) {
+        prInfoCache.set(commitHash, null)
+        return null
+      }
+    }
+  }
+
+  prInfoCache.set(commitHash, null)
+  return null
+}
+
 const buckets = {
   breaking: [],
   feat: [],
@@ -80,7 +147,6 @@ const buckets = {
   perf: [],
   refactor: [],
   docs: [],
-  chore: [],
   other: [],
 }
 
@@ -90,8 +156,12 @@ for (const commit of commits) {
 
   const desc = parsed.subject?.trim() || commit.subject.trim()
   const scope = parsed.scope ? `**${parsed.scope}**: ` : ''
-  const shortHash = commit.hash.slice(0, 7)
-  const line = `- ${scope}${desc} (${shortHash})`
+
+  // Get PR info
+  const prInfo = await fetchPrInfo(commit.hash)
+  const prSuffix = prInfo ? `(@${prInfo.author} in #${prInfo.number})` : ''
+
+  const line = `- ${scope}${desc}${prSuffix}`
 
   if (breaking) {
     buckets.breaking.push(line)
@@ -114,29 +184,24 @@ for (const commit of commits) {
     case 'docs':
       buckets.docs.push(line)
       break
-    case 'chore':
-    case 'build':
-    case 'ci':
-    case 'test':
-    case 'style':
-      buckets.chore.push(line)
-      break
+    // Filter out: chore, build, ci, test, style
     default:
-      buckets.other.push(line)
+      if (!['chore', 'build', 'ci', 'test', 'style'].includes(parsed.type)) {
+        buckets.other.push(line)
+      }
   }
 }
 
 const today = new Date().toISOString().slice(0, 10)
 
 const sections = []
-if (buckets.breaking.length) sections.push(['Breaking Changes', buckets.breaking])
-if (buckets.feat.length) sections.push(['Features', buckets.feat])
-if (buckets.fix.length) sections.push(['Bug Fixes', buckets.fix])
-if (buckets.perf.length) sections.push(['Performance', buckets.perf])
-if (buckets.refactor.length) sections.push(['Refactors', buckets.refactor])
-if (buckets.docs.length) sections.push(['Documentation', buckets.docs])
-if (buckets.chore.length) sections.push(['Chores', buckets.chore])
-if (buckets.other.length) sections.push(['Other', buckets.other])
+if (buckets.breaking.length) sections.push(['### 💥 Breaking Changes', buckets.breaking])
+if (buckets.feat.length) sections.push(['### 🚀 Features', buckets.feat])
+if (buckets.fix.length) sections.push(['### 🐛 Bug Fixes', buckets.fix])
+if (buckets.perf.length) sections.push(['### ⚡ Performance', buckets.perf])
+if (buckets.refactor.length) sections.push(['### ♻️ Refactors', buckets.refactor])
+if (buckets.docs.length) sections.push(['### 📝 Documentation', buckets.docs])
+if (buckets.other.length) sections.push(['### 🔮 Other', buckets.other])
 
 const header = `# Changelog
 
@@ -158,13 +223,23 @@ if (!sections.length) {
   entry += '- No changes recorded.\n'
 } else {
   for (const [title, lines] of sections) {
-    entry += `### ${title}\n\n${lines.join('\n')}\n\n`
+    entry += `${title}\n\n${lines.join('\n')}\n\n`
   }
 }
 
-const notes = `## ${packageName}@${version}\n\n${
-  prevTag ? `- Previous tag: \`${prevTag}\`\n` : '- Previous tag: (none)\n'
-}\n${entry.trimEnd()}\n`
+// New release notes format
+const comparisonUrl = prevTag
+  ? `https://github.com/${repoOwner}/${repoName}/compare/${prevTag}...${currentTag}`
+  : `https://github.com/${repoOwner}/${repoName}/commits/${currentTag}`
+
+const notes = `# ${packageName} Release ${version}
+
+## What's Changed
+
+${sections.map(([title, lines]) => `${title.replace('### ', '')}\n\n${lines.join('\n')}\n`).join('\n')}
+
+**Full Changelog**: ${comparisonUrl}
+`
 
 const insertAfterHeader = content => {
   if (!content.startsWith('# Changelog'))
