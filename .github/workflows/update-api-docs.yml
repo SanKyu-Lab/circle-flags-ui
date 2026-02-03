@@ -43,6 +43,8 @@ jobs:
         run: pnpm run build
 
       - name: Build website (triggers TypeDoc generation)
+        env:
+          RUN_TYPEDOC: 'true'
         run: |
           cd website
           pnpm install --frozen-lockfile

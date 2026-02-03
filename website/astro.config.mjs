@@ -11,7 +11,9 @@ import starlightLinksValidator from 'starlight-links-validator'
 
 const isAstroCheck = process.argv.includes('check')
 const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
-const shouldRunTypeDoc = isCI && process.env.SKIP_TYPEDOC !== 'true'
+
+const isTypeDocEnabled = process.env.RUN_TYPEDOC === 'true'
+const shouldRunTypeDoc = isCI && isTypeDocEnabled && process.env.SKIP_TYPEDOC !== 'true'
 
 const reactPkgEntry = fileURLToPath(new URL('../packages/react/src/index.tsx', import.meta.url))
 const reactPkgSrcDir = fileURLToPath(new URL('../packages/react/src/', import.meta.url))
