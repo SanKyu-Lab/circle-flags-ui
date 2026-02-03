@@ -83,6 +83,9 @@ jobs:
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
+        with:
+          registry-url: https://registry.npmjs.org
+          install: false
 
       - name: Determine previous tag
         id: prev
