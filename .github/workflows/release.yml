@@ -84,19 +84,19 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determine previous tag
-        id: prev
-        run: |
-          node scripts/gha/determine-prev-tag.mjs \
-            --slug "${{ matrix.pkg.slug }}" \
-            --current-tag "${{ matrix.pkg.tag }}"
-
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: 22.x
           pnpm-version: '10'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Determine previous tag
+        id: prev
+        run: |
+          node scripts/gha/determine-prev-tag.mjs \
+            --slug "${{ matrix.pkg.slug }}" \
+            --current-tag "${{ matrix.pkg.tag }}"
 
       - name: Build package
         shell: bash
