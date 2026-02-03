@@ -7,7 +7,7 @@ import {
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-const external = ['vue', '@sankyu/circle-flags-core']
+const external = ['vue']
 
 const define = createBuildDefines({ prefix: 'VUE_CIRCLE_FLAGS' })
 

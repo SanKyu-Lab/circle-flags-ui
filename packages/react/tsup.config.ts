@@ -6,13 +6,7 @@ import {
 } from '../../scripts/tsup/shared.ts'
 
 const isProduction = process.env.NODE_ENV === 'production'
-const external = [
-  'react',
-  'react-dom',
-  'react/jsx-runtime',
-  'react/jsx-dev-runtime',
-  '@sankyu/circle-flags-core',
-]
+const external = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
 
 const define = createBuildDefines({ prefix: 'REACT_CIRCLE_FLAGS' })
 

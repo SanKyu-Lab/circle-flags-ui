@@ -8,7 +8,7 @@ import {
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-const external = ['solid-js', '@sankyu/circle-flags-core']
+const external = ['solid-js']
 
 const define = createBuildDefines({ prefix: 'SOLID_CIRCLE_FLAGS' })
 
