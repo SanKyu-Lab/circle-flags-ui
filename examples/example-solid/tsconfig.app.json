@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.app.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@example-shared/*": ["../shared/src/*"]
+    }
+  },
+  "include": ["src"]
+}

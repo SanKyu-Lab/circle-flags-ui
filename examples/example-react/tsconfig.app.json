@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.app.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@example-shared/*": ["../shared/src/*"],
+      "@sankyu/react-circle-flags": ["../packages/react/src/index.tsx"],
+      "@sankyu/react-circle-flags/*": ["../packages/react/src/*"]
+    }
+  },
+  "include": ["src"]
+}
