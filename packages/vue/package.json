@@ -23,7 +23,9 @@
   },
   "sideEffects": false,
   "scripts": {
+    "predev": "pnpm -C ../.. -F @sankyu/circle-flags-core run build",
     "dev": "tsup --watch",
+    "prebuild": "pnpm -C ../.. -F @sankyu/circle-flags-core run build",
     "build": "tsup",
     "postbuild": "node scripts/postbuild.mjs",
     "typecheck": "tsc --noEmit",

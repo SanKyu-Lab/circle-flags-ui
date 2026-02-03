@@ -22,8 +22,10 @@
     "access": "public"
   },
   "scripts": {
+    "prebuild": "node ../../scripts/ensure-generated.mjs",
     "build": "tsup",
     "dev": "tsup --watch",
+    "pretypecheck": "node ../../scripts/ensure-generated.mjs",
     "typecheck": "tsc --noEmit"
   },
   "repository": {

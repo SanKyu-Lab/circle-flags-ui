@@ -3,8 +3,11 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "predev": "pnpm -C .. run build:react",
     "dev": "astro dev",
+    "prestart": "pnpm -C .. run build:react",
     "start": "astro dev",
+    "prebuild": "pnpm -C .. run build:react",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",

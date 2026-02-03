@@ -19,7 +19,7 @@
     "dev:package": "pnpm -r -F './packages/*' --if-present run dev",
     "dev:website": "pnpm -F './website' run dev",
     "dev:examples": "pnpm -r -F './examples/*' --if-present run dev",
-    "typecheck": "pnpm -r --parallel run typecheck",
+    "typecheck": "pnpm run gen:flags && pnpm -r --parallel run typecheck",
     "lint": "pnpm -r --if-present run lint",
     "lint:fix": "pnpm -r --if-present run lint:fix",
     "format": "prettier --write .",
