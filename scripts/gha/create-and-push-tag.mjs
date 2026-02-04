@@ -1,6 +1,8 @@
 import { Command } from 'commander'
 import { simpleGit } from 'simple-git'
 import { appendFileSync } from 'node:fs'
+import { execSync } from 'node:child_process'
+import { resolve } from 'node:path'
 
 const program = new Command()
   .name('create-and-push-tag')
@@ -41,6 +43,21 @@ if (exists) {
 }
 
 await git.raw(['tag', '-a', tag, '-m', message])
+
+// Format CHANGELOG.md files before push to avoid pre-push hook failures
+try {
+  const repoRoot = resolve(process.cwd())
+  const prettierPath = resolve(repoRoot, 'node_modules', '.bin', 'prettier')
+  execSync(`"${prettierPath}" --write packages/*/CHANGELOG.md`, {
+    cwd: repoRoot,
+    stdio: 'pipe',
+  })
+  // Stage the formatted CHANGELOG.md files
+  await git.add(['packages/*/CHANGELOG.md'])
+} catch {
+  // Prettier not found or no CHANGELOG.md files, continue
+}
+
 await git.raw(['push', 'origin', tag])
 
 process.stdout.write(`Tag created and pushed: ${tag}\n`)
