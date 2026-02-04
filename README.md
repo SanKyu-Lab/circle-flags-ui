@@ -20,6 +20,8 @@ A monorepo for circular flag components across multiple UI frameworks.
 - 📱 **SSR compatible** - Works with Next.js, Nuxt, SolidStart, etc.
 - 🪶 **Lightweight** - Each flag is ~1KB
 
+> Note: `CircleFlag` is deprecated (kept temporarily for backward compatibility). Prefer named imports or `DynamicFlag`.
+
 ## Development
 
 ```bash

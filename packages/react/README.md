@@ -89,6 +89,15 @@ export default function App() {
 > [!TIP]
 > For more information, you may refer to the [Usage Guide](https://react-circle-flags.js.org/docs/guides/getting-started/usage/).
 
+## ⚠️ Deprecated: `<CircleFlag />`
+
+`<CircleFlag />` is deprecated and is **not recommended for new code**.
+
+- It fetches SVG at runtime (not offline-first).
+- After loading, it renders a wrapper with injected SVG HTML, so many SVG-only props won’t apply.
+
+See: https://react-circle-flags.js.org/docs/deprecated/circleflag/
+
 ## 📚 API
 
 ### Build Meta Information

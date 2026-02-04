@@ -89,6 +89,15 @@ export default function App() {
 > [!TIP]
 > 欲了解更多信息，请参阅 [使用指南](https://react-circle-flags.js.org/docs/guides/getting-started/usage/)。
 
+## ⚠️ 弃用警告：`<CircleFlag />`
+
+`<CircleFlag />` 已弃用，**不推荐在新代码中使用**。
+
+- 它会在运行时拉取 SVG（非离线优先）。
+- 加载后渲染的是 wrapper 并注入 SVG HTML，许多仅 SVG 生效的 props 无法按预期工作。
+
+详见：https://react-circle-flags.js.org/docs/deprecated/circleflag/
+
 ## 📚 API
 
 ### 构建元信息
