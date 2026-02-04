@@ -3,7 +3,6 @@ title: TypeScript
 description: Use the SVG prop types in your components.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 
@@ -78,19 +77,25 @@ TypeScript will automatically infer all available props when you use flag compon
   </TabItem>
   <TabItem label="Reusable Wrapper" icon="seti:react">
     ```tsx
-    import type { ComponentProps } from 'react'
-    import { FlagUs, FlagCn, FlagGb } from '@sankyu/react-circle-flags'
+    import type { ComponentProps, ComponentType } from 'react'
+    import { FlagUs } from '@sankyu/react-circle-flags'
 
-    type FlagComponent = typeof FlagUs | typeof FlagCn | typeof FlagGb
-    type FlagWrapperProps = ComponentProps<FlagComponent> & {
+    type SvgFlagProps = ComponentProps<typeof FlagUs>
+    type SvgFlagComponent = ComponentType<SvgFlagProps>
+
+    interface FlagWithLabelProps extends SvgFlagProps {
+      FlagComponent?: SvgFlagComponent
       label?: string
     }
 
-    export function FlagWithLabel({ label, ...flagProps }: FlagWrapperProps) {
-      const FlagComp = flagProps.as || FlagUs
+    export function FlagWithLabel({
+      FlagComponent = FlagUs,
+      label,
+      ...svgProps
+    }: FlagWithLabelProps) {
       return (
         <div>
-          <FlagComp {...flagProps} />
+          <FlagComponent {...svgProps} />
           {label && <span>{label}</span>}
         </div>
       )

@@ -11,18 +11,17 @@ import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 Choose the right approach based on your use case:
 
-<LinkCard title="1. Named Imports" href="#1-named-imports" />
-<LinkCard title="2. CircleFlag" href="#2-circleflag" />
-<LinkCard title="3. DynamicFlag" href="#3-dynamicflag" />
+<LinkCard title="1. Named Imports (Recommended)" href="#1-named-imports" />
+<LinkCard title="2. DynamicFlag (Offline, Large Bundle)" href="#2-dynamicflag" />
 
 ### 1. Named Imports
 
 :::tip[When to use]
 Use named imports when you:
 
-- ✅ You know which flags you need at build time
+- 📦 Work offline or in restricted network environments
+- ✅ Know which flags you need at build time
 - 🚀 Want synchronous rendering without loading states
-- 📦 Working offline or in restricted network environments
 
 :::
 
@@ -75,80 +74,30 @@ import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
 See full props definition: [FlagComponentProps →](/reference/api/interfaceflagcomponentprops/)
 :::
 
-### 2. CircleFlag
+### 2. DynamicFlag
 
-:::tip[When to use]
-Use CircleFlag when you:
-
-- ✅ Country codes are determined at runtime (e.g., user input, API responses)
-- 📉 Want to minimize bundle size
-- 🌐 Can tolerate async loading with brief loading states
-- 🔌 Have reliable CDN access
-
-:::
-
-**Best for dynamic flags.**
-
-- **Bundle impact:** ~2 KB (component only)
-- **Tree-shaking:** ✅ Perfect
-- **Loading:** Async from CDN
-
-Load SVG flags from CDN on demand. Perfect for runtime-determined country codes:
-
-<Tabs groupId="framework">
-  <TabItem label="React" icon="seti:react">
-
-```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
-
-export function CountryFlag({ code }: { code: string }) {
-  return <CircleFlag countryCode={code} width={36} height={36} />
-}
-```
-
-  </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
-
-```vue
-<script setup lang="ts">
-import { CircleFlag } from '@sankyu/vue-circle-flags'
-const props = defineProps<{ code: string }>()
-</script>
-
-<template>
-  <CircleFlag :countryCode="props.code" :width="36" :height="36" />
-</template>
-```
-
-  </TabItem>
-</Tabs>
-
-:::note[API Reference]
-See full props definition: [CircleFlagProps →](/reference/api/interfacecircleflagprops/)
-:::
-
-### 3. DynamicFlag
+<span id="3-dynamicflag"></span>
 
 :::tip[When to use]
 Use DynamicFlag when you:
 
-- ❌ Cannot access external CDNs
-- ⚡ Need instant rendering without any loading states
-- 🛠️ Want to render any flag synchronously at runtime
+- ⚡ Need to render _any_ flag synchronously from runtime ISO codes
+- ❌ Cannot access external CDNs (offline, intranet, air-gapped)
+- 🛠️ Want full SVG props support (direct `<svg />` rendering)
 
 :::
 
 :::caution[Large Bundle Impact]
-This component adds **~600 KB** to your bundle.
+This component adds **~600 KB** to your bundle (it bundles ALL 400+ flags).
 :::
 
-**Loads all flags in a single bundle.**
+**Offline-first runtime flags (bundles all flags).**
 
 - **Bundle impact:** ~600 KB
 - **Tree-shaking:** ❌ None
 - **Loading:** Synchronous, instant
 
-Bundles ALL 400+ flag components. Only use when you absolutely need synchronous rendering of any flag:
+Render any flag from runtime ISO codes without network requests:
 
 <Tabs syncKey="framework">
   <TabItem label="React" icon="seti:react">
@@ -161,7 +110,7 @@ export function CountryFlag({ code }: { code: string }) {
 }
 ```
 
-</TabItem>
+  </TabItem>
   <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
@@ -316,7 +265,7 @@ The library works seamlessly with all modern frameworks:
   />
   <LinkCard
     title="Dynamic Flags"
-    description="Learn when to use CircleFlag vs DynamicFlag"
+    description="Render flags from runtime ISO codes (offline-first strategies)"
     href="../dynamic-flags/"
   />
 </CardGrid>

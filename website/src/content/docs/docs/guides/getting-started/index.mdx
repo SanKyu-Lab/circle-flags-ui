@@ -5,7 +5,6 @@ description: Overview of installation, usage, and core concepts.
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
-import { Icon } from '@astrojs/starlight/components'
 
 Welcome to **circle-flags-ui**, a modern library for circular flag components supporting multiple frameworks.
 
@@ -59,8 +58,8 @@ Follow these guides to master the library:
   />
 </CardGrid>
 
-:::tip[No npm? Use CDN!]
-You can also load the library directly from CDN without npm install. Perfect for rapid prototyping or online sandboxes.
+:::tip[No npm? Use CDN (online-only)]
+You can load the library directly from CDN without npm install. This is great for rapid prototyping or online sandboxes, but it is **not offline-first**.
 
 👉 [CDN Usage Guide](/docs/guides/advanced/cdn-usage/)
 :::
@@ -81,10 +80,11 @@ You can also load the library directly from CDN without npm install. Perfect for
     Works seamlessly with Next.js, Nuxt.js, Remix, Astro, and other SSR frameworks.
   </Card>
   <Card title="Inline SVG" icon="document">
-    No external requests — flags are embedded as framework components.
+    Flags are embedded as framework components (named imports & DynamicFlag), so they work offline
+    with no external requests.
   </Card>
   <Card title="Standard Props" icon="setting">
-    Accepts all standard SVG properties for easy customization.
+    Named imports & DynamicFlag accept standard SVG props for easy customization.
   </Card>
 </CardGrid>
 
@@ -111,8 +111,7 @@ You can also load the library directly from CDN without npm install. Perfect for
 
   </Card>
   <Card title="Performance" icon="seti:favicon">
-    - No external HTTP requests  
-    - Inline SVG for rendering 
+    - Offline-first rendering with no external requests (named imports & DynamicFlag)  
     - Tiny per-flag size (~1-2 KB)  
   </Card>
 </CardGrid>

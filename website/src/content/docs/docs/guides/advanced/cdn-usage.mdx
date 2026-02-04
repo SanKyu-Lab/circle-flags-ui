@@ -1,22 +1,21 @@
 ---
-title: Using CDN
-description: Load react-circle-flags directly from CDN without npm install
+title: Using CDN (No npm)
+description: Load @sankyu/react-circle-flags from an ESM CDN without installing dependencies.
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components'
 import { Card, CardGrid } from '@astrojs/starlight/components'
 
-Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandboxes, or environments where npm isn't available.
+This page is for **prototyping** and **online sandboxes**.
 
-:::caution[Bundle & security]
+If you control your build, prefer installing from npm and bundling locally (best performance and offline support).
 
-- Use the `?exports=CircleFlag` query to avoid downloading the entire flag set over CDN.
-- Flags are sanitized client-side (scripts/foreignObject and javascript: URLs are stripped), but you should still trust the CDN origin you load from.
+:::caution[Security & stability]
+
+- You are executing JavaScript from a third-party origin. Only use CDNs you trust.
+- Always pin versions in production to avoid unexpected breaking changes.
   :::
 
-## Quick Start
-
-### Using esm.sh (Recommended)
+## Quick start (esm.sh)
 
 ```html
 <!DOCTYPE html>
@@ -26,8 +25,9 @@ Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandb
     <script type="importmap">
       {
         "imports": {
-          "react": "https://esm.sh/react@18",
-          "react-dom/client": "https://esm.sh/react-dom@18/client"
+          "react": "https://esm.sh/react@19",
+          "react-dom/client": "https://esm.sh/react-dom@19/client",
+          "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime"
         }
       }
     </script>
@@ -37,10 +37,10 @@ Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandb
 
     <script type="module">
       import { createRoot } from 'react-dom/client'
-      import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
+      import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.5.5?exports=FlagUs'
 
       function App() {
-        return <CircleFlag countryCode="us" width={64} />
+        return <FlagUs width={64} height={64} title="US" />
       }
 
       createRoot(document.getElementById('root')).render(<App />)
@@ -49,182 +49,60 @@ Load `@sankyu/react-circle-flags` directly from CDN for rapid prototyping, sandb
 </html>
 ```
 
-## CDN Options
+## Import only what you need
 
-All three CDNs provide excellent ESM support with automatic dependency resolution:
-
-### esm.sh (Recommended)
-
-Fast, reliable, with optimal bundle splitting and caching:
+Most ESM CDNs support an `exports` query to avoid pulling in unused exports.
 
 ```js
-// Latest version (CircleFlag-only build)
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags?exports=CircleFlag'
-
-// Pinned version (recommended for production, CircleFlag-only build)
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
-
-// Pinned major version (auto-update patches)
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@^1?exports=CircleFlag'
+import {
+  FlagCn,
+  FlagUs,
+} from 'https://esm.sh/@sankyu/react-circle-flags@1.5.5?exports=FlagCn,FlagUs'
 ```
 
-### Skypack
+## Runtime codes (finite set)
 
-Formerly Pika, a Snowflake-sponsored CDN:
-
-```js
-// Latest version (CircleFlag-only build)
-import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags?exports=CircleFlag'
-
-// Pinned version
-import { CircleFlag } from 'https://cdn.skypack.dev/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
-```
-
-### esm.run
-
-Lightning-fast ESM CDN, sponsored by jsDelivr:
+When country codes are runtime values, keep it offline-first by mapping a finite set:
 
 ```js
-// Latest version (CircleFlag-only build)
-import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags?exports=CircleFlag'
+import {
+  FlagCn,
+  FlagGb,
+  FlagUs,
+} from 'https://esm.sh/@sankyu/react-circle-flags@1.5.5?exports=FlagCn,FlagGb,FlagUs'
 
-// Pinned version
-import { CircleFlag } from 'https://esm.run/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
-```
+const FLAGS = { cn: FlagCn, gb: FlagGb, us: FlagUs }
 
-## Usage Examples
-
-### With CircleFlag (CDN-loaded SVGs)
-
-```js
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
-
-// CircleFlag loads SVGs from HatScripts CDN by default
-const App = () => <CircleFlag countryCode="us" width={48} />
-
-// Or use custom CDN
-const AppCustom = () => (
-  <CircleFlag countryCode="io" width={48} cdnUrl="https://custom-cdn.example.com/flags/" />
-)
-```
-
-### CodeSandbox / StackBlitz
-
-```js
-// App.js
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0?exports=CircleFlag'
-
-export default function App() {
-  return (
-    <div>
-      <h1>Flags Demo</h1>
-      <CircleFlag countryCode="us" width={48} />
-      <CircleFlag countryCode="cn" width={48} />
-    </div>
-  )
+export function CountryFlag({ code }) {
+  const normalized = String(code).toLowerCase()
+  const Flag = FLAGS[normalized]
+  return Flag ? <Flag width={36} height={36} /> : <span>{String(code).toUpperCase()}</span>
 }
 ```
 
-### Deno Compatibility
+## Version pinning
 
-```js
-// main.tsx (Deno)
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
-import React from 'https://esm.sh/react@18.3.1'
-import ReactDOM from 'https://esm.sh/react-dom@18.3.1/client'
-
-const App = () => <CircleFlag countryCode="us" width={48} />
-
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
-```
-
-## Version Pinning
-
-:::caution[Production Best Practice]
-
-**Always pin specific versions** in production to avoid breaking changes:
-
-```diff
-- import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
-+ import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags@1.4.0'
-```
-
+:::tip[Production best practice]
+Pin versions in production:
 :::
 
-## Custom CDN Mirrors
-
-Use regional CDN mirrors for better performance:
-
-```js
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags'
-
-const EuropeFlag = () => (
-  <CircleFlag countryCode="gb" cdnUrl="https://eu-cdn.example.com/circle-flags/flags/" />
-)
+```diff
+- import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags?exports=FlagUs'
++ import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.5.5?exports=FlagUs'
 ```
 
-## Troubleshooting
+## CDN options
 
-### Module Resolution Errors
-
-Use import maps for React dependencies:
-
-```html
-<script type="importmap">
-  {
-    "imports": {
-      "react": "https://esm.sh/react@18",
-      "react-dom/client": "https://esm.sh/react-dom@18/client",
-      "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime"
-    }
-  }
-</script>
-```
-
-### TypeScript in Browser
-
-esm.sh supports TypeScript transformation:
-
-```js
-// .ts and .tsx files work automatically
-import { CircleFlag } from 'https://esm.sh/@sankyu/react-circle-flags?target=es2020'
-```
-
-### Import Maps Fallback
-
-For browsers without import map support, use an esm shim:
-
-```html
-<script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
-<script type="importmap">
-  {
-    "imports": {
-      "react": "https://esm.sh/react@18"
-    }
-  }
-</script>
-```
-
-## Performance Tips
+All of these provide ESM support with dependency resolution:
 
 <CardGrid>
-  <Card title="Use HTTP/2" icon="rocket">
-    Modern CDNs support HTTP/2 for faster asset loading
+  <Card title="esm.sh" icon="star">
+    Great defaults, good caching, widely used.
   </Card>
-  <Card title="Enable Compression" icon="setting">
-    All CDNs serve Brotli/Gzip compressed assets automatically
+  <Card title="Skypack" icon="external">
+    Stable ESM CDN with long history.
   </Card>
-  <Card title="Leverage Browser Cache" icon="approve-check">
-    Versioned URLs enable long-term caching (1 year+)
-  </Card>
-  <Card title="Choose Right CDN" icon="star">
-    Use esm.sh for development, Skypack for production stability
+  <Card title="esm.run" icon="rocket">
+    Fast ESM CDN (jsDelivr ecosystem).
   </Card>
 </CardGrid>
-
-## Related Resources
-
-- [esm.sh Documentation](https://esm.sh/#docs)
-- [Skypack Documentation](https://docs.skypack.dev/)
-- [esm.run Documentation](https://esm.run/)
-- [Import Maps Specification - WHATWG](https://html.spec.whatwg.org/multipage/webappapis.html#import-maps)

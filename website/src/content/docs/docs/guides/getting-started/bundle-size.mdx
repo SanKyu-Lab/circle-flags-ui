@@ -5,7 +5,6 @@ description: Keep bundles small by choosing the right import strategy.
 
 import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
-import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 Optimize your bundle size by choosing the right approach for your use case.
 
@@ -20,39 +19,28 @@ Optimize your bundle size by choosing the right approach for your use case.
 
 **[View detailed usage with code examples →](./usage/#1-named-imports)**
 
-### 2. CircleFlag
+### 2. DynamicFlag
 
-- **Best for:** Dynamic flags with minimal bundle
-- **Bundle impact:** ~2 KB (component only)
-- **Tree-shaking:** ✅ Perfect
-- **Loading:** Async from CDN
-
-**[View detailed usage with code examples →](./usage/#2-circleflag)**
-
-### 3. DynamicFlag
-
-- **Best for:** CDN-restricted environments, offline apps
+- **Best for:** Offline-first apps that must render any runtime code synchronously
 - **Bundle impact:** ~600 KB (all flags bundled)
 - **Tree-shaking:** ❌ None
 - **Loading:** Synchronous, instant
 
-**[View detailed usage with code examples →](./usage/#3-dynamicflag)**
+**[View detailed usage with code examples →](./usage/#2-dynamicflag)**
 
 ## Bundle size comparison
 
-| Method                       | Bundle Size | Tree-shaking | Loading   | Use Case                         |
-| ---------------------------- | ----------- | ------------ | --------- | -------------------------------- |
-| **Named imports (3 flags)**  | ~2.8 KB     | ✅ Excellent | Instant   | Known flags at build time        |
-| **Named imports (10 flags)** | ~9.5 KB     | ✅ Excellent | Instant   | Common flags header              |
-| **CircleFlag**               | ~2 KB       | ✅ Perfect   | Async CDN | Dynamic flags, minimal bundle    |
-| **DynamicFlag**              | ~600 KB     | ❌ None      | Instant   | CDN-restricted, all flags needed |
+| Method                       | Bundle Size | Tree-shaking | Loading | Use Case                         |
+| ---------------------------- | ----------- | ------------ | ------- | -------------------------------- |
+| **Named imports (3 flags)**  | ~2.8 KB     | ✅ Excellent | Instant | Known flags at build time        |
+| **Named imports (10 flags)** | ~9.5 KB     | ✅ Excellent | Instant | Common flags header              |
+| **DynamicFlag**              | ~600 KB     | ❌ None      | Instant | CDN-restricted, all flags needed |
 
 ## Expected bundle sizes
 
-:::note[Size Reference (v1.4.0)]
+:::note[Size Reference (v1.5.5)]
 
 - **Each flag component (named import):** ~950 bytes (minified)
-- **CircleFlag component:** ~2 KB (minified)
 - **DynamicFlag (includes all flags):** ~600 KB (minified)
 - **10 named imports:** ~9.5 KB total (minified)
   :::
@@ -69,70 +57,10 @@ Optimize your bundle size by choosing the right approach for your use case.
   <Card title="Static Analysis" icon="magnifier">
     Run bundle analysis regularly to catch unexpected size increases.
   </Card>
-  <Card title="Use CircleFlag" icon="star">
-    For dynamic flags, prefer CircleFlag over DynamicFlag to avoid bundling unused flags.
+  <Card title="Prefer Offline-first" icon="star">
+    Default to named imports. If you must support any runtime code synchronously, use DynamicFlag.
   </Card>
 </CardGrid>
-
-## Hybrid approach: Best of both worlds
-
-Combine named imports for known flags with dynamic loading for runtime flags:
-
-<Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
-    ```tsx
-    import { FlagUs } from '@sankyu/react-circle-flags'
-    import { CircleFlag } from '@sankyu/react-circle-flags'
-
-    export function Header({ userCountry }: { userCountry?: string }) {
-      return (
-        <div className="flex gap-2">
-          {/* Static flags: bundled (~950 bytes) */}
-          <FlagUs width={32} height={32} />
-
-          {/* Dynamic flag: loaded from CDN (~0 KB) */}
-          {userCountry && <CircleFlag countryCode={userCountry} width={32} height={32} />}
-        </div>
-      )
-    }
-    ```
-
-    **Total bundle impact:** ~2.9 KB (FlagUs + CircleFlag component)
-
-  </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
-    ```vue
-    <script setup lang="ts">
-    import { computed, defineAsyncComponent } from 'vue'
-    import { FlagUs } from '@sankyu/vue-circle-flags'
-
-    const props = defineProps<{ userCountry?: string }>()
-
-    const DynamicFlag = computed(() => {
-      if (!props.userCountry) return null
-      const code = props.userCountry.toLowerCase()
-      const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
-      return defineAsyncComponent(() =>
-        import('@sankyu/vue-circle-flags').then(module => module[componentName])
-      )
-    })
-    </script>
-
-    <template>
-      <div class="flex gap-2">
-        <!-- Static flags: bundled (~950 bytes) -->
-        <FlagUs :width="32" :height="32" />
-
-        <!-- Dynamic flag: loaded on demand -->
-        <component v-if="DynamicFlag" :is="DynamicFlag" :width="32" :height="32" />
-      </div>
-    </template>
-    ```
-
-    **Total bundle impact:** ~950 bytes (FlagUs only, dynamic flag loaded on demand)
-
-  </TabItem>
-</Tabs>
 
 ## Analyzing your bundle
 
@@ -159,7 +87,7 @@ npm install --save-dev @next/bundle-analyzer
   />
   <LinkCard
     title="Dynamic Flags"
-    description="Deep dive into CircleFlag and DynamicFlag components"
+    description="Offline-first strategies for runtime ISO codes"
     href="./dynamic-flags/"
   />
 </CardGrid>

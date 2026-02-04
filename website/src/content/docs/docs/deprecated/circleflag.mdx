@@ -1,0 +1,79 @@
+---
+title: '<CircleFlag /> API is Deprecated!'
+description: <CircleFlag /> is deprecated and no longer documented in the main guides.
+---
+
+:::caution[Deprecated]
+
+`<CircleFlag />` API is deprecated and is **not recommended for new code**.
+
+It remains in the package temporarily for backward compatibility, but it may be removed in a future major version.
+:::
+
+## Why it’s deprecated
+
+`<CircleFlag />` fetches SVG at runtime and injects it into the DOM.
+
+- **Not offline-first:** each country code triggers a network request
+- **Availability & latency risks:** blocked/slow networks cause loading/error states
+- **SVG props mismatch:** after loading it renders a wrapper (`div`) with injected SVG HTML, so many SVG-only props (e.g. `stroke`, `viewBox`) won’t apply
+
+## What to use instead
+
+### 1) Named imports (recommended)
+
+Use this when the flags are known at build time (best bundle size, no network):
+
+```tsx
+import { FlagCn, FlagGb, FlagUs } from '@sankyu/react-circle-flags'
+
+export function Header() {
+  return (
+    <div>
+      <FlagUs width={32} height={32} />
+      <FlagCn width={32} height={32} />
+      <FlagGb width={32} height={32} />
+    </div>
+  )
+}
+```
+
+### 2) Named imports + map (runtime, finite set)
+
+Use this when codes are runtime values but the set is finite:
+
+```tsx
+import { FlagCn, FlagGb, FlagUs } from '@sankyu/react-circle-flags'
+
+const FLAGS = { cn: FlagCn, gb: FlagGb, us: FlagUs } as const
+
+export function CountryFlag({ code }: { code: string }) {
+  const normalized = code.toLowerCase()
+  const Flag = FLAGS[normalized as keyof typeof FLAGS]
+  return Flag ? <Flag width={36} height={36} /> : <span>{code.toUpperCase()}</span>
+}
+```
+
+### 3) DynamicFlag (runtime, but bundles all flags)
+
+Use this when you must render any code synchronously and stay offline:
+
+```tsx
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ code }: { code: string }) {
+  return <DynamicFlag code={code} width={36} height={36} />
+}
+```
+
+:::note[Trade-off]
+`DynamicFlag` bundles all 400+ flags into your app (large bundle).
+
+Prefer a finite map when you can, as it keeps your bundle smaller (Tree Shaking).
+:::
+
+## See also
+
+- [/docs/guides/getting-started/usage →](/docs/guides/getting-started/usage/)
+- [/docs/guides/getting-started/dynamic-flags →](/docs/guides/getting-started/dynamic-flags/)
+- [/docs/guides/getting-started/bundle-size →](/docs/guides/getting-started/bundle-size/)

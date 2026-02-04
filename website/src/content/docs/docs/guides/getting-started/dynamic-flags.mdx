@@ -3,91 +3,98 @@ title: Dynamic Flags
 description: Render flags from runtime ISO codes.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components'
 import { LinkCard } from '@astrojs/starlight/components'
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 
-:::tip[Best for Most Cases]
+:::tip[Offline-first defaults]
+For flags known at build time, use [named imports](/docs/guides/getting-started/usage/#1-named-imports) for the best bundle size and zero network.
 
-When country codes are only known at runtime, use dynamic flag rendering.
-
-For flags known at build time, use [named imports](/docs/guides/getting-started/usage/#1-named-imports) for best bundle size and performance.
-
+When country codes are only known at runtime, pick a strategy based on your constraints.
 :::
 
-## Why use dynamic flags?
+## Decision guide
 
-In many applications, country codes are not known until runtime. Examples include:
+- **You can enumerate the possible codes (finite set):** use **Named Imports + Map** (recommended)
+- **You need to render any code synchronously and stay offline:** use **DynamicFlag**
 
-- User-selected countries in forms or settings
-- Country data from APIs or databases
-- Dynamic content based on user location
+## Why runtime flags?
 
-To handle these scenarios, you need a way to render flags based on ISO country codes at runtime.
+In many apps, country codes come from runtime data:
 
-When you need to render flags based on runtime data (user input, API responses, database values), you have several options depending on your framework.
+- User-selected countries (forms, settings)
+- API/database values (profiles, records)
+- Location-based content
 
-## Option 1: CircleFlag (React - Recommended)
+## Strategy 1: Named Imports + Map (Recommended)
 
-Use `CircleFlag` for **minimal bundle size** with on-demand CDN loading:
+This stays **offline-first** while still letting you render runtime values.
+
+:::note[Limitation]
+You must know (or cap) the set of possible country codes. Unknown codes should render a fallback UI.
+:::
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
+import { FlagCn, FlagGb, FlagUs } from '@sankyu/react-circle-flags'
+
+const FLAGS = {
+  cn: FlagCn,
+  gb: FlagGb,
+  us: FlagUs,
+} as const
 
 export function CountryFlag({ code }: { code: string }) {
-  return <CircleFlag countryCode={code} width={36} height={36} title="Country flag" />
+  const normalized = code.toLowerCase()
+  const Flag = FLAGS[normalized as keyof typeof FLAGS]
+
+  if (!Flag) return <span title="Unknown country code">{code.toUpperCase()}</span>
+  return <Flag width={36} height={36} />
 }
 ```
 
-:::tip[Best for Most Cases]
-`CircleFlag` loads SVG flags from CDN on demand, adding only ~2 KB to your bundle while supporting all 400+ flags.
-:::
-
-:::note[SVG props scope]
-`CircleFlag` renders a `<div>` wrapper with the fetched SVG inside. SVG-specific props (e.g. `stroke`, `viewBox`) will not apply through the wrapper; stick to sizing (`width`/`height`) and className/style for the wrapper, or use named imports/DynamicFlag when you need direct SVG props.
-:::
-
-**Backward Compatible API:**
-
-For compatibility with `react-circle-flags`, you can also use the `code` prop:
-
-```tsx
-// Both work the same way
-<CircleFlag countryCode="us" width={36} />
-<CircleFlag code="us" width={36} />
-```
-
-## Option 2: Vue Dynamic Import
-
-For Vue 3, use `defineAsyncComponent` to dynamically load flags:
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from 'vue'
+import { computed } from 'vue'
+import { FlagCn, FlagGb, FlagUs } from '@sankyu/vue-circle-flags'
 
-const countryCode = ref('us')
+const props = defineProps<{ code: string }>()
 
-const FlagComponent = computed(() => {
-  const code = countryCode.value.toLowerCase()
-  const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
-  return defineAsyncComponent(() =>
-    import('@sankyu/vue-circle-flags').then(module => module[componentName])
-  )
+const FLAGS = {
+  cn: FlagCn,
+  gb: FlagGb,
+  us: FlagUs,
+} as const
+
+const FlagComp = computed(() => {
+  const normalized = props.code.toLowerCase()
+  return FLAGS[normalized as keyof typeof FLAGS] ?? null
 })
 </script>
 
 <template>
-  <component :is="FlagComponent" :width="36" :height="36" />
+  <component v-if="FlagComp" :is="FlagComp" :width="36" :height="36" />
+  <span v-else :title="'Unknown country code'">{{ props.code.toUpperCase() }}</span>
 </template>
 ```
 
-:::tip[Vue Dynamic Loading]
-This approach only loads the flags you need at runtime, keeping your bundle size minimal.
+  </TabItem>
+</Tabs>
+
+## Strategy 2: DynamicFlag (Offline, Bundles All Flags)
+
+Use this when you truly need to support **any** runtime code and still render synchronously with full SVG props.
+
+:::caution[Large bundle]
+`DynamicFlag` bundles **ALL 400+ flags** (roughly **~600 KB**). Only use this when the trade-off is acceptable.
 :::
 
-## Option 3: DynamicFlag (React)
-
-Use `DynamicFlag` when you need synchronous rendering and **cannot use CDN**:
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { DynamicFlag } from '@sankyu/react-circle-flags'
@@ -97,172 +104,29 @@ export function CountryFlag({ code }: { code: string }) {
 }
 ```
 
-:::caution[Large Bundle Size]
-`DynamicFlag` bundles **ALL 400+ flag components** (~600 KB) in your bundle. Only use this if:
-
-- You cannot access CDN in your environment
-- You need synchronous, instant rendering without loading states
-- Bundle size is not a primary concern
-  :::
-
-## When to use it
-
-<CardGrid>
-  <Card title="User Input" icon="pencil">
-    Country selectors, forms, or settings where users choose their location.
-  </Card>
-  <Card title="API Responses" icon="external">
-    Data fetched from external APIs that include country codes.
-  </Card>
-  <Card title="Database Records" icon="seti:db">
-    User profiles or records stored with country information.
-  </Card>
-  <Card title="Runtime Values" icon="random">
-    Any scenario where the country code is not known at build time.
-  </Card>
-</CardGrid>
-
-## Real-world example
-
-<Tabs syncKey="framework">
-  <TabItem label="React (CircleFlag)" icon="seti:react">
-    ```tsx
-    import { CircleFlag } from '@sankyu/react-circle-flags'
-
-    interface User {
-      name: string
-      countryCode: string
-    }
-
-    export function UserProfile({ user }: { user: User }) {
-      return (
-        <div className="flex items-center gap-3">
-          <CircleFlag
-            countryCode={user.countryCode.toLowerCase()}
-            width={32}
-            height={32}
-            title={`${user.name}'s country`}
-          />
-          <span>{user.name}</span>
-        </div>
-      )
-    }
-    ```
-
-  </TabItem>
-  <TabItem label="React (DynamicFlag)" icon="seti:react">
-    ```tsx
-    import { DynamicFlag } from '@sankyu/react-circle-flags'
-
-    interface User {
-      name: string
-      countryCode: string
-    }
-
-    export function UserProfile({ user }: { user: User }) {
-      return (
-        <div className="flex items-center gap-3">
-          <DynamicFlag
-            code={user.countryCode.toLowerCase()}
-            width={32}
-            height={32}
-            title={`${user.name}'s country`}
-          />
-          <span>{user.name}</span>
-        </div>
-      )
-    }
-    ```
-
   </TabItem>
   <TabItem label="Vue 3" icon="seti:vue">
-    ```vue
-    <script setup lang="ts">
-    import { computed, defineAsyncComponent } from 'vue'
 
-    interface User {
-      name: string
-      countryCode: string
-    }
+```vue
+<script setup lang="ts">
+import { DynamicFlag } from '@sankyu/vue-circle-flags'
+const props = defineProps<{ code: string }>()
+</script>
 
-    const props = defineProps<{ user: User }>()
-
-    const FlagComponent = computed(() => {
-      const code = props.user.countryCode.toLowerCase()
-      const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
-      return defineAsyncComponent(() =>
-        import('@sankyu/vue-circle-flags').then(module => module[componentName])
-      )
-    })
-    </script>
-
-    <template>
-      <div class="flex items-center gap-3">
-        <component
-          :is="FlagComponent"
-          :width="32"
-          :height="32"
-          :title="`${user.name}'s country`"
-        />
-        <span>{{ user.name }}</span>
-      </div>
-    </template>
-    ```
+<template>
+  <DynamicFlag :code="props.code" :width="36" :height="36" />
+</template>
+```
 
   </TabItem>
 </Tabs>
 
-## Bundle Size Comparison
+## Quick comparison
 
-:::tip[Code Normalization]
-
-Both `CircleFlag` and `DynamicFlag` automatically convert country codes to lowercase, so `"US"` and `"us"` work identically.
-
-:::
-
-<Card title="CircleFlag (Best)" icon="star">
-
-```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
-```
-
-- **Bundle impact:** ~2 KB (component only)
-- **Loading:** Async from CDN
-- **Tree-shaking:** ✅ Perfect
-- **Best for:** Minimal bundle size with dynamic flags
-
-</Card>
-<Card title="DynamicFlag" icon="warning">
-
-```tsx
-import { DynamicFlag } from '@sankyu/react-circle-flags'
-```
-
-- **Bundle impact:** ~600 KB (all flags bundled)
-- **Loading:** Synchronous, instant
-- **Tree-shaking:** ❌ None
-- **Best for:** CDN-restricted environments
-
-</Card>
-
-## Advanced: CircleFlag with Custom CDN
-
-For better performance or region-specific optimization:
-
-```tsx
-import { CircleFlag } from '@sankyu/react-circle-flags'
-
-export function CountryFlag({ code }: { code: string }) {
-  return (
-    <CircleFlag
-      countryCode={code}
-      width={36}
-      height={36}
-      cdnUrl="https://custom-cdn.example.com/flags/"
-    />
-  )
-}
-```
+| Strategy            | Bundle impact                | Network | Offline-first |
+| ------------------- | ---------------------------- | ------- | ------------- |
+| Named Imports + Map | ~950 bytes per imported flag | None    | ✅            |
+| DynamicFlag         | ~600 KB                      | None    | ✅            |
 
 ## Next step
 

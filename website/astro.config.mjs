@@ -63,7 +63,9 @@ const starlightPlugins = [
     projectName: '@sankyu/react-circle-flags',
     description:
       'A React component library providing 400+ circular SVG country flags with full TypeScript support, tree-shaking optimization, and SSR compatibility.',
-    details: `This library converts SVG flags from the HatScripts/circle-flags repository into optimized React components. Each flag component supports standard SVG properties, has a default size of 48px.
+    details: `This library converts SVG flags from the HatScripts/circle-flags repository into optimized React components.
+
+Offline-first usage (named imports and DynamicFlag) renders inline SVG with standard SVG props and no external requests.
 
 The package uses a dual-entry build configuration for optimal tree-shaking, ensuring users only bundle the flag components they actually import.`,
     customSets: [
@@ -202,6 +204,10 @@ export default defineConfig({
         {
           label: 'Advanced',
           items: [{ label: 'Using CDN', slug: 'docs/guides/advanced/cdn-usage' }],
+        },
+        {
+          label: 'Deprecated',
+          items: [{ label: 'CircleFlag', slug: 'docs/deprecated/circleflag' }],
         },
         {
           label: 'Migration',
