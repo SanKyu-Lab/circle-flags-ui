@@ -49,6 +49,23 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
     ```
 
   </TabItem>
+  <TabItem label="Solid">
+    All flag components accept standard Solid SVG props:
+
+    ```tsx
+    import type { JSX } from 'solid-js'
+    import { FlagUs } from '@sankyu/solid-circle-flags'
+
+    interface Props {
+      flagProps?: JSX.SvgSVGAttributes<SVGSVGElement>
+    }
+
+    export function FlagItem(props: Props) {
+      return <FlagUs {...props.flagProps} />
+    }
+    ```
+
+  </TabItem>
 </Tabs>
 
 :::note[Type Inference]
@@ -125,6 +142,33 @@ TypeScript will automatically infer all available props when you use flag compon
     ```
 
   </TabItem>
+  <TabItem label="Solid">
+    ```tsx
+    import type { Component } from 'solid-js'
+    import { FlagCn, FlagUs } from '@sankyu/solid-circle-flags'
+
+    type FlagCnProps = Parameters<typeof FlagCn>[0]
+    type SvgFlagProps = Parameters<typeof FlagUs>[0]
+    type SvgFlagComponent = Component<SvgFlagProps>
+
+    export function Flag(props: FlagCnProps) {
+      return <FlagCn {...props} />
+    }
+
+    export function FlagWithLabel(
+      props: { FlagComponent?: SvgFlagComponent; label?: string } & SvgFlagProps
+    ) {
+      const { FlagComponent = FlagUs, label, ...svgProps } = props
+      return (
+        <div>
+          <FlagComponent {...svgProps} />
+          {label && <span>{label}</span>}
+        </div>
+      )
+    }
+    ```
+
+  </TabItem>
 </Tabs>
 
 ## Type exports
@@ -166,29 +210,89 @@ The library exports helpful types for advanced use cases:
     ```
 
   </TabItem>
+  <TabItem label="Solid">
+    ```typescript
+    import type { FlagCode, FlagComponentProps } from '@sankyu/solid-circle-flags'
+
+    // FlagCode: Union type of all available flag codes
+    const validCode: FlagCode = 'us' // ✓ Valid
+    const invalidCode: FlagCode = 'invalid' // ✗ Type error
+
+    // FlagComponentProps: Standard props for flag components
+    const props: FlagComponentProps = {
+      width: 64,
+      height: 64,
+      className: 'my-flag',
+    }
+    ```
+
+  </TabItem>
 </Tabs>
 
 ## Type safety with DynamicFlag
 
-```tsx
-import { DynamicFlag } from '@sankyu/react-circle-flags'
-import type { FlagCode } from '@sankyu/react-circle-flags'
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    ```tsx
+    import { DynamicFlag } from '@sankyu/react-circle-flags'
+    import type { FlagCode } from '@sankyu/react-circle-flags'
 
-interface CountrySelectProps {
-  selectedCountry: FlagCode
-  onSelect: (code: FlagCode) => void
-}
+    interface CountrySelectProps {
+      selectedCountry: FlagCode
+      onSelect: (code: FlagCode) => void
+    }
 
-export function CountrySelect({ selectedCountry, onSelect }: CountrySelectProps) {
-  return (
-    <div>
-      <DynamicFlag code={selectedCountry} width={32} height={32} />
-      <button onClick={() => onSelect('us')}>USA</button>
-      <button onClick={() => onSelect('cn')}>China</button>
-    </div>
-  )
-}
-```
+    export function CountrySelect({ selectedCountry, onSelect }: CountrySelectProps) {
+      return (
+        <div>
+          <DynamicFlag code={selectedCountry} width={32} height={32} />
+          <button onClick={() => onSelect('us')}>USA</button>
+          <button onClick={() => onSelect('cn')}>China</button>
+        </div>
+      )
+    }
+    ```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { ref } from 'vue'
+    import { DynamicFlag } from '@sankyu/vue-circle-flags'
+    import type { FlagCode } from '@sankyu/vue-circle-flags'
+
+    const selectedCountry = ref<FlagCode>('us')
+    </script>
+
+    <template>
+      <DynamicFlag :code="selectedCountry" :width="32" :height="32" />
+      <button @click="selectedCountry = 'us'">USA</button>
+      <button @click="selectedCountry = 'cn'">China</button>
+    </template>
+    ```
+
+  </TabItem>
+  <TabItem label="Solid">
+    ```tsx
+    import { createSignal } from 'solid-js'
+    import { DynamicFlag } from '@sankyu/solid-circle-flags'
+    import type { FlagCode } from '@sankyu/solid-circle-flags'
+
+    export function CountrySelect() {
+      const [selectedCountry, setSelectedCountry] = createSignal<FlagCode>('us')
+
+      return (
+        <div>
+          <DynamicFlag code={selectedCountry()} width={32} height={32} />
+          <button onClick={() => setSelectedCountry('us')}>USA</button>
+          <button onClick={() => setSelectedCountry('cn')}>China</button>
+        </div>
+      )
+    }
+    ```
+
+  </TabItem>
+</Tabs>
 
 :::tip[Strict Type Checking]
 Enable `strict: true` in your `tsconfig.json` to catch type errors early and get the best TypeScript experience.

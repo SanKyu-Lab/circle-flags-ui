@@ -68,6 +68,25 @@ import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
 ```
 
   </TabItem>
+  <TabItem label="Solid">
+
+Solid (beta): named-import flags currently use `className` for CSS classes.
+
+```tsx
+import { FlagUs, FlagCn, FlagGb } from '@sankyu/solid-circle-flags'
+
+export function Header() {
+  return (
+    <div>
+      <FlagUs width={32} height={32} className="flag-icon" />
+      <FlagCn width={32} height={32} className="flag-icon" />
+      <FlagGb width={32} height={32} className="flag-icon" />
+    </div>
+  )
+}
+```
+
+  </TabItem>
 </Tabs>
 
 :::note[API Reference]
@@ -122,6 +141,17 @@ const props = defineProps<{ code: string }>()
 <template>
   <DynamicFlag :code="props.code" :width="36" :height="36" />
 </template>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```tsx
+import { DynamicFlag } from '@sankyu/solid-circle-flags'
+
+export function CountryFlag(props: { code: string }) {
+  return <DynamicFlag code={props.code} width={36} height={36} />
+}
 ```
 
   </TabItem>
@@ -209,6 +239,42 @@ The library works seamlessly with all modern frameworks:
     }
 
     export default App
+    ```
+
+  </TabItem>
+  <TabItem label="SolidStart">
+    ```tsx
+    import { FlagUs, FlagCn } from '@sankyu/solid-circle-flags'
+
+    export default function Home() {
+      return (
+        <main>
+          <h1>Country Flags</h1>
+          <div class="flex gap-4">
+            <FlagUs width={64} height={64} className="rounded-full" />
+            <FlagCn width={64} height={64} className="rounded-full" />
+          </div>
+        </main>
+      )
+    }
+    ```
+
+  </TabItem>
+  <TabItem label="Vite (Solid)">
+    ```tsx
+    import { FlagUs, FlagCn } from '@sankyu/solid-circle-flags'
+
+    export default function App() {
+      return (
+        <main>
+          <h1>Country Flags</h1>
+          <div class="flex gap-4">
+            <FlagUs width={56} height={56} className="rounded-full" />
+            <FlagCn width={56} height={56} className="rounded-full" />
+          </div>
+        </main>
+      )
+    }
     ```
 
   </TabItem>

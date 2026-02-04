@@ -83,6 +83,27 @@ const FlagComp = computed(() => {
 ```
 
   </TabItem>
+  <TabItem label="Solid">
+
+```tsx
+import { FlagCn, FlagGb, FlagUs } from '@sankyu/solid-circle-flags'
+
+const FLAGS = {
+  cn: FlagCn,
+  gb: FlagGb,
+  us: FlagUs,
+} as const
+
+export function CountryFlag(props: { code: string }) {
+  const normalized = props.code.toLowerCase()
+  const Flag = FLAGS[normalized as keyof typeof FLAGS]
+
+  if (!Flag) return <span title="Unknown country code">{props.code.toUpperCase()}</span>
+  return <Flag width={36} height={36} />
+}
+```
+
+  </TabItem>
 </Tabs>
 
 ## Strategy 2: DynamicFlag (Offline, Bundles All Flags)
@@ -116,6 +137,17 @@ const props = defineProps<{ code: string }>()
 <template>
   <DynamicFlag :code="props.code" :width="36" :height="36" />
 </template>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```tsx
+import { DynamicFlag } from '@sankyu/solid-circle-flags'
+
+export function CountryFlag(props: { code: string }) {
+  return <DynamicFlag code={props.code} width={36} height={36} />
+}
 ```
 
   </TabItem>

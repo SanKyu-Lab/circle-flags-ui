@@ -38,7 +38,7 @@ Optimize your bundle size by choosing the right approach for your use case.
 
 ## Expected bundle sizes
 
-:::note[Size Reference (v1.5.5)]
+:::note[Size Reference (approx.)]
 
 - **Each flag component (named import):** ~950 bytes (minified)
 - **DynamicFlag (includes all flags):** ~600 KB (minified)
@@ -52,7 +52,8 @@ Optimize your bundle size by choosing the right approach for your use case.
     Split flag components across routes to load only what's needed per page.
   </Card>
   <Card title="Lazy Loading" icon="moon">
-    Use React's `lazy()` to defer loading flags until they're actually rendered.
+    Use your framework’s lazy loading (React `lazy()`, Vue `defineAsyncComponent`, Solid `lazy()`)
+    to defer flags until they’re actually rendered.
   </Card>
   <Card title="Static Analysis" icon="magnifier">
     Run bundle analysis regularly to catch unexpected size increases.

@@ -9,6 +9,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 Named import flags and `DynamicFlag` accept standard SVG props, making them easy to style with any CSS approach.
 
+:::note[Solid (beta)]
+Named-import flag components currently use `className` for CSS classes.
+:::
+
 ## Styling methods
 
 <CardGrid stagger>
@@ -141,28 +145,91 @@ Named import flags and `DynamicFlag` accept standard SVG props, making them easy
     ```
 
   </TabItem>
+  <TabItem label="Solid">
+    Solid (beta): use `className` for named-import flags.
+
+    ```tsx
+    import { FlagUs } from '@sankyu/solid-circle-flags'
+
+    export default function SolidFlag() {
+      return (
+        <FlagUs
+          width={48}
+          height={48}
+          className="w-12 h-12 rounded-full shadow-lg hover:scale-110 transition-transform"
+          style={{ filter: 'grayscale(100%)' }}
+          aria-label="United States flag"
+        />
+      )
+    }
+    ```
+
+  </TabItem>
 </Tabs>
 
 ## Common customizations
 
 All flags support standard SVG properties:
 
-```tsx
-import { FlagJp } from '@sankyu/react-circle-flags'
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    ```tsx
+    import { FlagJp } from '@sankyu/react-circle-flags'
 
-export default function CustomFlag() {
-  return (
-    <FlagJp
-      width={64}
-      height={64}
-      className="my-flag"
-      style={{ opacity: 0.8 }}
-      onClick={() => console.log('Flag clicked!')}
-      aria-label="Japan flag"
-    />
-  )
-}
-```
+    export default function CustomFlag() {
+      return (
+        <FlagJp
+          width={64}
+          height={64}
+          className="my-flag"
+          style={{ opacity: 0.8 }}
+          onClick={() => console.log('Flag clicked!')}
+          aria-label="Japan flag"
+        />
+      )
+    }
+    ```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```vue
+    <script setup lang="ts">
+    import { FlagJp } from '@sankyu/vue-circle-flags'
+    </script>
+
+    <template>
+      <FlagJp
+        :width="64"
+        :height="64"
+        class="my-flag"
+        :style="{ opacity: 0.8 }"
+        aria-label="Japan flag"
+        @click="console.log('Flag clicked!')"
+      />
+    </template>
+    ```
+
+  </TabItem>
+  <TabItem label="Solid">
+    ```tsx
+    import { FlagJp } from '@sankyu/solid-circle-flags'
+
+    export default function CustomFlag() {
+      return (
+        <FlagJp
+          width={64}
+          height={64}
+          className="my-flag"
+          style={{ opacity: 0.8 }}
+          onClick={() => console.log('Flag clicked!')}
+          aria-label="Japan flag"
+        />
+      )
+    }
+    ```
+
+  </TabItem>
+</Tabs>
 
 :::tip[Responsive Sizing]
 Use CSS units like `rem` or `em` for responsive flag sizes, or rely on Tailwind's responsive utilities like `w-12 md:w-16 lg:w-20`.
