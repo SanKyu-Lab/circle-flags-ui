@@ -3,6 +3,7 @@ import type { ReactElement, SVGProps } from 'react'
 import {
   codeToEmoji,
   codeToComponentName,
+  coerceFlagCode,
   FlagSizes,
   getSizeName,
   FLAG_REGISTRY,
@@ -218,47 +219,36 @@ export const CircleFlag = ({
   )
 }
 
-export interface DynamicFlagProps extends FlagComponentProps {
-  code: string
+export type CountryCode = FlagCode
+
+type DynamicFlagPropsBase = FlagComponentProps & {
   // Explicitly include title to avoid type resolution differences across toolchains (e.g. Astro/TS).
   title?: string
 }
 
+export type DynamicFlagProps =
+  | (DynamicFlagPropsBase & { strict?: false; code: string })
+  | (DynamicFlagPropsBase & { strict: true; code: CountryCode })
+
 export const DynamicFlag = ({
   code,
+  strict: _strict,
   width = 48,
   height = 48,
   title,
   ...props
 }: DynamicFlagProps): ReactElement => {
-  const titleId = useId()
-  const normalizedCode = code.toLowerCase()
-  const componentName = FLAG_REGISTRY[normalizedCode as FlagCode]
+  void _strict
+  const normalizedInput = code.trim().toLowerCase()
+  const resolvedCode = coerceFlagCode(code, 'xx')
+  const componentName = FLAG_REGISTRY[resolvedCode]
+  const isFallback = resolvedCode === 'xx' && normalizedInput !== 'xx'
 
-  if (!componentName) {
-    const upperCode = code.toUpperCase()
-    const emoji = codeToEmoji(code)
-    const defaultTitle = title ?? `${emoji} ${upperCode}`
-
-    return (
-      <svg
-        viewBox="0 0 512 512"
-        width={width}
-        height={height}
-        role="img"
-        aria-label={defaultTitle}
-        aria-labelledby={titleId}
-        {...props}
-      >
-        <title id={titleId}>{defaultTitle}</title>
-        <circle cx="256" cy="256" r="256" fill="#f0f0f0" />
-        <circle cx="256" cy="256" r="200" fill="#e0e0e0" />
-        <text x="256" y="280" textAnchor="middle" fontSize="80" fontWeight="bold" fill="#666">
-          {upperCode}
-        </text>
-      </svg>
-    )
-  }
+  const fallbackTitle = (() => {
+    if (!isFallback) return title
+    const upperCode = code.trim().toUpperCase()
+    return title ?? (upperCode.length > 0 ? upperCode : 'XX')
+  })()
 
   const FlagComponent = AllFlags[componentName as keyof typeof AllFlags] as unknown as (
     props: FlagComponentProps
@@ -269,10 +259,8 @@ export const DynamicFlag = ({
     return <div>Flag not found: {code}</div>
   }
 
-  return <FlagComponent width={width} height={height} title={title} {...props} />
+  return <FlagComponent width={width} height={height} title={fallbackTitle} {...props} />
 }
-
-export type CountryCode = FlagCode
 
 export * from '../generated/flags'
 
@@ -280,5 +268,7 @@ export {
   FLAG_REGISTRY,
   COUNTRY_NAMES,
   SUBDIVISION_NAMES,
+  coerceFlagCode,
+  isFlagCode,
   type FlagCode,
 } from '@sankyu/circle-flags-core'

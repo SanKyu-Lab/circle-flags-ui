@@ -395,8 +395,10 @@ describe('DynamicFlag component', () => {
     render(<DynamicFlag code="invalid" data-testid="invalid-flag" />)
     const flag = screen.getByTestId('invalid-flag')
     expect(flag).toBeInTheDocument()
-    // Should show fallback with country code text
-    expect(flag.textContent).toContain('INVALID')
+    expect(flag.tagName.toLowerCase()).toBe('svg')
+    expect(flag).toHaveAttribute('aria-label', 'INVALID')
+    expect(flag.querySelector('title')?.textContent).toBe('INVALID')
+    expect(flag.querySelector('text')).toBeNull()
   })
 
   test('should log error when registry entry is missing implementation', () => {
