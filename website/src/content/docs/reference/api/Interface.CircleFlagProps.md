@@ -5,7 +5,7 @@ prev: false
 title: "CircleFlagProps"
 ---
 
-Defined in: [react/src/index.tsx:75](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L75)
+Defined in: [react/src/index.tsx:76](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L76)
 
 :::caution[Deprecated]
 `CircleFlag` is deprecated and not recommended for new code.
@@ -29,7 +29,7 @@ Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag
 optional cdnUrl: string;
 ```
 
-Defined in: [react/src/index.tsx:79](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L79)
+Defined in: [react/src/index.tsx:80](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L80)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [react/src/index.tsx:79](https://github.com/SanKyu-Lab/circle-flags-
 optional code: string;
 ```
 
-Defined in: [react/src/index.tsx:78](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L78)
+Defined in: [react/src/index.tsx:79](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L79)
 
 :::caution[Deprecated]
 Use 'countryCode' instead
@@ -53,7 +53,7 @@ Use 'countryCode' instead
 optional countryCode: string;
 ```
 
-Defined in: [react/src/index.tsx:76](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L76)
+Defined in: [react/src/index.tsx:77](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L77)
 
 ***
 
@@ -63,4 +63,4 @@ Defined in: [react/src/index.tsx:76](https://github.com/SanKyu-Lab/circle-flags-
 optional title: string;
 ```
 
-Defined in: [react/src/index.tsx:80](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L80)
+Defined in: [react/src/index.tsx:81](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L81)

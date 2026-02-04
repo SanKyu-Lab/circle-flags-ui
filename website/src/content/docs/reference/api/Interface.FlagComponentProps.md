@@ -5,15 +5,11 @@ prev: false
 title: "FlagComponentProps"
 ---
 
-Defined in: [react/src/index.tsx:64](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L64)
+Defined in: [react/src/index.tsx:65](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L65)
 
 ## Extends
 
 - `SVGProps`\<`SVGSVGElement`\>.`FlagComponentProps`
-
-## Extended by
-
-- [`DynamicFlagProps`](/reference/api/interfacedynamicflagprops/)
 
 ## Properties
 
