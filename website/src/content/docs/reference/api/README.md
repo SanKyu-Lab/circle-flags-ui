@@ -12,7 +12,7 @@ API Reference for @sankyu/react-circle-flags
 | Interface | Description |
 | ------ | ------ |
 | [BuildMeta](/reference/api/interfacebuildmeta/) | - |
-| [CircleFlagProps](/reference/api/interfacecircleflagprops/) | - |
+| [~~CircleFlagProps~~](/reference/api/interfacecircleflagprops/) | - |
 | [DynamicFlagProps](/reference/api/interfacedynamicflagprops/) | - |
 | [FlagComponentProps](/reference/api/interfaceflagcomponentprops/) | - |
 

@@ -5,7 +5,17 @@ prev: false
 title: "CircleFlagProps"
 ---
 
-Defined in: [react/src/index.tsx:66](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L66)
+Defined in: [react/src/index.tsx:75](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L75)
+
+:::caution[Deprecated]
+`CircleFlag` is deprecated and not recommended for new code.
+
+It fetches SVG at runtime and renders a wrapper with injected SVG HTML, so many SVG-only props won’t apply.
+
+Prefer `named imports` or `DynamicFlag` instead.
+
+Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag
+:::
 
 ## Extends
 
@@ -13,13 +23,13 @@ Defined in: [react/src/index.tsx:66](https://github.com/SanKyu-Lab/circle-flags-
 
 ## Properties
 
-### cdnUrl?
+### ~~cdnUrl?~~
 
 ```ts
 optional cdnUrl: string;
 ```
 
-Defined in: [react/src/index.tsx:70](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L70)
+Defined in: [react/src/index.tsx:79](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L79)
 
 ***
 
@@ -29,7 +39,7 @@ Defined in: [react/src/index.tsx:70](https://github.com/SanKyu-Lab/circle-flags-
 optional code: string;
 ```
 
-Defined in: [react/src/index.tsx:69](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L69)
+Defined in: [react/src/index.tsx:78](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L78)
 
 :::caution[Deprecated]
 Use 'countryCode' instead
@@ -37,20 +47,20 @@ Use 'countryCode' instead
 
 ***
 
-### countryCode?
+### ~~countryCode?~~
 
 ```ts
 optional countryCode: string;
 ```
 
-Defined in: [react/src/index.tsx:67](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L67)
+Defined in: [react/src/index.tsx:76](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L76)
 
 ***
 
-### title?
+### ~~title?~~
 
 ```ts
 optional title: string;
 ```
 
-Defined in: [react/src/index.tsx:71](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L71)
+Defined in: [react/src/index.tsx:80](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L80)

@@ -5,7 +5,7 @@ prev: false
 title: "DynamicFlagProps"
 ---
 
-Defined in: [react/src/index.tsx:205](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L205)
+Defined in: [react/src/index.tsx:221](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L221)
 
 ## Extends
 
@@ -19,7 +19,7 @@ Defined in: [react/src/index.tsx:205](https://github.com/SanKyu-Lab/circle-flags
 code: string;
 ```
 
-Defined in: [react/src/index.tsx:206](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L206)
+Defined in: [react/src/index.tsx:222](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L222)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [react/src/index.tsx:206](https://github.com/SanKyu-Lab/circle-flags
 optional title: string;
 ```
 
-Defined in: [react/src/index.tsx:208](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L208)
+Defined in: [react/src/index.tsx:224](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L224)
 
 Accessible title for screen readers
 
