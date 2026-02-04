@@ -4,6 +4,7 @@ import { Command } from 'commander'
 import conventionalcommits from 'conventional-changelog-conventionalcommits'
 import { CommitParser } from 'conventional-commits-parser'
 import { simpleGit } from 'simple-git'
+import { execSync } from 'node:child_process'
 
 const program = new Command()
   .name('generate-package-changelog')
@@ -230,12 +231,13 @@ const alreadyHasVersion = new RegExp(`^##\\s+${version.replaceAll('.', '\\.')}(\
 
 let entry = `## ${version} - ${today}\n\n`
 if (!sections.length) {
-  entry += '- No changes recorded.\n'
+  entry += '- No changes recorded.'
 } else {
   for (const [title, lines] of sections) {
     entry += `${title}\n\n${lines.join('\n')}\n\n`
   }
 }
+entry = entry.trimEnd()
 
 // New release notes format
 const comparisonUrl = prevTag
@@ -253,7 +255,7 @@ ${sections.map(([title, lines]) => `${title.replace('### ', '')}\n\n${lines.join
 
 const insertAfterHeader = content => {
   if (!content.startsWith('# Changelog'))
-    return `${header}\n\n${entry}\n${content}`.trimEnd() + '\n'
+    return `${header}\n\n${entry.trim()}\n\n${content.trim()}\n`
 
   const lines = content.split('\n')
   const headerEndIdx = (() => {
@@ -264,13 +266,24 @@ const insertAfterHeader = content => {
   })()
 
   const before = lines.slice(0, headerEndIdx).join('\n').trimEnd()
-  const after = lines.slice(headerEndIdx).join('\n').trimStart()
-  return `${before}\n\n${entry}\n${after}`.trimEnd() + '\n'
+  const after = lines.slice(headerEndIdx).join('\n')
+  // Trim leading blank lines from after
+  const afterTrimmed = after.replace(/^\n+/, '')
+  // Ensure single blank line between header and entry
+  return `${before}\n${entry.trim()}\n\n${afterTrimmed}`.trimEnd() + '\n'
 }
 
 if (!alreadyHasVersion) {
   const next = insertAfterHeader(base)
   writeFileSync(changelogPath, next)
+
+  // Run Prettier to format the CHANGELOG.md
+  try {
+    const prettierPath = resolve(repoRoot, 'node_modules', '.bin', 'prettier')
+    execSync(`"${prettierPath}" --write "${changelogPath}"`, { cwd: repoRoot, stdio: 'pipe' })
+  } catch {
+    // Prettier not found or failed, skip formatting
+  }
 }
 
 if (notesPath) {
