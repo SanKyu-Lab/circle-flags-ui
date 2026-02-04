@@ -1,3 +1,5 @@
+import { FLAG_REGISTRY, type FlagCode } from './generated/registry'
+
 /**
  * Convert ISO country code to flag emoji
  * @example
@@ -57,4 +59,16 @@ export function getSizeName(pixels: number): FlagSizeName | null {
   const entries = Object.entries(FlagSizes) as [FlagSizeName, number][]
   const match = entries.find(([, size]) => size === pixels)
   return match ? match[0] : null
+}
+
+export function isFlagCode(code: string): code is FlagCode {
+  const normalized = code.trim().toLowerCase()
+  if (normalized !== code) return false
+  return Object.prototype.hasOwnProperty.call(FLAG_REGISTRY, normalized)
+}
+
+export function coerceFlagCode(code: string, fallback: FlagCode = 'xx'): FlagCode {
+  const normalized = code.trim().toLowerCase()
+  if (Object.prototype.hasOwnProperty.call(FLAG_REGISTRY, normalized)) return normalized as FlagCode
+  return fallback
 }
