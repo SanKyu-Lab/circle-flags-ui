@@ -232,7 +232,7 @@ const comparisonUrl = prevTag
   ? `https://github.com/${repoOwner}/${repoName}/compare/${prevTag}...${currentTag}`
   : `https://github.com/${repoOwner}/${repoName}/commits/${currentTag}`
 
-const notes = `# ${packageName} Release ${version}
+const notes = `> v${version} is here! 🎉
 
 ## What's Changed
 
