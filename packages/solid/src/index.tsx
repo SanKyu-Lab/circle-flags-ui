@@ -25,7 +25,7 @@ export interface FlagComponentProps extends CoreFlagComponentProps {
  *
  * Prefer `named imports` or `DynamicFlag` instead.
  *
- * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag
+ * Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag
  */
 export interface CircleFlagProps
   extends
@@ -72,7 +72,7 @@ const toCssSize = (value: number | string | undefined) => {
  *
  * Prefer `named imports` or `DynamicFlag` instead.
  *
- * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag/
+ * Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag/
  */
 export const CircleFlag: Component<CircleFlagProps> = props => {
   const merged = mergeProps(

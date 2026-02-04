@@ -26,7 +26,7 @@ export interface FlagComponentProps extends CoreFlagComponentProps {
  *
  * Prefer `named imports` or `DynamicFlag` instead.
  *
- * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag
+ * Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag
  */
 export interface CircleFlagProps extends Omit<FlagComponentProps, 'title'> {
   countryCode?: string
@@ -251,7 +251,7 @@ const _CircleFlag = defineComponent({
  *
  * Prefer `named imports` or `DynamicFlag` instead.
  *
- * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag/
+ * Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag/
  */
 export const CircleFlag: typeof _CircleFlag = _CircleFlag
 
