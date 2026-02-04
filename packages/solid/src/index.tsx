@@ -18,6 +18,15 @@ export interface FlagComponentProps extends CoreFlagComponentProps {
   height?: number | string
 }
 
+/**
+ * @deprecated `CircleFlag` is deprecated and not recommended for new code.
+ *
+ * It fetches SVG at runtime and renders a wrapper with injected SVG HTML, so many SVG-only props won’t apply.
+ *
+ * Prefer `named imports` or `DynamicFlag` instead.
+ *
+ * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag
+ */
 export interface CircleFlagProps
   extends
     Omit<JSX.SvgSVGAttributes<SVGSVGElement>, 'width' | 'height' | 'title'>,
@@ -58,6 +67,13 @@ const toCssSize = (value: number | string | undefined) => {
 }
 
 // Simple CDN-based flag loader (for demonstration - production would use resources)
+/**
+ * @deprecated `CircleFlag` is deprecated and not recommended for new code.
+ *
+ * Prefer `named imports` or `DynamicFlag` instead.
+ *
+ * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag/
+ */
 export const CircleFlag: Component<CircleFlagProps> = props => {
   const merged = mergeProps(
     {

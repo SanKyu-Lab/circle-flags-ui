@@ -63,6 +63,15 @@ function sanitizeSvg(raw: string): string {
 
 export interface FlagComponentProps extends SVGProps<SVGSVGElement>, CoreFlagComponentProps {}
 
+/**
+ * @deprecated `CircleFlag` is deprecated and not recommended for new code.
+ *
+ * It fetches SVG at runtime and renders a wrapper with injected SVG HTML, so many SVG-only props won’t apply.
+ *
+ * Prefer `named imports` or `DynamicFlag` instead.
+ *
+ * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag
+ */
 export interface CircleFlagProps extends Omit<FlagComponentProps, 'title'> {
   countryCode?: string
   /** @deprecated Use 'countryCode' instead */
@@ -100,6 +109,13 @@ export const FlagUtils: {
 export { buildMeta } from './meta'
 export type { BuildMeta } from './meta'
 
+/**
+ * @deprecated `CircleFlag` is deprecated and not recommended for new code.
+ *
+ * Prefer `named imports` or `DynamicFlag` instead.
+ *
+ * Read more: https://react-circle-flags.sankyu.dev/docs/deprecated/circleflag/
+ */
 export const CircleFlag = ({
   countryCode,
   code,
