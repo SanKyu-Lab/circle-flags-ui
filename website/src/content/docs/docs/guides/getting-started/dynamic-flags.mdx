@@ -153,6 +153,49 @@ export function CountryFlag(props: { code: string }) {
   </TabItem>
 </Tabs>
 
+### Strict typing (optional)
+
+If you can guarantee that your runtime value is already a **valid** country code (for example, from a typed list),
+enable `strict` for stronger TypeScript constraints:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { DynamicFlag, coerceFlagCode } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ codeFromApi }: { codeFromApi: string }) {
+  // Coerce unknown runtime data to a safe union (unknown values become "xx")
+  const safeCode = coerceFlagCode(codeFromApi)
+  return <DynamicFlag strict code={safeCode} width={36} height={36} />
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue'
+import { DynamicFlag, coerceFlagCode } from '@sankyu/vue-circle-flags'
+
+const props = defineProps<{ codeFromApi: string }>()
+const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
+</script>
+
+<template>
+  <DynamicFlag strict :code="safeCode" :width="36" :height="36" />
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+:::note[Fallback behavior]
+When `code` is not a known flag code, `DynamicFlag` renders the `xx` placeholder flag (`FlagXx`).
+If you don't pass `title`, the fallback defaults to `code.trim().toUpperCase()` (or `XX` when empty).
+:::
+
 ## Quick comparison
 
 | Strategy            | Bundle impact                | Network | Offline-first |

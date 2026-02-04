@@ -178,11 +178,15 @@ The library exports helpful types for advanced use cases:
 <Tabs syncKey="framework">
   <TabItem label="React" icon="seti:react">
     ```tsx
-    import type { FlagCode, FlagComponentProps } from '@sankyu/react-circle-flags'
+    import { coerceFlagCode, isFlagCode } from '@sankyu/react-circle-flags'
+    import type { CountryCode, FlagCode, FlagComponentProps } from '@sankyu/react-circle-flags'
 
     // FlagCode: Union type of all available flag codes
     const validCode: FlagCode = 'us' // ✓ Valid
     const invalidCode: FlagCode = 'invalid' // ✗ Type error
+
+    // CountryCode: a semantic alias of FlagCode (same union)
+    const alsoValid: CountryCode = validCode
 
     // FlagComponentProps: Standard props for flag components
     const props: FlagComponentProps = {
@@ -190,16 +194,25 @@ The library exports helpful types for advanced use cases:
       height: 64,
       className: 'my-flag',
     }
+
+    // Runtime data narrowing/coercion helpers
+    const fromApi: string = 'US'
+    const safeCode = coerceFlagCode(fromApi) // -> FlagCode (unknown values become "xx")
+    const isNormalizedValid = isFlagCode('us') // true (expects already-normalized input)
     ```
 
   </TabItem>
   <TabItem label="Vue 3" icon="seti:vue">
     ```typescript
-    import type { FlagCode, FlagComponentProps } from '@sankyu/vue-circle-flags'
+    import { coerceFlagCode, isFlagCode } from '@sankyu/vue-circle-flags'
+    import type { CountryCode, FlagCode, FlagComponentProps } from '@sankyu/vue-circle-flags'
 
     // FlagCode: Union type of all available flag codes
     const validCode: FlagCode = 'us' // ✓ Valid
     const invalidCode: FlagCode = 'invalid' // ✗ Type error
+
+    // CountryCode: a semantic alias of FlagCode (same union)
+    const alsoValid: CountryCode = validCode
 
     // FlagComponentProps: Standard props for flag components
     const props: FlagComponentProps = {
@@ -207,16 +220,24 @@ The library exports helpful types for advanced use cases:
       height: 64,
       class: 'my-flag',
     }
+
+    const fromApi: string = 'US'
+    const safeCode = coerceFlagCode(fromApi)
+    const isNormalizedValid = isFlagCode('us')
     ```
 
   </TabItem>
   <TabItem label="Solid">
     ```typescript
-    import type { FlagCode, FlagComponentProps } from '@sankyu/solid-circle-flags'
+    import { coerceFlagCode, isFlagCode } from '@sankyu/solid-circle-flags'
+    import type { CountryCode, FlagCode, FlagComponentProps } from '@sankyu/solid-circle-flags'
 
     // FlagCode: Union type of all available flag codes
     const validCode: FlagCode = 'us' // ✓ Valid
     const invalidCode: FlagCode = 'invalid' // ✗ Type error
+
+    // CountryCode: a semantic alias of FlagCode (same union)
+    const alsoValid: CountryCode = validCode
 
     // FlagComponentProps: Standard props for flag components
     const props: FlagComponentProps = {
@@ -224,6 +245,10 @@ The library exports helpful types for advanced use cases:
       height: 64,
       className: 'my-flag',
     }
+
+    const fromApi: string = 'US'
+    const safeCode = coerceFlagCode(fromApi)
+    const isNormalizedValid = isFlagCode('us')
     ```
 
   </TabItem>
@@ -245,7 +270,7 @@ The library exports helpful types for advanced use cases:
     export function CountrySelect({ selectedCountry, onSelect }: CountrySelectProps) {
       return (
         <div>
-          <DynamicFlag code={selectedCountry} width={32} height={32} />
+          <DynamicFlag strict code={selectedCountry} width={32} height={32} />
           <button onClick={() => onSelect('us')}>USA</button>
           <button onClick={() => onSelect('cn')}>China</button>
         </div>
@@ -265,7 +290,7 @@ The library exports helpful types for advanced use cases:
     </script>
 
     <template>
-      <DynamicFlag :code="selectedCountry" :width="32" :height="32" />
+      <DynamicFlag strict :code="selectedCountry" :width="32" :height="32" />
       <button @click="selectedCountry = 'us'">USA</button>
       <button @click="selectedCountry = 'cn'">China</button>
     </template>
@@ -283,7 +308,7 @@ The library exports helpful types for advanced use cases:
 
       return (
         <div>
-          <DynamicFlag code={selectedCountry()} width={32} height={32} />
+          <DynamicFlag strict code={selectedCountry()} width={32} height={32} />
           <button onClick={() => setSelectedCountry('us')}>USA</button>
           <button onClick={() => setSelectedCountry('cn')}>China</button>
         </div>

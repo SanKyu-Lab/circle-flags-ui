@@ -13,11 +13,25 @@ API Reference for @sankyu/react-circle-flags
 | ------ | ------ |
 | [BuildMeta](/reference/api/interfacebuildmeta/) | - |
 | [~~CircleFlagProps~~](/reference/api/interfacecircleflagprops/) | - |
-| [DynamicFlagProps](/reference/api/interfacedynamicflagprops/) | - |
 | [FlagComponentProps](/reference/api/interfaceflagcomponentprops/) | - |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [CountryCode](/reference/api/typealiascountrycode/) | - |
+| [DynamicFlagProps](/reference/api/typealiasdynamicflagprops/) | - |
+| [FlagCode](/reference/api/typealiasflagcode/) | - |
 
 ## Variables
 
 | Variable | Description |
 | ------ | ------ |
 | [FlagSizes](/reference/api/variableflagsizes/) | Standard flag sizes |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [coerceFlagCode](/reference/api/functioncoerceflagcode/) | - |
+| [isFlagCode](/reference/api/functionisflagcode/) | - |
