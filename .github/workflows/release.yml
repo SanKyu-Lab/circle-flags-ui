@@ -86,14 +86,43 @@ jobs:
         with:
           registry-url: https://registry.npmjs.org
 
+      - name: Check if version is already published
+        id: check_published
+        run: |
+          set -euo pipefail
+          PACKAGE_NAME="${{ matrix.pkg.name }}"
+          VERSION="${{ matrix.pkg.version }}"
+
+          # Encode package name for npm registry URL
+          if [[ "$PACKAGE_NAME" == @* ]]; then
+            ENCODED_NAME="${PACKAGE_NAME/\//%2f}"
+          else
+            ENCODED_NAME="$PACKAGE_NAME"
+          fi
+
+          echo "Checking if $PACKAGE_NAME@$VERSION is already published..."
+
+          # Check npm registry
+          RESPONSE=$(npm view "$PACKAGE_NAME@$VERSION" --json 2>/dev/null || echo "{}")
+
+          if echo "$RESPONSE" | grep -q '"name"'; then
+            echo "Version $VERSION is already published. Skipping."
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version $VERSION is not published yet. Proceeding with release."
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Determine previous tag
         id: prev
+        if: steps.check_published.outputs.already_published != 'true'
         run: |
           node scripts/gha/determine-prev-tag.mjs \
             --slug "${{ matrix.pkg.slug }}" \
             --current-tag "${{ matrix.pkg.tag }}"
 
       - name: Build package
+        if: steps.check_published.outputs.already_published != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -103,6 +132,7 @@ jobs:
           NODE_ENV: production
 
       - name: Publish to npm
+        if: steps.check_published.outputs.already_published != 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         shell: bash
@@ -112,6 +142,7 @@ jobs:
           (cd "${{ matrix.pkg.dir }}" && npm publish --access public --provenance)
 
       - name: Generate package changelog
+        if: steps.check_published.outputs.already_published != 'true'
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -129,12 +160,14 @@ jobs:
             --repo-name "${{ github.event.repository.name }}"
 
       - name: Upload changelog artifact
+        if: steps.check_published.outputs.already_published != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: changelog-${{ matrix.pkg.slug }}
           path: ${{ matrix.pkg.dir }}/CHANGELOG.md
 
       - name: Upload release notes artifact
+        if: steps.check_published.outputs.already_published != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: release-notes-${{ matrix.pkg.slug }}
@@ -142,13 +175,14 @@ jobs:
 
       - name: Create and push git tag
         id: tag
+        if: steps.check_published.outputs.already_published != 'true'
         run: |
           node scripts/gha/create-and-push-tag.mjs \
             --tag "${{ matrix.pkg.tag }}" \
             --message "${{ matrix.pkg.name }}@${{ matrix.pkg.version }}"
 
       - name: Create GitHub release
-        if: steps.tag.outputs.created == 'true'
+        if: steps.check_published.outputs.already_published != 'true' && steps.tag.outputs.created == 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -176,15 +210,22 @@ jobs:
         shell: bash
         run: |
           {
-            echo "## Published"
-            echo ""
-            echo "- Package: \`${{ matrix.pkg.name }}@${{ matrix.pkg.version }}\`"
-            echo "- Tag: \`${{ matrix.pkg.tag }}\`"
-            if [ -f ".release-notes.md" ]; then
+            if [ "${{ steps.check_published.outputs.already_published }}" == "true" ]; then
+              echo "## Skipped (Already Published)"
               echo ""
-              echo "### Release notes"
+              echo "- Package: \`${{ matrix.pkg.name }}@${{ matrix.pkg.version }}\`"
+              echo "- Status: This version is already published on npm, skipping release."
+            else
+              echo "## Published"
               echo ""
-              cat ".release-notes.md"
+              echo "- Package: \`${{ matrix.pkg.name }}@${{ matrix.pkg.version }}\`"
+              echo "- Tag: \`${{ matrix.pkg.tag }}\`"
+              if [ -f ".release-notes.md" ]; then
+                echo ""
+                echo "### Release notes"
+                echo ""
+                cat ".release-notes.md"
+              fi
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
