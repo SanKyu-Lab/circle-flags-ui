@@ -5,11 +5,10 @@
  * - cn -> 🇨🇳
  * - ad -> 🇦🇩
  */
-export function codeToEmoji(code: string): string {
-  const upperCode = code.toUpperCase().slice(0, 2)
+export const codeToEmoji = code => {
+  const upperCode = String(code).toUpperCase().slice(0, 2)
   if (upperCode.length < 2) return '🏳️'
 
-  // Regional Indicator Symbol A starts at 0x1F1E6
   const base = 0x1f1e6
   const aCode = 'A'.charCodeAt(0)
 
@@ -26,16 +25,13 @@ export function codeToEmoji(code: string): string {
  * - `it-72` -> `It72` -> `FlagIt72`
  * - `ru-cu` -> `RuCu` -> `FlagRuCu`
  */
-export function codeToComponentName(code: string): string {
-  // Remove special characters and convert to PascalCase
-  const cleanName = code
+export const codeToComponentName = code => {
+  const cleanName = String(code)
     .toLowerCase()
-    .split(/[-_\s]+/) // Split on hyphens, underscores, spaces
+    .split(/[-_\s]+/)
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join('')
 
-  // Ensure it doesn't start with a number
   const safeName = /^[0-9]/.test(cleanName) ? `Flag_${cleanName}` : cleanName
-
   return `Flag${safeName}`
 }

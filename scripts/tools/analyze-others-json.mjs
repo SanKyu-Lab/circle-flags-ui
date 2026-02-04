@@ -1,30 +1,18 @@
-/**
- * Analyze others.json to identify entries that can be auto-generated from country-region-data
- *
- * @run: npx tsx scripts/analyze-others-json.ts
- */
+// Analyzes others.json and reports which entries could be generated from country-region-data.
 
-import countriesData from 'country-region-data/data.json'
-import othersJson from './gen-flags/libs/others.json'
+import { readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 
-interface OtherEntry {
-  id: number | null
-  alpha2: string
-  alpha3: string | null
-  name: string
-}
+const require = createRequire(import.meta.url)
+const countriesData = require('country-region-data/data.json')
 
-interface CountryData {
-  countryName: string
-  countryShortCode: string
-  regions: Array<{ name: string; shortCode: string }>
-}
+const readJson = url => JSON.parse(readFileSync(url, 'utf8'))
+const othersJson = readJson(new URL('../gen-flags/libs/others.json', import.meta.url))
 
-const others = othersJson as OtherEntry[]
+const others = othersJson
 
-// Build subdivision map from country-region-data
-const countryRegionMap = new Map<string, { country: string; region: string }>()
-for (const country of countriesData as CountryData[]) {
+const countryRegionMap = new Map()
+for (const country of countriesData) {
   for (const region of country.regions) {
     if (region.shortCode) {
       const code = `${country.countryShortCode.toLowerCase()}-${region.shortCode.toLowerCase()}`
@@ -36,28 +24,11 @@ for (const country of countriesData as CountryData[]) {
   }
 }
 
-// Build country map
-const countryMap = new Map<string, string>()
-for (const country of countriesData as CountryData[]) {
+const countryMap = new Map()
+for (const country of countriesData) {
   countryMap.set(country.countryShortCode.toLowerCase(), country.countryName)
 }
 
-// Categories for analysis
-interface Category {
-  name: string
-  description: string
-  entries: Array<{
-    code: string
-    othersName: string
-    autoName?: string
-    canAutoGenerate: boolean
-    note?: string
-  }>
-}
-
-const categories: Category[] = []
-
-// 1. Historical/Obsolete codes (need manual maintenance)
 const historicalCodes = new Map([
   ['an', 'Netherlands Antilles (dissolved 2010)'],
   ['fx', 'Metropolitan France (historical)'],
@@ -66,7 +37,6 @@ const historicalCodes = new Map([
   ['yu', 'Yugoslavia (dissolved 2003)'],
 ])
 
-// 2. Organization codes
 const organizationCodes = new Map([
   ['eu', 'European Union'],
   ['european_union', 'European Union (alias)'],
@@ -74,7 +44,6 @@ const organizationCodes = new Map([
   ['nato', 'NATO'],
 ])
 
-// 3. Ethnic/Cultural codes
 const ethnicCodes = new Set([
   'guarani',
   'hausa',
@@ -92,7 +61,6 @@ const ethnicCodes = new Set([
   'yorubaland',
 ])
 
-// 4. Special territories/entities (no standard ISO code)
 const specialTerritories = new Map([
   ['ac', 'Ascension Island (UK overseas territory)'],
   ['cp', 'Clipperton Island (French territory)'],
@@ -106,7 +74,6 @@ const specialTerritories = new Map([
   ['uk', 'United Kingdom (non-standard, should be gb)'],
 ])
 
-// 5. Disputed/Unrecognized territories
 const disputedTerritories = new Map([
   ['artsakh', 'Artsakh/Nagorno-Karabakh (de facto state)'],
   ['northern_cyprus', 'Northern Cyprus (de facto state)'],
@@ -115,7 +82,6 @@ const disputedTerritories = new Map([
   ['transnistria', 'Transnistria (de facto state)'],
 ])
 
-// 6. Fictional/Micronations
 const micronations = new Map([
   ['sealand', 'Principality of Sealand (micronation)'],
   ['east_african_federation', 'East African Federation (proposed)'],
@@ -123,16 +89,15 @@ const micronations = new Map([
   ['easter_island', 'Easter Island (Chile territory, has cl code)'],
 ])
 
-// Categorize entries
-const historicalEntries: Category['entries'] = []
-const organizationEntries: Category['entries'] = []
-const ethnicEntries: Category['entries'] = []
-const specialEntries: Category['entries'] = []
-const disputedEntries: Category['entries'] = []
-const micronationEntries: Category['entries'] = []
-const canAutoGenerateEntries: Category['entries'] = []
-const partialAutoEntries: Category['entries'] = []
-const unknownEntries: Category['entries'] = []
+const historicalEntries = []
+const organizationEntries = []
+const ethnicEntries = []
+const specialEntries = []
+const disputedEntries = []
+const micronationEntries = []
+const canAutoGenerateEntries = []
+const partialAutoEntries = []
+const unknownEntries = []
 
 for (const entry of others) {
   const code = entry.alpha2.toLowerCase()
@@ -180,8 +145,7 @@ for (const entry of others) {
       note: micronations.get(code),
     })
   } else if (countryRegionMap.has(code)) {
-    // Can be auto-generated from country-region-data
-    const autoData = countryRegionMap.get(code)!
+    const autoData = countryRegionMap.get(code)
     const autoName = `${autoData.region}, ${autoData.country}`
     const namesMatch =
       autoName === entry.name || autoName.toLowerCase() === entry.name.toLowerCase()
@@ -194,7 +158,6 @@ for (const entry of others) {
       note: namesMatch ? 'Exact match' : 'Name differs slightly',
     })
   } else if (code.includes('-') || code.includes('_')) {
-    // Subdivision code but not in country-region-data
     const [countryCode] = code.split(/[-_]/)
     const countryName = countryMap.get(countryCode)
 
@@ -224,7 +187,6 @@ for (const entry of others) {
   }
 }
 
-// Output report
 console.log('='.repeat(80))
 console.log('OTHERS.JSON ANALYSIS REPORT')
 console.log('='.repeat(80))
@@ -233,28 +195,30 @@ console.log(`Total entries in others.json: ${others.length}`)
 console.log(`Total subdivisions in country-region-data: ${countryRegionMap.size}`)
 console.log('')
 
-// Summary
 console.log('--- SUMMARY ---')
 console.log(
-  `1. Can auto-generate (exact match):     ${canAutoGenerateEntries.filter(e => e.canAutoGenerate).length}`
+  `1. Can auto-generate (exact match):     ${
+    canAutoGenerateEntries.filter(e => e.canAutoGenerate).length
+  }`
 )
 console.log(
-  `2. Can auto-generate (name differs):    ${canAutoGenerateEntries.filter(e => !e.canAutoGenerate).length}`
+  `2. Can auto-generate (needs review):   ${
+    canAutoGenerateEntries.filter(e => !e.canAutoGenerate).length
+  }`
 )
-console.log(`3. Historical codes (need manual):      ${historicalEntries.length}`)
-console.log(`4. Organization codes (need manual):    ${organizationEntries.length}`)
-console.log(`5. Ethnic/cultural codes (need manual): ${ethnicEntries.length}`)
-console.log(`6. Special territories (need manual):   ${specialEntries.length}`)
-console.log(`7. Disputed territories (need manual):  ${disputedEntries.length}`)
-console.log(`8. Micronations/proposed (need manual): ${micronationEntries.length}`)
-console.log(`9. Partial auto (country exists):       ${partialAutoEntries.length}`)
-console.log(`10. Unknown codes:                      ${unknownEntries.length}`)
+console.log(`3. Historical codes (manual):          ${historicalEntries.length}`)
+console.log(`4. Organization codes (manual):        ${organizationEntries.length}`)
+console.log(`5. Ethnic/cultural codes (manual):     ${ethnicEntries.length}`)
+console.log(`6. Special territories (manual):       ${specialEntries.length}`)
+console.log(`7. Disputed territories (manual):      ${disputedEntries.length}`)
+console.log(`8. Micronations/proposed (manual):     ${micronationEntries.length}`)
+console.log(`9. Partial auto (manual subdivision):  ${partialAutoEntries.length}`)
+console.log(`10. Unknown codes (manual):            ${unknownEntries.length}`)
 console.log('')
 
-// Detailed sections
 const sections = [
   {
-    name: 'CAN AUTO-GENERATE (exact match)',
+    name: 'CAN AUTO-GENERATE (exact match - safe to remove)',
     entries: canAutoGenerateEntries.filter(e => e.canAutoGenerate),
   },
   {
@@ -294,7 +258,6 @@ for (const section of sections) {
   }
 }
 
-// Recommendations
 console.log('='.repeat(80))
 console.log('RECOMMENDATIONS')
 console.log('='.repeat(80))

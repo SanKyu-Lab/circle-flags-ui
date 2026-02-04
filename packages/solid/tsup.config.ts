@@ -4,7 +4,7 @@ import {
   createBaseTsupConfig,
   createBuildDefines,
   createOnSuccess,
-} from '../../scripts/tsup/shared.ts'
+} from '../../scripts/tsup/shared.mjs'
 
 const isProduction = process.env.NODE_ENV === 'production'
 

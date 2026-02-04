@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 const repoRootDir = fileURLToPath(new URL('../..', import.meta.url))
 const circleFlagsDir = fileURLToPath(new URL('../../circle-flags', import.meta.url))
 
-const tryExec = (command: string, options?: { cwd?: string }) => {
+const tryExec = (command, options) => {
   try {
     return execSync(command, {
       encoding: 'utf-8',
@@ -16,20 +16,20 @@ const tryExec = (command: string, options?: { cwd?: string }) => {
   }
 }
 
-export const resolveRepoCommit = (envVarName: string) => {
+export const resolveRepoCommit = envVarName => {
   const env = process.env
   if (env[envVarName]) return env[envVarName]
   if (env.GIT_COMMIT) return env.GIT_COMMIT
   return tryExec('git rev-parse HEAD', { cwd: repoRootDir }) ?? 'dev'
 }
 
-export const resolveCircleFlagsCommit = (envVarName: string) => {
+export const resolveCircleFlagsCommit = envVarName => {
   const env = process.env
   if (env[envVarName]) return env[envVarName]
   return tryExec('git rev-parse HEAD', { cwd: circleFlagsDir }) ?? 'unknown'
 }
 
-export const resolveBuiltAt = (envVarName: string) => {
+export const resolveBuiltAt = envVarName => {
   const env = process.env
   const fallback = `${Date.now()}`
   const source = env[envVarName] ?? env.BUILD_TIMESTAMP ?? env.BUILD_AT
@@ -37,7 +37,7 @@ export const resolveBuiltAt = (envVarName: string) => {
   return Number.isFinite(parsed) ? `${parsed}` : fallback
 }
 
-export const createBuildDefines = (options: { prefix: string }) => {
+export const createBuildDefines = options => {
   const { prefix } = options
   const commit = resolveRepoCommit(`${prefix}_COMMIT`)
   const circleFlagsCommit = resolveCircleFlagsCommit(`${prefix}_CIRCLE_FLAGS_COMMIT`)
@@ -47,10 +47,10 @@ export const createBuildDefines = (options: { prefix: string }) => {
     [`__${prefix}_COMMIT__`]: JSON.stringify(commit),
     [`__${prefix}_CIRCLE_FLAGS_COMMIT__`]: JSON.stringify(circleFlagsCommit),
     [`__${prefix}_BUILT_AT__`]: JSON.stringify(builtAt),
-  } as const
+  }
 }
 
-export const createOnSuccess = (label: string) => {
+export const createOnSuccess = label => {
   let buildCount = 0
   return () => {
     buildCount += 1
@@ -61,16 +61,11 @@ export const createOnSuccess = (label: string) => {
   }
 }
 
-export const outExtensionMjsCjs = ({ format }: { format: 'esm' | 'cjs' | string }) => ({
+export const outExtensionMjsCjs = ({ format }) => ({
   js: format === 'esm' ? '.mjs' : '.cjs',
 })
 
-export const createBaseTsupConfig = (options: {
-  external: string[]
-  define: Record<string, string>
-  isProduction: boolean
-  esbuildOptions?: (options: any) => void
-}) => {
+export const createBaseTsupConfig = options => {
   const { external, define, isProduction, esbuildOptions } = options
 
   return {
@@ -85,5 +80,5 @@ export const createBaseTsupConfig = (options: {
     define,
     outExtension: outExtensionMjsCjs,
     ...(esbuildOptions ? { esbuildOptions } : {}),
-  } as const
+  }
 }

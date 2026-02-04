@@ -1,13 +1,10 @@
-import { getCountryName } from './names'
-import { codeToComponentName, codeToEmoji } from './utils'
+import { getCountryName } from './names.mjs'
+import { codeToComponentName, codeToEmoji } from './utils.mjs'
 
 /**
  * Convert SVG string to React component string
  */
-export function svgToReactComponent(
-  svg: string,
-  code: string
-): { componentCode: string; svgSize: number; optimizedSize: number } {
+export function svgToReactComponent(svg, code) {
   const svgSize = svg.length
 
   // No optimization needed - upstream circle-flags SVGs are already optimized
@@ -99,10 +96,7 @@ ${innerContent
  * - Use `innerHTML` on the <svg> to avoid generating thousands of VNode calls
  * - Escape user-provided title to avoid injection via <title>
  */
-export function svgToVueComponent(
-  svg: string,
-  code: string
-): { componentCode: string; svgSize: number; optimizedSize: number } {
+export function svgToVueComponent(svg, code) {
   const svgSize = svg.length
 
   // No optimization needed - upstream circle-flags SVGs are already optimized
@@ -192,10 +186,7 @@ export const ${componentName} = defineComponent({
  * - Keep SVG inner markup as a constant string
  * - Escape user-provided title to avoid injection
  */
-export function svgToSolidComponent(
-  svg: string,
-  code: string
-): { componentCode: string; svgSize: number; optimizedSize: number } {
+export function svgToSolidComponent(svg, code) {
   const svgSize = svg.length
 
   // No optimization needed - upstream circle-flags SVGs are already optimized
@@ -258,7 +249,7 @@ export const ${componentName}: Component<${componentName}Props> = (props) => {
     props
   )
 
-  const [local, rest] = splitProps(merged, ['width', 'height', 'class', 'className', 'title'])
+  const [local, rest] = splitProps(merged, ['width', 'height', 'className', 'title'])
 
   return (
     <svg
@@ -266,7 +257,7 @@ export const ${componentName}: Component<${componentName}Props> = (props) => {
       viewBox="${viewBox}"
       width={local.width}
       height={local.height}
-      class={local.class || local.className}
+      class={local.className}
       role="img"
       aria-label={local.title}
       innerHTML={'<title>' + escapeHtml(local.title) + '</title>' + SVG_BODY}

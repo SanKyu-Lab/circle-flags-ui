@@ -1,5 +1,5 @@
 import { defineConfig } from 'tsup'
-import { outExtensionMjsCjs } from '../../scripts/tsup/shared.ts'
+import { outExtensionMjsCjs } from '../../scripts/tsup/shared.mjs'
 
 export default defineConfig({
   entry: ['src/index.ts'],

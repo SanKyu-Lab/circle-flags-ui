@@ -1,18 +1,21 @@
 import { mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { dirname, join, relative } from 'node:path'
+import { isMain } from './lib/is-main.mjs'
+import { repoRootFromImportMeta } from './lib/repo-root.mjs'
 
 const GENERATED_BANNER = `// DO NOT CHANGE ANY PART OF THIS FILE
 // This file is auto-generated from examples/shared/lib.
 
 `
 
-const EXAMPLES_DIR = join(process.cwd(), 'examples')
+const defaultRepoRoot = repoRootFromImportMeta(import.meta.url)
+const EXAMPLES_DIR = join(defaultRepoRoot, 'examples')
 const SHARED_LIB_DIR = join(EXAMPLES_DIR, 'shared', 'lib')
 const DEST_SUBDIR = join('src', 'libs', 'shared')
 
-async function listFilesRecursively(dir: string): Promise<string[]> {
+const listFilesRecursively = async dir => {
   const entries = await readdir(dir, { withFileTypes: true })
-  const results: string[] = []
+  const results = []
 
   for (const entry of entries) {
     const fullPath = join(dir, entry.name)
@@ -29,16 +32,14 @@ async function listFilesRecursively(dir: string): Promise<string[]> {
   return results
 }
 
-function shouldCopyFile(filePath: string): boolean {
-  return filePath.endsWith('.ts') || filePath.endsWith('.tsx')
-}
+const shouldCopyFile = filePath => filePath.endsWith('.ts') || filePath.endsWith('.tsx')
 
-async function writeGeneratedFile(destPath: string, sourceContent: string) {
+const writeGeneratedFile = async (destPath, sourceContent) => {
   await mkdir(dirname(destPath), { recursive: true })
   await writeFile(destPath, GENERATED_BANNER + sourceContent, 'utf8')
 }
 
-export async function syncExampleShared() {
+export const syncExampleShared = async () => {
   const sourceFiles = (await listFilesRecursively(SHARED_LIB_DIR)).filter(shouldCopyFile)
 
   const exampleEntries = await readdir(EXAMPLES_DIR, { withFileTypes: true })
@@ -64,7 +65,9 @@ export async function syncExampleShared() {
   }
 }
 
-syncExampleShared().catch(error => {
-  console.error('❌ Failed to sync examples shared lib:', error)
-  process.exitCode = 1
-})
+if (isMain(import.meta.url)) {
+  syncExampleShared().catch(error => {
+    console.error('❌ Failed to sync examples shared lib:', error)
+    process.exitCode = 1
+  })
+}

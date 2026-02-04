@@ -7,20 +7,19 @@ import {
   CORE_GENERATED_DIR,
   FLAGS_DIR,
   REACT_OUTPUT_DIR,
-  VUE_OUTPUT_DIR,
   SOLID_OUTPUT_DIR,
-} from './constants'
-import { buildNameMappings, getNameFromMappings } from './country-data'
-import { getCountryName } from './names'
-import { svgToReactComponent, svgToVueComponent, svgToSolidComponent } from './svg'
-import type { FlagMetadata } from './types'
-import { codeToComponentName } from './utils'
+  VUE_OUTPUT_DIR,
+} from './constants.mjs'
+import { buildNameMappings, getNameFromMappings } from './country-data.mjs'
+import { getCountryName } from './names.mjs'
+import { svgToReactComponent, svgToSolidComponent, svgToVueComponent } from './svg.mjs'
+import { codeToComponentName } from './utils.mjs'
+import { repoRootFromImportMeta } from '../lib/repo-root.mjs'
 
 /**
  * Ensure circle-flags repository is available
  */
 function ensureCircleFlagsRepo() {
-  // First, try to initialize/update as a git submodule
   if (existsSync('.git')) {
     console.log('🔄 Attempting to initialize git submodule...')
     try {
@@ -31,9 +30,7 @@ function ensureCircleFlagsRepo() {
     }
   }
 
-  // Verify the flags directory exists and is not empty
   if (!existsSync(FLAGS_DIR)) {
-    // If circle-flags doesn't exist, clone it
     if (!existsSync('circle-flags')) {
       console.log('📦 Cloning circle-flags repository...')
       execSync(`git clone --depth 1 ${CIRCLE_FLAGS_REPO}`, { stdio: 'inherit' })
@@ -45,7 +42,6 @@ function ensureCircleFlagsRepo() {
     }
   }
 
-  // Final verification
   if (!existsSync(FLAGS_DIR)) {
     throw new Error(
       `Failed to set up circle-flags repository. ` +
@@ -56,10 +52,37 @@ function ensureCircleFlagsRepo() {
   console.log('✓ circle-flags repository is ready\n')
 }
 
+const writeComponentsFromSvg = async (svgPath, { reactPath, vuePath, solidPath }, code) => {
+  const svgContent = await readFile(svgPath, 'utf-8')
+  const react = svgToReactComponent(svgContent, code)
+  const vue = svgToVueComponent(svgContent, code)
+  const solid = svgToSolidComponent(svgContent, code)
+
+  await writeFile(reactPath, react.componentCode, 'utf-8')
+  await writeFile(vuePath, vue.componentCode, 'utf-8')
+  await writeFile(solidPath, solid.componentCode, 'utf-8')
+
+  return {
+    svgSize: react.svgSize,
+    optimizedSize: react.optimizedSize,
+  }
+}
+
+const writeAliasComponents = async (
+  { reactPath, vuePath, solidPath },
+  { componentName, targetCode, targetComponentName }
+) => {
+  const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
+  await writeFile(reactPath, aliasContent, 'utf-8')
+  await writeFile(vuePath, aliasContent, 'utf-8')
+  await writeFile(solidPath, aliasContent, 'utf-8')
+}
+
 /**
  * Main generation function
  */
 export async function generateFlags() {
+  process.chdir(repoRootFromImportMeta(import.meta.url))
   console.log('🚀 Starting optimized flag generation...\n')
 
   ensureCircleFlagsRepo()
@@ -80,14 +103,15 @@ export async function generateFlags() {
 
   console.log(`📄 Found ${svgFiles.length} flag files\n`)
 
-  const flags: FlagMetadata[] = []
+  const flags = []
   let totalOriginalSize = 0
   let totalOptimizedSize = 0
 
   for (const file of svgFiles) {
     const code = basename(file, '.svg')
     const svgPath = `${FLAGS_DIR}/${file}`
-    const outputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
+
+    const reactOutputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
     const vueOutputPath = `${VUE_OUTPUT_DIR}/${code}.ts`
     const solidOutputPath = `${SOLID_OUTPUT_DIR}/${code}.tsx`
 
@@ -104,10 +128,14 @@ export async function generateFlags() {
         const targetFile = `${targetCode}.svg`
 
         if (svgFiles.includes(targetFile)) {
-          const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
-          await writeFile(outputPath, aliasContent, 'utf-8')
-          await writeFile(vueOutputPath, aliasContent, 'utf-8')
-          await writeFile(solidOutputPath, aliasContent, 'utf-8')
+          await writeAliasComponents(
+            {
+              reactPath: reactOutputPath,
+              vuePath: vueOutputPath,
+              solidPath: solidOutputPath,
+            },
+            { componentName, targetCode, targetComponentName }
+          )
 
           flags.push({
             code,
@@ -119,58 +147,35 @@ export async function generateFlags() {
           })
 
           process.stdout.write(`✓ ${componentName}: alias of ${targetComponentName}\r`)
-        } else {
-          const svgContent = await readFile(svgPath, 'utf-8')
-          const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
-          const { componentCode: vueComponentCode } = svgToVueComponent(svgContent, code)
-          const { componentCode: solidComponentCode } = svgToSolidComponent(svgContent, code)
-
-          await writeFile(outputPath, componentCode, 'utf-8')
-          await writeFile(vueOutputPath, vueComponentCode, 'utf-8')
-          await writeFile(solidOutputPath, solidComponentCode, 'utf-8')
-
-          flags.push({
-            code,
-            name: displayName,
-            componentName,
-            svgSize,
-            optimizedSize,
-          })
-
-          totalOriginalSize += svgSize
-          totalOptimizedSize += optimizedSize
-
-          const compression = (((svgSize - optimizedSize) / svgSize) * 100).toFixed(1)
-          process.stdout.write(
-            `✓ ${componentName}: ${svgSize}B → ${optimizedSize}B (${compression}% smaller)\r`
-          )
+          continue
         }
-      } else {
-        const svgContent = await readFile(svgPath, 'utf-8')
-        const { componentCode, svgSize, optimizedSize } = svgToReactComponent(svgContent, code)
-        const { componentCode: vueComponentCode } = svgToVueComponent(svgContent, code)
-        const { componentCode: solidComponentCode } = svgToSolidComponent(svgContent, code)
-
-        await writeFile(outputPath, componentCode, 'utf-8')
-        await writeFile(vueOutputPath, vueComponentCode, 'utf-8')
-        await writeFile(solidOutputPath, solidComponentCode, 'utf-8')
-
-        flags.push({
-          code,
-          name: displayName,
-          componentName,
-          svgSize,
-          optimizedSize,
-        })
-
-        totalOriginalSize += svgSize
-        totalOptimizedSize += optimizedSize
-
-        const compression = (((svgSize - optimizedSize) / svgSize) * 100).toFixed(1)
-        process.stdout.write(
-          `✓ ${componentName}: ${svgSize}B → ${optimizedSize}B (${compression}% smaller)\r`
-        )
       }
+
+      const { svgSize, optimizedSize } = await writeComponentsFromSvg(
+        svgPath,
+        {
+          reactPath: reactOutputPath,
+          vuePath: vueOutputPath,
+          solidPath: solidOutputPath,
+        },
+        code
+      )
+
+      flags.push({
+        code,
+        name: displayName,
+        componentName,
+        svgSize,
+        optimizedSize,
+      })
+
+      totalOriginalSize += svgSize
+      totalOptimizedSize += optimizedSize
+
+      const compression = (((svgSize - optimizedSize) / svgSize) * 100).toFixed(1)
+      process.stdout.write(
+        `✓ ${componentName}: ${svgSize}B → ${optimizedSize}B (${compression}% smaller)\r`
+      )
     } catch (error) {
       console.error(`\n❌ Error processing ${code}:`, error)
     }
@@ -178,10 +183,14 @@ export async function generateFlags() {
 
   console.log(`\n\n✅ Generated ${flags.length} optimized flag components`)
 
-  // Generate enhanced index file with metadata
-  const largestFlags = flags.sort((a, b) => b.optimizedSize - a.optimizedSize).slice(0, 5)
+  const sizedFlags = flags.filter(f => f.svgSize > 0 && f.optimizedSize > 0)
+  const largestFlags = sizedFlags
+    .slice()
+    .sort((a, b) => b.optimizedSize - a.optimizedSize)
+    .slice(0, 5)
 
-  const mostCompressed = flags
+  const mostCompressed = sizedFlags
+    .slice()
     .sort(
       (a, b) =>
         (b.svgSize - b.optimizedSize) / b.svgSize - (a.svgSize - a.optimizedSize) / a.svgSize
@@ -198,7 +207,11 @@ export async function generateFlags() {
 // • Size reduction: ${(((totalOriginalSize - totalOptimizedSize) / totalOriginalSize) * 100).toFixed(1)}%
 //
 // 🏆 Largest flags by optimized size: ${largestFlags.map(f => f.componentName).join(', ')}
-// 🗜️  Most compressed: ${mostCompressed.map(f => `${f.componentName} (${(((f.svgSize - f.optimizedSize) / f.svgSize) * 100).toFixed(0)}%)`).join(', ')}
+// 🗜️  Most compressed: ${mostCompressed
+    .map(
+      f => `${f.componentName} (${(((f.svgSize - f.optimizedSize) / f.svgSize) * 100).toFixed(0)}%)`
+    )
+    .join(', ')}
 //
 
 ${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
@@ -247,15 +260,17 @@ ${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
   await writeFile(`${SOLID_OUTPUT_DIR}/index.ts`, solidIndexContent, 'utf-8')
   console.log('✅ Generated solid generated/flags/index.ts\n')
 
-  const aliases = flags
-    .filter(f => f.aliasOf)
-    .reduce((acc, f) => ({ ...acc, [f.code]: f.aliasOf }), {})
+  const aliases = {}
+  for (const flag of flags) {
+    if (flag.aliasOf) aliases[flag.code] = flag.aliasOf
+  }
 
-  const coreRegistryContent = `export const FLAG_REGISTRY = ${JSON.stringify(
-    flags.reduce((acc, f) => ({ ...acc, [f.code]: f.componentName }), {}),
-    null,
-    2
-  )} as const
+  const registry = {}
+  for (const flag of flags) {
+    registry[flag.code] = flag.componentName
+  }
+
+  const coreRegistryContent = `export const FLAG_REGISTRY = ${JSON.stringify(registry, null, 2)} as const
 
 ${Object.keys(aliases).length > 0 ? `export const FLAG_ALIASES = ${JSON.stringify(aliases, null, 2)} as const\n` : ''}
 export type FlagCode = keyof typeof FLAG_REGISTRY
@@ -264,15 +279,13 @@ export type FlagCode = keyof typeof FLAG_REGISTRY
   await writeFile(`${CORE_GENERATED_DIR}/registry.ts`, coreRegistryContent, 'utf-8')
   console.log('✅ Generated core/src/generated/registry.ts\n')
 
-  // country-region-data doesn't cover some circle-flags variants (e.g. "by-historical"),
-  // but downstream consumers/tests expect every flag code to have a display name entry.
-  const extraCountryNames = flags.reduce<Record<string, string>>((acc, flag) => {
+  const extraCountryNames = {}
+  for (const flag of flags) {
     const code = flag.code
-    if (Object.prototype.hasOwnProperty.call(nameMappings.countryNames, code)) return acc
-    if (Object.prototype.hasOwnProperty.call(nameMappings.subdivisionNames, code)) return acc
-    acc[code] = getCountryName(code)
-    return acc
-  }, {})
+    if (Object.prototype.hasOwnProperty.call(nameMappings.countryNames, code)) continue
+    if (Object.prototype.hasOwnProperty.call(nameMappings.subdivisionNames, code)) continue
+    extraCountryNames[code] = getCountryName(code)
+  }
 
   const mergedCountryNames = {
     ...nameMappings.countryNames,
