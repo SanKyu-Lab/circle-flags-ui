@@ -3,6 +3,7 @@ import type { PropType, VNode } from 'vue'
 import {
   codeToEmoji,
   codeToComponentName,
+  coerceFlagCode,
   FlagSizes,
   getSizeName,
   FLAG_REGISTRY,
@@ -255,42 +256,40 @@ const _CircleFlag = defineComponent({
  */
 export const CircleFlag: typeof _CircleFlag = _CircleFlag
 
-export interface DynamicFlagProps extends FlagComponentProps {
-  code: string
+type DynamicFlagPropsBase = FlagComponentProps & {
+  // Explicitly include title to avoid type resolution differences across toolchains (e.g. Astro/TS).
   title?: string
 }
+
+export type DynamicFlagProps =
+  | (DynamicFlagPropsBase & { strict?: false; code: string })
+  | (DynamicFlagPropsBase & { strict: true; code: CountryCode })
 
 const _DynamicFlag = defineComponent({
   name: 'DynamicFlag',
   inheritAttrs: false,
   props: {
     code: { type: String, required: true },
+    strict: { type: Boolean, default: false },
     width: { type: [Number, String] as PropType<number | string>, default: 48 },
     height: { type: [Number, String] as PropType<number | string>, default: 48 },
     title: { type: String, default: undefined },
     className: { type: String, default: undefined },
   },
   setup(props, { attrs }): () => VNode {
-    const normalizedCode = computed(() => props.code.toLowerCase())
-    const componentName = computed(() => FLAG_REGISTRY[normalizedCode.value as FlagCode])
+    const normalizedInput = computed(() => props.code.trim().toLowerCase())
+    const resolvedCode = computed(() => coerceFlagCode(props.code, 'xx'))
+    const componentName = computed(() => FLAG_REGISTRY[resolvedCode.value])
+    const isFallback = computed(() => resolvedCode.value === 'xx' && normalizedInput.value !== 'xx')
+    const fallbackTitle = computed(() => {
+      if (!isFallback.value) return props.title
+      const upperCode = props.code.trim().toUpperCase()
+      return props.title ?? (upperCode.length > 0 ? upperCode : 'XX')
+    })
 
     return (): VNode => {
       const attrsAny = attrs as Record<string, unknown>
       const name = componentName.value
-
-      if (!name) {
-        const upper = props.code.toUpperCase()
-        const emoji = codeToEmoji(props.code)
-        const title = props.title ?? `${emoji} ${upper}`
-        return renderFallbackSvg({
-          width: props.width,
-          height: props.height,
-          title,
-          codeUpper: upper,
-          className: props.className,
-          attrs: attrsAny,
-        })
-      }
 
       const FlagComponent = (AllFlags as unknown as Record<string, unknown>)[name]
 
@@ -303,7 +302,7 @@ const _DynamicFlag = defineComponent({
         ...attrsAny,
         width: props.width,
         height: props.height,
-        title: props.title,
+        title: fallbackTitle.value,
         className: props.className,
       })
     }
@@ -320,5 +319,7 @@ export {
   FLAG_REGISTRY,
   COUNTRY_NAMES,
   SUBDIVISION_NAMES,
+  coerceFlagCode,
+  isFlagCode,
   type FlagCode,
 } from '@sankyu/circle-flags-core'

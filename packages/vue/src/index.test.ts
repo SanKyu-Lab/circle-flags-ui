@@ -11,7 +11,10 @@ describe('@sankyu/vue-circle-flags', () => {
 
   it('DynamicFlag renders fallback for unknown code', () => {
     const wrapper = mount(DynamicFlag, { props: { code: 'zzzz' } })
-    expect(wrapper.find('text').text()).toBe('ZZZZ')
+    const svg = wrapper.find('svg')
+    expect(svg.exists()).toBe(true)
+    expect(svg.attributes('aria-label')).toBe('ZZZZ')
+    expect(wrapper.html()).toContain('<title>ZZZZ</title>')
   })
 
   it('DynamicFlag renders a real flag component for known code', () => {
