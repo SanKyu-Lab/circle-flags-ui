@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { useState } from 'react'
+import { describe, expect, test } from 'vitest'
 import * as Flags from '../../generated/flags'
 
 // Helper function: Convert country code to component name (PascalCase)

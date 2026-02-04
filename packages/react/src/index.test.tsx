@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import fetchMock from 'jest-fetch-mock'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import {
   CircleFlag,
   DynamicFlag,
@@ -11,6 +11,10 @@ import {
 } from './index'
 import { FlagUs } from '../generated/flags/us'
 import { FlagCn } from '../generated/flags/cn'
+
+type FetchMock = ReturnType<typeof vi.fn>
+
+const getFetchMock = () => globalThis.fetch as unknown as FetchMock
 
 describe('Main exports', () => {
   test('should export CircleFlag component', () => {
@@ -138,12 +142,10 @@ describe('Individual flag components', () => {
 })
 
 describe('CircleFlag CDN loading', () => {
-  beforeEach(() => {
-    fetchMock.resetMocks()
-  })
+  const fetchMock = getFetchMock()
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   test('should show loading state initially', () => {
@@ -155,7 +157,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should show error fallback on fetch failure', async () => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     fetchMock.mockRejectedValue(new Error('Network error'))
 
     render(<CircleFlag countryCode="us" data-testid="flag" />)
@@ -195,7 +197,7 @@ describe('CircleFlag CDN loading', () => {
   })
 
   test('should handle non-ok responses and show fallback', async () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     fetchMock.mockResolvedValue({
       ok: false,
       statusText: 'Not Found',
@@ -286,7 +288,7 @@ describe('CircleFlag CDN loading', () => {
             outerHTML: '<svg><use/></svg>',
             querySelectorAll: (selector: string) => {
               if (selector === 'script,foreignObject') {
-                return [{ remove: jest.fn() }]
+                return [{ remove: vi.fn() }]
               }
               if (selector === '*') {
                 return [
@@ -295,12 +297,12 @@ describe('CircleFlag CDN loading', () => {
                       {
                         name: 'href',
                         value: 'javascript:alert(1)',
-                        removeAttribute: jest.fn(),
+                        removeAttribute: vi.fn(),
                       },
                       {
                         name: 'xlink:href',
                         value: 'javascript:alert(2)',
-                        removeAttribute: jest.fn(),
+                        removeAttribute: vi.fn(),
                       },
                     ],
                   },
@@ -398,7 +400,7 @@ describe('DynamicFlag component', () => {
   })
 
   test('should log error when registry entry is missing implementation', () => {
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const registry = FLAG_REGISTRY as Record<string, string>
     registry['missing'] = 'FlagMissing'
 
@@ -425,7 +427,7 @@ describe('Registry and metadata', () => {
   })
 
   test('buildMeta should use provided build-time constants when available', async () => {
-    jest.resetModules()
+    vi.resetModules()
     const mockCommit = 'abc123'
     const mockCircleFlagsCommit = 'def456'
     const mockBuiltAt = '1700000000'
@@ -447,8 +449,8 @@ describe('Registry and metadata', () => {
   })
 
   test('buildMeta should fall back to Date.now when builtAt is invalid', async () => {
-    jest.resetModules()
-    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(999999)
+    vi.resetModules()
+    const nowSpy = vi.spyOn(Date, 'now').mockReturnValue(999999)
     ;(globalThis as Record<string, unknown>).__REACT_CIRCLE_FLAGS_BUILT_AT__ = 'invalid'
 
     const metaModule = await import('./meta')

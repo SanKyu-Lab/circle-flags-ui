@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, expect, test, vi } from 'vitest'
 import { FlagUs, FlagCn, FlagJp, FlagGb, FlagDe } from '../../generated/flags'
 
 // Sample flag components for testing
@@ -62,7 +63,7 @@ describe('Flag Components', () => {
     })
 
     test(`should support event handlers`, () => {
-      const handleClick = jest.fn()
+      const handleClick = vi.fn()
       render(
         <FlagComponent onClick={handleClick} data-testid={`${name.toLowerCase()}-clickable-flag`} />
       )

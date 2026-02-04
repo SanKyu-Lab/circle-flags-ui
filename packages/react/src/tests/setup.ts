@@ -1,8 +1,18 @@
-import '@testing-library/jest-dom'
-import fetchMock from 'jest-fetch-mock'
+import '@testing-library/jest-dom/vitest'
+import { afterEach, beforeEach, vi } from 'vitest'
+import { cleanup } from '@testing-library/react'
 
-// Enable fetch mocking globally
-fetchMock.enableMocks()
+const fetchMock = vi.fn()
+vi.stubGlobal('fetch', fetchMock)
+
+beforeEach(() => {
+  fetchMock.mockReset()
+  fetchMock.mockImplementation(() => new Promise(() => {}))
+})
+
+afterEach(() => {
+  cleanup()
+})
 
 // Ensure SVGElement exists and inheritance is correct
 // This is required for @testing-library/jest-dom matchers (like toBeInTheDocument) to work correctly

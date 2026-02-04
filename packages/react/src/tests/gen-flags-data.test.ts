@@ -1,28 +1,18 @@
 import { readdirSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
-import { getCountryNameMap } from '../../../../scripts/gen-flags/names'
 import { COUNTRY_NAMES, SUBDIVISION_NAMES } from '@sankyu/circle-flags-core'
+import { describe, expect, it } from 'vitest'
 
 describe('flag metadata coverage', () => {
   it('covers all generated flag codes', () => {
-    const countryNames = getCountryNameMap()
-    const allNames = {
-      ...countryNames,
-      ...Object.keys(SUBDIVISION_NAMES).reduce(
-        (acc, key) => {
-          acc[key] =
-            `${SUBDIVISION_NAMES[key as keyof typeof SUBDIVISION_NAMES].country} - ${SUBDIVISION_NAMES[key as keyof typeof SUBDIVISION_NAMES].region}`
-          return acc
-        },
-        {} as Record<string, string>
-      ),
-      ...Object.keys(COUNTRY_NAMES).reduce(
-        (acc, key) => {
-          acc[key] = COUNTRY_NAMES[key as keyof typeof COUNTRY_NAMES]
-          return acc
-        },
-        {} as Record<string, string>
-      ),
+    const subdivisionNames: Record<string, string> = {}
+    for (const [code, meta] of Object.entries(SUBDIVISION_NAMES)) {
+      subdivisionNames[code] = `${meta.country} - ${meta.region}`
+    }
+
+    const allNames: Record<string, string> = {
+      ...COUNTRY_NAMES,
+      ...subdivisionNames,
     }
 
     const flagsDir = resolve(__dirname, '../../generated/flags')
