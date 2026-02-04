@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Check, Copy, ExternalLink } from 'lucide-react'
 import Tabs from '../animated-ui/Tabs'
 import LinkButton from '../ui/LinkButton'
@@ -52,9 +52,12 @@ const renderLine = (line: CodeToken[], index: number) => (
 )
 
 const frameworkOptions = [
-  { id: 'react', label: 'React' },
-  { id: 'vue', label: 'Vue 3' },
-]
+  { id: 'react', label: 'React', badge: undefined },
+  { id: 'vue', label: 'Vue 3', badge: 'Beta' },
+  { id: 'solid', label: 'Solid', badge: 'Beta' },
+] as const
+
+type Framework = (typeof frameworkOptions)[number]['id']
 
 const installCommands = {
   react: [
@@ -68,6 +71,12 @@ const installCommands = {
     { id: 'npm', label: 'npm', command: 'npm install @sankyu/vue-circle-flags' },
     { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/vue-circle-flags' },
     { id: 'bun', label: 'bun', command: 'bun add @sankyu/vue-circle-flags' },
+  ],
+  solid: [
+    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/solid-circle-flags' },
+    { id: 'npm', label: 'npm', command: 'npm install @sankyu/solid-circle-flags' },
+    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/solid-circle-flags' },
+    { id: 'bun', label: 'bun', command: 'bun add @sankyu/solid-circle-flags' },
   ],
 }
 
@@ -92,10 +101,20 @@ import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
     <FlagCn :width="40" :height="40" />
   </div>
 </template>`,
+  solid: `import { FlagUs, FlagCn } from '@sankyu/solid-circle-flags'
+
+export function Header() {
+  return (
+    <div class="flex items-center gap-3">
+      <FlagUs width={40} height={40} />
+      <FlagCn width={40} height={40} />
+    </div>
+  )
+}`,
 }
 
 export default function CodeExample() {
-  const [activeFramework, setActiveFramework] = useState<'react' | 'vue'>('react')
+  const [activeFramework, setActiveFramework] = useState<Framework>('react')
   const [activeManager, setActiveManager] = useState('pnpm')
   const [copied, setCopied] = useState(false)
 
@@ -128,7 +147,7 @@ export default function CodeExample() {
           {frameworkOptions.map(option => (
             <button
               key={option.id}
-              onClick={() => setActiveFramework(option.id as 'react' | 'vue')}
+              onClick={() => setActiveFramework(option.id)}
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 activeFramework === option.id
                   ? 'bg-(--accent) text-white'
@@ -136,11 +155,18 @@ export default function CodeExample() {
               }`}
             >
               {option.label}
-              {option.id === 'vue' && <span className="ml-1.5 text-[10px] opacity-75">Beta</span>}
+              {option.badge ? (
+                <span className="ml-1.5 text-[10px] opacity-75">{option.badge}</span>
+              ) : null}
             </button>
           ))}
         </div>
       </div>
+      {activeFramework === 'solid' ? (
+        <p className="text-xs text-(--muted)">
+          Solid (beta): named-import flags currently use <code>className</code> for CSS classes.
+        </p>
+      ) : null}
 
       <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#192732]">
         <Tabs items={currentInstallCommands} activeId={activeManager} onChange={setActiveManager} />

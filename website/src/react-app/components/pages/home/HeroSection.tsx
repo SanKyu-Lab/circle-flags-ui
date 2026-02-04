@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Check, Copy, ExternalLink } from 'lucide-react'
 import FlagShowcase from '../../flag-showcase/FlagShowcase'
 import SpotlightCard from '../../animated-ui/SpotlightCard'
@@ -7,11 +7,12 @@ import LinkButton from '../../ui/LinkButton'
 import { toRouteHref, withBasePath } from '../../../routing/paths'
 import { buildMeta } from '@sankyu/react-circle-flags'
 
-type Framework = 'react' | 'vue'
+type Framework = 'react' | 'vue' | 'solid'
 
 const frameworkOptions: { id: Framework; label: string; badge?: string }[] = [
   { id: 'react', label: 'React' },
   { id: 'vue', label: 'Vue 3', badge: 'Beta' },
+  { id: 'solid', label: 'Solid', badge: 'Beta' },
 ]
 
 const installCommandsByFramework = {
@@ -26,6 +27,12 @@ const installCommandsByFramework = {
     { id: 'npm', label: 'npm', command: 'npm install @sankyu/vue-circle-flags' },
     { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/vue-circle-flags' },
     { id: 'bun', label: 'bun', command: 'bun add @sankyu/vue-circle-flags' },
+  ],
+  solid: [
+    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/solid-circle-flags' },
+    { id: 'npm', label: 'npm', command: 'npm install @sankyu/solid-circle-flags' },
+    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/solid-circle-flags' },
+    { id: 'bun', label: 'bun', command: 'bun add @sankyu/solid-circle-flags' },
   ],
 }
 
@@ -74,7 +81,7 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
         <div className="space-y-5">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05]">
             <span className="gradient-text block">Circular flags</span>
-            <span className="text-(--ink) block">for React & Vue.</span>
+            <span className="text-(--ink) block">for React, Vue & Solid.</span>
           </h1>
           <p className="text-lg sm:text-xl text-(--muted) max-w-2xl leading-relaxed">
             Self-contained flags. Zero external requests. Zero layout shifts.
@@ -111,8 +118,8 @@ export default function HeroSection({ flagCount, onBrowseClick, onFlagClick }: H
           {[
             { icon: '⚛️', label: 'React' },
             { icon: '💚', label: 'Vue 3' },
+            { icon: '🟦', label: 'Solid' },
             { icon: '💎', label: 'TypeScript' },
-            { icon: '🪶', label: 'ESM + CJS' },
             { icon: '🎨', label: 'Accessible SVGs' },
           ].map(item => (
             <div

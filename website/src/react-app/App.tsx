@@ -31,7 +31,7 @@ export default function App() {
       },
       {
         label: 'GitHub',
-        href: 'https://github.com/SanKyu-Lab/react-circle-flags',
+        href: 'https://github.com/SanKyu-Lab/circle-flags-ui',
         ariaLabel: 'GitHub repository',
         target: '_blank',
         rel: 'noreferrer',

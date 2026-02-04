@@ -4,11 +4,12 @@ import type { FlagInfo } from '../../utils/flagData'
 import { TYPE_LABELS } from '../../utils/flagData'
 import { flagComponentMap } from './flagComponent'
 
-type Framework = 'react' | 'vue'
+type Framework = 'react' | 'vue' | 'solid'
 
 const frameworkOptions: { id: Framework; label: string; badge?: string }[] = [
   { id: 'react', label: 'React' },
   { id: 'vue', label: 'Vue 3', badge: 'Beta' },
+  { id: 'solid', label: 'Solid', badge: 'Beta' },
 ]
 
 interface FlagDetailPanelProps {
@@ -31,7 +32,11 @@ export default function FlagDetailPanel({
   }
 
   const packageName =
-    activeFramework === 'vue' ? '@sankyu/vue-circle-flags' : '@sankyu/react-circle-flags'
+    activeFramework === 'vue'
+      ? '@sankyu/vue-circle-flags'
+      : activeFramework === 'solid'
+        ? '@sankyu/solid-circle-flags'
+        : '@sankyu/react-circle-flags'
 
   const componentCode =
     activeFramework === 'vue' ? `<${flag.componentName} />` : `<${flag.componentName} />`
@@ -137,6 +142,12 @@ export default function FlagDetailPanel({
                 ))}
               </div>
             </div>
+            {activeFramework === 'solid' ? (
+              <p className="text-[11px] text-(--muted) mb-3">
+                Solid (beta): named-import flags currently use <code>className</code> for CSS
+                classes.
+              </p>
+            ) : null}
 
             <div className="flex flex-wrap gap-2">
               <button

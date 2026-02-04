@@ -16,18 +16,14 @@ export default function AppFooter() {
       <div className="relative mx-auto flex max-w-6xl flex-wrap items-start justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="flex h-11 w-11 items-center justify-center rounded-full border border-(--border-weak) bg-(--overlay-soft) shadow-inner shadow-(--accent)/20">
-            <img
-              src={withBasePath('favicon.svg')}
-              alt="React Circle Flags logo"
-              className="h-6 w-6"
-            />
+            <img src={withBasePath('favicon.svg')} alt="Circle Flags logo" className="h-6 w-6" />
           </div>
           <div>
             <p className="text-sm font-semibold tracking-tight text-(--ink)">
-              Sankyu Lab - React Circle Flags
+              Sankyu Lab - Circle Flags UI
             </p>
             <p className="mt-1 text-(--muted)">
-              A curated playground for @sankyu/react-circle-flags
+              A curated playground for React, Vue & Solid packages
             </p>
           </div>
         </div>
@@ -45,7 +41,7 @@ export default function AppFooter() {
             </span>
           </a>
           <a
-            href="https://github.com/SanKyu-Lab/react-circle-flags"
+            href="https://github.com/SanKyu-Lab/circle-flags-ui"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 rounded-full border border-(--border-weak) bg-(--overlay-soft) px-4 py-1.5 text-(--ink) transition hover:border-(--accent) hover:text-(--accent)"

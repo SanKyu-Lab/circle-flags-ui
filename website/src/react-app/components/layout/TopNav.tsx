@@ -49,7 +49,7 @@ export default function TopNav({ currentPage, onPageChange, children }: TopNavPr
               Docs
             </a>
             <a
-              href="https://github.com/SanKyu-Lab/react-circle-flags"
+              href="https://github.com/SanKyu-Lab/circle-flags-ui"
               target="_blank"
               rel="noreferrer"
               className="group flex items-center gap-2 rounded-full border border-transparent px-4 py-1.5 text-sm font-medium text-(--muted) transition-all hover:border-(--border-weak) hover:bg-(--overlay-mid) hover:text-(--ink)"
