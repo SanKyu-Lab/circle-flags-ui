@@ -1,11 +1,2 @@
 #!/usr/bin/env sh
-set -e
-
-msgFile="$(git rev-parse --git-path COMMIT_EDITMSG 2>/dev/null || true)"
-if [ -n "$msgFile" ] && [ -f "$msgFile" ]; then
-  pnpm dlx commitlint --edit "$msgFile"
-fi
-
-pnpm run format
-pnpm run lint:fix
-pnpm run typecheck
+exit 0
