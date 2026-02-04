@@ -3,6 +3,7 @@ import type { Component, JSX } from 'solid-js'
 import {
   codeToEmoji,
   codeToComponentName,
+  coerceFlagCode,
   FlagSizes,
   getSizeName,
   FLAG_REGISTRY,
@@ -170,13 +171,19 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
   )
 }
 
-export interface DynamicFlagProps
-  extends
-    Omit<JSX.SvgSVGAttributes<SVGSVGElement>, 'width' | 'height' | 'title'>,
-    FlagComponentProps {
-  code: string
-  title?: string
-}
+export type CountryCode = FlagCode
+
+type DynamicFlagPropsBase = Omit<
+  JSX.SvgSVGAttributes<SVGSVGElement>,
+  'width' | 'height' | 'title'
+> &
+  FlagComponentProps & {
+    title?: string
+  }
+
+export type DynamicFlagProps =
+  | (DynamicFlagPropsBase & { strict?: false; code: string })
+  | (DynamicFlagPropsBase & { strict: true; code: CountryCode })
 
 export const DynamicFlag: Component<DynamicFlagProps> = props => {
   const merged = mergeProps(
@@ -189,6 +196,7 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
 
   const [local, rest] = splitProps(merged, [
     'code',
+    'strict',
     'width',
     'height',
     'title',
@@ -196,32 +204,28 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
     'className',
   ])
 
-  const normalizedCode = () => local.code.toLowerCase()
-  const componentName = () => FLAG_REGISTRY[normalizedCode() as FlagCode]
-  const upperCode = () => local.code.toUpperCase()
-  const emoji = () => codeToEmoji(local.code)
-  const defaultTitle = () => local.title ?? `${emoji()} ${upperCode()}`
+  const normalizedInput = () => local.code.trim().toLowerCase()
+  const resolvedCode = () => coerceFlagCode(local.code, 'xx')
+  const isFallback = () => resolvedCode() === 'xx' && normalizedInput() !== 'xx'
+  const fallbackTitle = () => {
+    if (!isFallback()) return local.title
+    const upperCode = local.code.trim().toUpperCase()
+    return local.title ?? (upperCode.length > 0 ? upperCode : 'XX')
+  }
+
+  const componentName = () => FLAG_REGISTRY[resolvedCode()]
 
   return (
     <Show
-      when={componentName()}
+      when={!isFallback()}
       fallback={
-        <svg
+        <AllFlags.FlagXx
           {...rest}
-          viewBox="0 0 512 512"
           width={local.width}
           height={local.height}
+          title={fallbackTitle()}
           class={local.class || local.className}
-          role="img"
-          aria-label={defaultTitle()}
-        >
-          <title>{defaultTitle()}</title>
-          <circle cx="256" cy="256" r="256" fill="#f0f0f0" />
-          <circle cx="256" cy="256" r="200" fill="#e0e0e0" />
-          <text x="256" y="280" text-anchor="middle" font-size="80" font-weight="bold" fill="#666">
-            {upperCode()}
-          </text>
-        </svg>
+        />
       }
     >
       {(() => {
@@ -244,13 +248,13 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
   )
 }
 
-export type CountryCode = FlagCode
-
 export * from '../generated/flags'
 
 export {
   FLAG_REGISTRY,
   COUNTRY_NAMES,
   SUBDIVISION_NAMES,
+  coerceFlagCode,
+  isFlagCode,
   type FlagCode,
 } from '@sankyu/circle-flags-core'
