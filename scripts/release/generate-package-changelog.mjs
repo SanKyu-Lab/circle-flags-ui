@@ -147,6 +147,8 @@ const buckets = {
   perf: [],
   refactor: [],
   docs: [],
+  chore: [],
+  style: [],
   other: [],
 }
 
@@ -184,9 +186,15 @@ for (const commit of commits) {
     case 'docs':
       buckets.docs.push(line)
       break
-    // Filter out: chore, build, ci, test, style
+    case 'chore':
+      buckets.chore.push(line)
+      break
+    case 'style':
+      buckets.style.push(line)
+      break
+    // Filter out: build, ci, test
     default:
-      if (!['chore', 'build', 'ci', 'test', 'style'].includes(parsed.type)) {
+      if (!['build', 'ci', 'test'].includes(parsed.type)) {
         buckets.other.push(line)
       }
   }
@@ -201,6 +209,8 @@ if (buckets.fix.length) sections.push(['### 🐛 Bug Fixes', buckets.fix])
 if (buckets.perf.length) sections.push(['### ⚡ Performance', buckets.perf])
 if (buckets.refactor.length) sections.push(['### ♻️ Refactors', buckets.refactor])
 if (buckets.docs.length) sections.push(['### 📝 Documentation', buckets.docs])
+if (buckets.chore.length) sections.push(['### 🧹 Chores', buckets.chore])
+if (buckets.style.length) sections.push(['### 🎨 Styles', buckets.style])
 if (buckets.other.length) sections.push(['### 🔮 Other', buckets.other])
 
 const header = `# Changelog
