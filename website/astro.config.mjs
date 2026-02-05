@@ -60,35 +60,42 @@ const starlightPlugins = [
         }),
       ]),
   starlightLlmsTxt({
-    projectName: '@sankyu/react-circle-flags',
+    projectName:
+      'circle-flags-ui Docs (@sankyu/react-circle-flags, @sankyu/vue-circle-flags, @sankyu/solid-circle-flags)',
     description:
-      'A React component library providing 400+ circular SVG country flags with full TypeScript support, tree-shaking optimization, and SSR compatibility.',
-    details: `This library converts SVG flags from the HatScripts/circle-flags repository into optimized React components.
+      'Documentation for circle-flags-ui: 400+ circular SVG flags across React (stable), Vue 3 (beta), and Solid.js (beta), with TypeScript types, SSR support, and tree-shaking.',
+    details: `Vibe-coding assistant guidance:
 
-Offline-first usage (named imports and DynamicFlag) renders inline SVG with standard SVG props and no external requests.
+- Start from \`guides/getting-started/installation\`, then choose one framework path (React, Vue 3, or Solid.js) and keep code examples framework-consistent.
+- Prefer named flag imports for smallest bundles. Use \`DynamicFlag\` only when codes are runtime values.
+- For runtime strings, normalize with \`trim().toLowerCase()\`, then use \`isFlagCode()\` or \`coerceFlagCode()\`.
+- \`FlagUtils.formatCountryCode()\` returns uppercase display text; size presets come from \`FlagSizes\` / \`FlagUtils.sizes\` and use \`xs | sm | md | lg | xl | xxl | xxxl\`.
+- \`CircleFlag\` is deprecated. Use named imports or \`DynamicFlag\` in new code.
+- CDN usage is for prototypes/sandboxes; for production and offline-first UX, install from npm and bundle locally.
 
-The package uses a dual-entry build configuration for optimal tree-shaking, ensuring users only bundle the flag components they actually import.`,
+Use \`/llms-small.txt\` for fast context loading, \`/llms-full.txt\` for complete context, and \`/_llms-txt/*.txt\` for focused subsets.`,
     customSets: [
       {
         label: 'Getting Started Guide',
         description:
-          'Essential documentation for new users: installation, basic usage, styling, dynamic flags, TypeScript support, and bundle size optimization',
+          'Core onboarding path for coding assistants: install, render flags, style, handle dynamic codes, and apply TypeScript-safe patterns',
         paths: ['**/guides/getting-started/**'],
       },
       {
         label: 'Advanced Usage',
-        description: 'Advanced topics including CDN usage and other expert-level configurations',
+        description:
+          'Advanced implementation guidance including FlagUtils, type utilities, and practical CDN tradeoffs',
         paths: ['**/guides/advanced/**'],
       },
       {
         label: 'Migration Guide',
-        description: 'Instructions for migrating from the original react-circle-flags package',
+        description:
+          'Migration notes from legacy react-circle-flags usage to the current circle-flags-ui patterns',
         paths: ['**/migration/**'],
       },
       {
         label: 'API Reference',
-        description:
-          'Complete API documentation for all exported components, types, and utility functions',
+        description: 'Typed API surface for components, utility functions, and exported types',
         paths: ['**/reference/**'],
       },
     ],
@@ -102,18 +109,33 @@ The package uses a dual-entry build configuration for optimal tree-shaking, ensu
     optionalLinks: [
       {
         label: 'GitHub Repository',
-        url: 'https://github.com/SanKyu-Lab/react-circle-flags',
+        url: 'https://github.com/SanKyu-Lab/circle-flags-ui',
         description: 'Source code, issue tracker, and contribution guidelines',
       },
       {
-        label: 'NPM Package',
+        label: 'NPM (React Package)',
         url: 'https://www.npmjs.com/package/@sankyu/react-circle-flags',
-        description: 'Package information, version history, and installation command',
+        description: 'Stable React package information and release history',
       },
       {
-        label: 'Interactive Demo',
-        url: 'https://react-circle-flags.js.org/',
-        description: 'Live React demo with flag browser and code examples',
+        label: 'NPM (Vue Package)',
+        url: 'https://www.npmjs.com/package/@sankyu/vue-circle-flags',
+        description: 'Vue 3 beta package information',
+      },
+      {
+        label: 'NPM (Solid Package)',
+        url: 'https://www.npmjs.com/package/@sankyu/solid-circle-flags',
+        description: 'Solid.js beta package information',
+      },
+      {
+        label: 'LLMs Small Context',
+        url: 'https://react-circle-flags.js.org/llms-small.txt',
+        description: 'Token-optimized context for fast AI coding assistance',
+      },
+      {
+        label: 'LLMs Full Context',
+        url: 'https://react-circle-flags.js.org/llms-full.txt',
+        description: 'Complete documentation context for deep reasoning',
       },
     ],
   }),
@@ -236,6 +258,21 @@ export default defineConfig({
         {
           label: 'Related Links',
           items: [
+            {
+              label: 'LLMs.txt (Entry)',
+              link: '/llms.txt',
+              attrs: { target: '_blank', rel: 'noreferrer' },
+            },
+            {
+              label: 'LLMs Small (Fast)',
+              link: '/llms-small.txt',
+              attrs: { target: '_blank', rel: 'noreferrer' },
+            },
+            {
+              label: 'LLMs Full (Complete)',
+              link: '/llms-full.txt',
+              attrs: { target: '_blank', rel: 'noreferrer' },
+            },
             {
               label: 'GitHub Repository',
               link: siteConfig.github.url,

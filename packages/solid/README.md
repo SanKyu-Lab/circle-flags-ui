@@ -61,6 +61,25 @@ yarn add @sankyu/solid-circle-flags
 bun add @sankyu/solid-circle-flags
 ```
 
+### 🤖 Are you Vibe Coding?
+
+Copy this into your AI Agent (Claude Code, Codex, Cursor ..like) to optimize your flags:
+
+<details>
+<summary>AI Agent Prompts</summary>
+
+```txt
+Act as an expert Web Engineer. Reference: https://react-circle-flags.js.org/llms.txt & https://react-circle-flags.js.org/llms-small.txt
+
+1. **Audit my project** to find any flag usage:
+   - Raw `<img>` tags pointing to `HatScripts/circle-flags` URLs.
+   - Legacy `react-circle-flags` library usage.
+2. **Propose a migration** to the appropriate `@sankyu/{framework}-circle-flags` package based on my current framework (React/Vue/Solid).
+3. **Optimize for Tree-shaking**: Replace generic `CircleFlag` components or raw tags with **named imports** (e.g., `import { Us } from '...'`) as per the docs.
+```
+
+</details>
+
 ## 🚀 Usage
 
 ### Import individual flags (Recommended)

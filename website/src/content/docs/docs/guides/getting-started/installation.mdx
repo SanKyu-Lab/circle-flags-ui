@@ -5,7 +5,7 @@ description: Add the package to your project.
 
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 import { Icon } from '@astrojs/starlight/components'
-import { LinkCard } from '@astrojs/starlight/components'
+import { CardGrid, LinkCard } from '@astrojs/starlight/components'
 
 ## Choose your framework
 
@@ -145,6 +145,28 @@ import { LinkCard } from '@astrojs/starlight/components'
 
   </TabItem>
 </Tabs>
+
+## LLM-friendly docs
+
+Using AI coding assistants? Start from these context endpoints:
+
+<CardGrid>
+  <LinkCard
+    title="llms.txt"
+    description="Entry file with project summary and recommended docs paths"
+    href="/llms.txt"
+  />
+  <LinkCard
+    title="llms-small.txt"
+    description="Token-optimized context for fast prompting and iteration"
+    href="/llms-small.txt"
+  />
+  <LinkCard
+    title="llms-full.txt"
+    description="Full documentation context for deeper analysis"
+    href="/llms-full.txt"
+  />
+</CardGrid>
 
 ## Next step
 

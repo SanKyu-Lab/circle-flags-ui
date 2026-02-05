@@ -67,6 +67,23 @@ bun add @sankyu/vue-circle-flags
 > [!TIP]
 > 欲了解更多信息，请参阅 [安装指南](https://react-circle-flags.js.org/docs/guides/getting-started/installation/)。
 
+### 🤖 正在 Vibe Coding?
+
+<details>
+<summary>AI Agent 提示词</summary>
+
+```txt
+你是一位资深 Web 开发专家。请参考文档：https://react-circle-flags.js.org/llms.txt
+
+1. **项目审计**：检查我项目中的国旗图标使用情况，找出：
+   - 指向 `HatScripts/circle-flags` 的原始 `<img>` 标签。
+   - 旧版 `react-circle-flags` 第三方库的使用。
+2. **迁移建议**：根据我当前的框架（React/Vue/Solid），提供向 `@sankyu/{framework}-circle-flags` 家族库迁移的方案。
+3. **极致优化**：根据文档规范，将通用的 `CircleFlag` 组件或原始 `<img>` 标签替换为**具名导入**（例如 `import { FlagUs, FlagDe } from '...'`），以确保 Tree-shaking 达到最小 Bundle 体积。
+```
+
+</details>
+
 ## 🚀 使用
 
 ### 导入单个国旗（推荐）
