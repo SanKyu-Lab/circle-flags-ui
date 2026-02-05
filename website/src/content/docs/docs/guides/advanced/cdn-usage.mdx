@@ -37,7 +37,7 @@ If you control your build, prefer installing from npm and bundling locally (best
 
     <script type="module">
       import { createRoot } from 'react-dom/client'
-      import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1?exports=FlagUs'
+      import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagUs'
 
       function App() {
         return <FlagUs width={64} height={64} title="US" />
@@ -54,7 +54,10 @@ If you control your build, prefer installing from npm and bundling locally (best
 Most ESM CDNs support an `exports` query to avoid pulling in unused exports.
 
 ```js
-import { FlagCn, FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1?exports=FlagCn,FlagUs'
+import {
+  FlagCn,
+  FlagUs,
+} from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagCn,FlagUs'
 ```
 
 ## Runtime codes (finite set)
@@ -66,7 +69,7 @@ import {
   FlagCn,
   FlagGb,
   FlagUs,
-} from 'https://esm.sh/@sankyu/react-circle-flags@1?exports=FlagCn,FlagGb,FlagUs'
+} from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagCn,FlagGb,FlagUs'
 
 const FLAGS = { cn: FlagCn, gb: FlagGb, us: FlagUs }
 
@@ -85,7 +88,7 @@ Pin versions in production:
 
 ```diff
 - import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags?exports=FlagUs'
-+ import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1?exports=FlagUs'
++ import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagUs'
 ```
 
 ## CDN options
