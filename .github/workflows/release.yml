@@ -165,7 +165,7 @@ jobs:
           cp "${{ matrix.pkg.dir }}/CHANGELOG.md" ".release-artifacts/${{ matrix.pkg.dir }}/CHANGELOG.md"
 
       - name: Upload changelog artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: changelog-${{ matrix.pkg.slug }}
           path: .release-artifacts
@@ -173,7 +173,7 @@ jobs:
 
       - name: Upload release notes artifact
         if: steps.check_published.outputs.already_published != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-notes-${{ matrix.pkg.slug }}
           path: .release-notes.md
