@@ -315,11 +315,4 @@ export type CountryCode = FlagCode
 
 export * from '../generated/flags'
 
-export {
-  FLAG_REGISTRY,
-  COUNTRY_NAMES,
-  SUBDIVISION_NAMES,
-  coerceFlagCode,
-  isFlagCode,
-  type FlagCode,
-} from '@sankyu/circle-flags-core'
+export { FLAG_REGISTRY, coerceFlagCode, isFlagCode, type FlagCode } from '@sankyu/circle-flags-core'

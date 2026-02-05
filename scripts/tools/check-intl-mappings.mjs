@@ -89,8 +89,9 @@ console.log('Special codes:', conflicts.filter(c => c.type === 'special').length
 console.log('Other codes:', conflicts.filter(c => c.type === 'other').length)
 console.log('')
 console.log(
-  'CRITICAL: These codes will display incorrectly if we use Intl.DisplayNames without checking COUNTRY_NAMES first!'
+  'NOTE: If you rely on Intl.DisplayNames only, these codes may display differently than our curated list.'
 )
 console.log('')
-console.log('The fix in flagData.ts correctly prioritizes COUNTRY_NAMES/SUBDIVISION_NAMES,')
-console.log('which prevents ALL of these conflicts.')
+console.log(
+  'If you still want curated display names, consider a small override map (historical/org/special codes) in the website.'
+)

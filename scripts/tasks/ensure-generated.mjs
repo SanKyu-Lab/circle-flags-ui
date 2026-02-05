@@ -5,10 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 
-const requiredFiles = [
-  resolve(rootDir, 'packages/core/src/generated/registry.ts'),
-  resolve(rootDir, 'packages/core/src/generated/names.ts'),
-]
+const requiredFiles = [resolve(rootDir, 'packages/core/src/generated/registry.ts')]
 
 export const ensureGenerated = () => {
   const hasAllGeneratedFiles = requiredFiles.every(p => existsSync(p))

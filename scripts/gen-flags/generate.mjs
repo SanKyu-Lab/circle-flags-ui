@@ -10,8 +10,6 @@ import {
   SOLID_OUTPUT_DIR,
   VUE_OUTPUT_DIR,
 } from './constants.mjs'
-import { buildNameMappings, getNameFromMappings } from './country-data.mjs'
-import { getCountryName } from './names.mjs'
 import { svgToReactComponent, svgToSolidComponent, svgToVueComponent } from './svg.mjs'
 import { codeToComponentName } from './utils.mjs'
 import { repoRootFromImportMeta } from '../lib/repo-root.mjs'
@@ -87,12 +85,6 @@ export async function generateFlags() {
 
   ensureCircleFlagsRepo()
 
-  console.log('📊 Building name mappings from country-region-data...')
-  const nameMappings = buildNameMappings()
-  console.log(
-    `✅ Built mappings: ${Object.keys(nameMappings.countryNames).length} countries, ${Object.keys(nameMappings.subdivisionNames).length} subdivisions\n`
-  )
-
   await mkdir(REACT_OUTPUT_DIR, { recursive: true })
   await mkdir(VUE_OUTPUT_DIR, { recursive: true })
   await mkdir(SOLID_OUTPUT_DIR, { recursive: true })
@@ -118,8 +110,6 @@ export async function generateFlags() {
     try {
       const stats = await lstat(svgPath)
       const componentName = codeToComponentName(code)
-      const nameFromData = getNameFromMappings(code, nameMappings)
-      const displayName = nameFromData || getCountryName(code)
 
       if (stats.isSymbolicLink()) {
         const linkTarget = await readlink(svgPath)
@@ -139,7 +129,6 @@ export async function generateFlags() {
 
           flags.push({
             code,
-            name: displayName,
             componentName,
             svgSize: 0,
             optimizedSize: 0,
@@ -163,7 +152,6 @@ export async function generateFlags() {
 
       flags.push({
         code,
-        name: displayName,
         componentName,
         svgSize,
         optimizedSize,
@@ -278,27 +266,6 @@ export type FlagCode = keyof typeof FLAG_REGISTRY
 
   await writeFile(`${CORE_GENERATED_DIR}/registry.ts`, coreRegistryContent, 'utf-8')
   console.log('✅ Generated core/src/generated/registry.ts\n')
-
-  const extraCountryNames = {}
-  for (const flag of flags) {
-    const code = flag.code
-    if (Object.prototype.hasOwnProperty.call(nameMappings.countryNames, code)) continue
-    if (Object.prototype.hasOwnProperty.call(nameMappings.subdivisionNames, code)) continue
-    extraCountryNames[code] = getCountryName(code)
-  }
-
-  const mergedCountryNames = {
-    ...nameMappings.countryNames,
-    ...extraCountryNames,
-  }
-
-  const coreNamesContent = `export const COUNTRY_NAMES = ${JSON.stringify(mergedCountryNames, null, 2)} as const
-
-export const SUBDIVISION_NAMES = ${JSON.stringify(nameMappings.subdivisionNames, null, 2)} as const
-`
-
-  await writeFile(`${CORE_GENERATED_DIR}/names.ts`, coreNamesContent, 'utf-8')
-  console.log('✅ Generated core/src/generated/names.ts\n')
 
   console.log('🎉 Flag generation complete!')
   console.log(`\n📊 Optimization Summary:`)

@@ -1,4 +1,4 @@
-import { FLAG_REGISTRY, COUNTRY_NAMES, SUBDIVISION_NAMES } from '@sankyu/react-circle-flags'
+import { FLAG_REGISTRY } from '@sankyu/react-circle-flags'
 import clm from 'country-locale-map'
 
 export interface FlagInfo {
@@ -32,30 +32,47 @@ const getCountryData = (code: string): CountryData | undefined => {
 
 const getSubdivisionSuffix = (code: string) => {
   const parts = code.split(/[-_]/)
-  return parts.length > 1 ? parts[1].toUpperCase() : undefined
+  return parts.length > 1 ? parts.slice(1).join('-').toUpperCase() : undefined
+}
+
+const ORG_DISPLAY_NAMES: Record<string, string> = {
+  eu: 'European Union',
+  european_union: 'European Union',
+  un: 'United Nations',
+  nato: 'NATO',
+}
+
+const HISTORICAL_DISPLAY_NAMES: Record<string, string> = {
+  su: 'Soviet Union',
+  yu: 'Yugoslavia',
+  an: 'Netherlands Antilles',
+  fx: 'Metropolitan France',
+}
+
+const SPECIAL_DISPLAY_NAMES: Record<string, string> = {
+  xk: 'Kosovo',
+  uk: 'United Kingdom',
+  xx: '<Placeholder>',
 }
 
 function getFlagType(code: string): FlagInfo['type'] {
-  if (COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]) return 'country'
-  if (SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]) return 'subdivision'
   if (['eu', 'un', 'nato', 'european_union'].includes(code)) return 'organization'
+  const country = getCountryData(code)
+  const suffix = getSubdivisionSuffix(code)
+  if (country && suffix) return 'subdivision'
+  if (country) return 'country'
   return 'other'
 }
 
 function getCountryName(code: string, componentName: string): string {
-  if (SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]) {
-    const { country, region } = SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]
-    return `${country} - ${region}`
-  }
-
-  if (COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]) {
-    return COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]
-  }
+  if (ORG_DISPLAY_NAMES[code]) return ORG_DISPLAY_NAMES[code]
+  if (HISTORICAL_DISPLAY_NAMES[code]) return HISTORICAL_DISPLAY_NAMES[code]
+  if (SPECIAL_DISPLAY_NAMES[code]) return SPECIAL_DISPLAY_NAMES[code]
 
   const country = getCountryData(code)
   if (country?.name) {
     const suffix = getSubdivisionSuffix(code)
-    return suffix ? `${country.name} - ${suffix}` : country.name
+    return suffix ? `${country.name} - (${suffix})` : country.name
   }
 
   const name = componentName
@@ -82,17 +99,9 @@ function getContinent(code: string): string {
 }
 
 function getDisplayName(code: string, fallback: string): string {
-  // Prioritize COUNTRY_NAMES and SUBDIVISION_NAMES over Intl.DisplayNames
-  // This ensures historical codes (e.g., 'su' -> 'Soviet Union') display correctly
-  // instead of being mapped to successor states (e.g., 'Russia')
-  if (SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]) {
-    const { country, region } = SUBDIVISION_NAMES[code as keyof typeof SUBDIVISION_NAMES]
-    return `${country} - ${region}`
-  }
-
-  if (COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]) {
-    return COUNTRY_NAMES[code as keyof typeof COUNTRY_NAMES]
-  }
+  if (ORG_DISPLAY_NAMES[code]) return ORG_DISPLAY_NAMES[code]
+  if (HISTORICAL_DISPLAY_NAMES[code]) return HISTORICAL_DISPLAY_NAMES[code]
+  if (SPECIAL_DISPLAY_NAMES[code]) return SPECIAL_DISPLAY_NAMES[code]
 
   // Fallback to Intl.DisplayNames for standard country codes
   const countryCode = getAlpha2(code)

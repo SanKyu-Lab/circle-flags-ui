@@ -19,8 +19,7 @@ const hasAnyGeneratedFlags = async () => {
 
 const hasCoreRegistry = () => {
   const registry = join(repoRoot, 'packages/core/src/generated/registry.ts')
-  const names = join(repoRoot, 'packages/core/src/generated/names.ts')
-  return existsSync(registry) && existsSync(names)
+  return existsSync(registry)
 }
 
 const main = async () => {

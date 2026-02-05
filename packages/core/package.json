@@ -18,12 +18,14 @@
     "README.md",
     "LICENSE"
   ],
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "prebuild": "node ../../scripts/life-cycle.js ensure-generated --pkg core",
     "build": "tsup",
+    "postbuild": "node ../../scripts/tasks/postbuild-core.mjs",
     "dev": "tsup --watch",
     "pretypecheck": "node ../../scripts/life-cycle.js ensure-generated --pkg core",
     "typecheck": "tsc --noEmit"
@@ -37,7 +39,6 @@
     "url": "https://github.com/SanKyu-Lab/circle-flags-ui/issues"
   },
   "devDependencies": {
-    "country-region-data": "^4.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   }
