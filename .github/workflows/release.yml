@@ -183,7 +183,7 @@ jobs:
 
       - name: Create GitHub release
         if: steps.check_published.outputs.already_published != 'true' && steps.tag.outputs.created == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require("fs");
