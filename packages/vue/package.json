@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/vue-circle-flags",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.1-beta.2",
   "description": "400+ circular SVG Vue 3 flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
   "type": "module",
   "main": "./dist/index.cjs",
