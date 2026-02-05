@@ -16,27 +16,27 @@ React demo app for `@sankyu/react-circle-flags`.
 ## Prerequisites
 
 - Node.js `20.19+` (recommended by current Vite/Rolldown toolchain)
-- pnpm `10+`
+- npm `10+`
 
 ## Quick Start
 
 ```bash
 # from repo root
-pnpm install
-pnpm -F example-react dev
+npm install
+npm run dev
 ```
 
 ## Common Commands
 
 ```bash
 # development
-pnpm -F example-react dev
+npm run dev
 
 # type-check + production build
-pnpm -F example-react build
+npm run build
 
 # preview built app
-pnpm -F example-react preview
+npm run preview
 ```
 
 ## Key Files
@@ -49,4 +49,4 @@ pnpm -F example-react preview
 ## StackBlitz Notes
 
 - This example is configured for StackBlitz auto-install.
-- If install is interrupted, run `pnpm install` once, then `pnpm dev`.
+- If install is interrupted, run `npm install` once, then `npm run dev`.

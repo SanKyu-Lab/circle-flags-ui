@@ -16,27 +16,27 @@ Vue 3 demo app for `@sankyu/vue-circle-flags`.
 ## Prerequisites
 
 - Node.js `20.19+` (recommended by current Vite/Rolldown toolchain)
-- pnpm `10+`
+- npm `10+`
 
 ## Quick Start
 
 ```bash
 # from repo root
-pnpm install
-pnpm -F example-vue dev
+npm install
+npm run dev
 ```
 
 ## Common Commands
 
 ```bash
 # development
-pnpm -F example-vue dev
+npm run dev
 
 # type-check + production build
-pnpm -F example-vue build
+npm run build
 
 # preview built app
-pnpm -F example-vue preview
+npm run preview
 ```
 
 ## Key Files
@@ -49,4 +49,4 @@ pnpm -F example-vue preview
 ## StackBlitz Notes
 
 - This example is configured for StackBlitz auto-install.
-- If install is interrupted, run `pnpm install` once, then `pnpm dev`.
+- If install is interrupted, run `npm install` once, then `npm run dev`.
