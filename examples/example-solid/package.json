@@ -11,7 +11,7 @@
   "dependencies": {
     "@sankyu/solid-circle-flags": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
-    "solid-js": "^1.9.10",
+    "solid-js": "^1.9.11",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
