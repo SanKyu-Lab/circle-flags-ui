@@ -203,7 +203,11 @@ export default defineConfig({
         },
         {
           label: 'Advanced',
-          items: [{ label: 'Using CDN', slug: 'docs/guides/advanced/cdn-usage' }],
+          items: [
+            { label: 'FlagUtils Toolkit', slug: 'docs/guides/advanced/flag-utils' },
+            { label: 'Type Utilities', slug: 'docs/guides/advanced/type-utilities' },
+            { label: 'Using CDN', slug: 'docs/guides/advanced/cdn-usage' },
+          ],
         },
         {
           label: 'Deprecated',
