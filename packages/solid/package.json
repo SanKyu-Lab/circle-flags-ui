@@ -74,6 +74,6 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vite-plugin-solid": "^2.10.2",
-    "vitest": "^3.1.0"
+    "vitest": "^4.0.18"
   }
 }
