@@ -254,39 +254,37 @@ The library exports helpful types for advanced use cases:
   </TabItem>
 </Tabs>
 
-## Code conversion utilities
+## Flag code utilities
 
 <Tabs syncKey="framework">
   <TabItem label="React" icon="seti:react">
     ```tsx
-    import { codeToComponentName, codeToEmoji } from '@sankyu/react-circle-flags'
+    import { FlagUtils } from '@sankyu/react-circle-flags'
 
     // Convert country code to component name (PascalCase)
-    codeToComponentName('us') // 'FlagUs'
-    codeToComponentName('cn') // 'FlagCn'
+    FlagUtils.getComponentName('us') // 'FlagUs'
+    FlagUtils.getComponentName('gb-eng') // 'FlagGbEng'
 
-    // Convert country code to emoji
-    codeToEmoji('us') // '🇺🇸'
-    codeToEmoji('cn') // '🇨🇳'
-    codeToEmoji('jp') // '🇯🇵'
+    // Normalize display format (uppercase)
+    FlagUtils.formatCountryCode('us') // 'US'
     ```
 
   </TabItem>
   <TabItem label="Vue 3" icon="seti:vue">
     ```typescript
-    import { codeToComponentName, codeToEmoji } from '@sankyu/vue-circle-flags'
+    import { FlagUtils } from '@sankyu/vue-circle-flags'
 
-    codeToComponentName('us') // 'FlagUs'
-    codeToEmoji('us') // '🇺🇸'
+    FlagUtils.getComponentName('us') // 'FlagUs'
+    FlagUtils.formatCountryCode('us') // 'US'
     ```
 
   </TabItem>
   <TabItem label="Solid">
     ```typescript
-    import { codeToComponentName, codeToEmoji } from '@sankyu/solid-circle-flags'
+    import { FlagUtils } from '@sankyu/solid-circle-flags'
 
-    codeToComponentName('us') // 'FlagUs'
-    codeToEmoji('us') // '🇺🇸'
+    FlagUtils.getComponentName('us') // 'FlagUs'
+    FlagUtils.formatCountryCode('us') // 'US'
     ```
 
   </TabItem>
@@ -306,14 +304,14 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     FlagUtils.isValidCountryCode('invalid') // false
 
     // Format country codes
-    FlagUtils.formatCountryCode('US')     // "us"
+    FlagUtils.formatCountryCode('us')     // "US"
 
     // Get component names
     FlagUtils.getComponentName('us')      // "FlagUs"
 
     // Handle flag sizes
-    FlagUtils.getSizeName(48)             // "medium"
-    FlagUtils.sizes.medium                // 48
+    FlagUtils.getSizeName(48)             // "lg"
+    FlagUtils.sizes.lg                    // 48
     ```
 
   </TabItem>
@@ -322,10 +320,10 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     import { FlagUtils } from '@sankyu/vue-circle-flags'
 
     FlagUtils.isValidCountryCode('us')    // true
-    FlagUtils.formatCountryCode('US')     // "us"
+    FlagUtils.formatCountryCode('us')     // "US"
     FlagUtils.getComponentName('us')      // "FlagUs"
-    FlagUtils.getSizeName(48)             // "medium"
-    FlagUtils.sizes.medium                // 48
+    FlagUtils.getSizeName(48)             // "lg"
+    FlagUtils.sizes.lg                    // 48
     ```
 
   </TabItem>
@@ -334,10 +332,10 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     import { FlagUtils } from '@sankyu/solid-circle-flags'
 
     FlagUtils.isValidCountryCode('us')    // true
-    FlagUtils.formatCountryCode('US')     // "us"
+    FlagUtils.formatCountryCode('us')     // "US"
     FlagUtils.getComponentName('us')      // "FlagUs"
-    FlagUtils.getSizeName(48)             // "medium"
-    FlagUtils.sizes.medium                // 48
+    FlagUtils.getSizeName(48)             // "lg"
+    FlagUtils.sizes.lg                    // 48
     ```
 
   </TabItem>

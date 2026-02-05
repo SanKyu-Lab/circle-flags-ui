@@ -1,0 +1,309 @@
+---
+title: FlagUtils Toolkit
+description: Common utility functions for validating, formatting flag codes, and handling sizes.
+---
+
+import { CardGrid } from '@astrojs/starlight/components'
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+import { LinkCard } from '@astrojs/starlight/components'
+
+`FlagUtils` provides commonly used utility functions for validating, formatting flag codes, and handling sizes.
+
+## Import
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { FlagUtils } from '@sankyu/react-circle-flags'
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { FlagUtils } from '@sankyu/vue-circle-flags'
+</script>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```tsx
+import { FlagUtils } from '@sankyu/solid-circle-flags'
+```
+
+  </TabItem>
+</Tabs>
+
+## API Reference
+
+### Flag code utilities
+
+#### `isValidCountryCode(code: string): boolean`
+
+Check if a string is a valid country/subdivision code.
+
+```ts
+FlagUtils.isValidCountryCode('us') // true
+FlagUtils.isValidCountryCode('US') // true (case-insensitive)
+FlagUtils.isValidCountryCode('invalid') // false
+```
+
+#### `formatCountryCode(code: string): string`
+
+Normalize a country code to uppercase display format.
+
+```ts
+FlagUtils.formatCountryCode('us') // 'US'
+FlagUtils.formatCountryCode('Us') // 'US'
+FlagUtils.formatCountryCode('invalid') // 'INVALID' (no validation)
+```
+
+#### `getComponentName(code: string): string`
+
+Get the component name for a flag code (e.g., `FlagUs`).
+
+```ts
+FlagUtils.getComponentName('us') // 'FlagUs'
+FlagUtils.getComponentName('gb-eng') // 'FlagGbEng'
+```
+
+### Size utilities
+
+#### `getSizeName(pixels: number): FlagSizeName | null`
+
+Get the predefined size name from pixel value.
+
+```ts
+FlagUtils.getSizeName(16) // 'xs'
+FlagUtils.getSizeName(24) // 'sm'
+FlagUtils.getSizeName(32) // 'md'
+FlagUtils.getSizeName(48) // 'lg'
+FlagUtils.getSizeName(64) // 'xl'
+FlagUtils.getSizeName(96) // 'xxl'
+FlagUtils.getSizeName(128) // 'xxxl'
+FlagUtils.getSizeName(100) // null
+```
+
+#### `sizes: Record<FlagSizeName, number>`
+
+Predefined size constants.
+
+```ts
+FlagUtils.sizes.xs // 16
+FlagUtils.sizes.sm // 24
+FlagUtils.sizes.md // 32
+FlagUtils.sizes.lg // 48
+FlagUtils.sizes.xl // 64
+FlagUtils.sizes.xxl // 96
+FlagUtils.sizes.xxxl // 128
+```
+
+## Usage Examples
+
+### Validating user input
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { FlagUtils } from '@sankyu/react-circle-flags'
+import { useState } from 'react'
+
+export function CountrySearch() {
+  const [code, setCode] = useState('')
+
+  const isValid = FlagUtils.isValidCountryCode(code)
+
+  return (
+    <div>
+      <input
+        value={code}
+        onChange={e => setCode(e.target.value)}
+        placeholder="Enter country code (e.g., us, cn, gb)"
+      />
+      {!isValid && code && <p className="text-red-500">Invalid country code</p>}
+    </div>
+  )
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { FlagUtils } from '@sankyu/vue-circle-flags'
+
+const code = ref('')
+const isValid = computed(() => FlagUtils.isValidCountryCode(code.value))
+</script>
+
+<template>
+  <div>
+    <input v-model="code" placeholder="Enter country code (e.g., us, cn, gb)" />
+    <p v-if="!isValid && code" class="text-red-500">Invalid country code</p>
+  </div>
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+### Responsive flag sizes
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { FlagUtils } from '@sankyu/react-circle-flags'
+import { FlagUs } from '@sankyu/react-circle-flags'
+import { useEffect, useState } from 'react'
+
+export function ResponsiveFlag() {
+  const [size, setSize] = useState(FlagUtils.sizes.md)
+
+  useEffect(() => {
+    const updateSize = () => {
+      const width = window.innerWidth
+      if (width < 640) return setSize(FlagUtils.sizes.sm)
+      if (width < 1024) return setSize(FlagUtils.sizes.md)
+      setSize(FlagUtils.sizes.lg)
+    }
+
+    updateSize()
+    window.addEventListener('resize', updateSize)
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
+
+  return <FlagUs width={size} height={size} />
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { FlagUtils } from '@sankyu/vue-circle-flags'
+import { FlagUs } from '@sankyu/vue-circle-flags'
+
+const size = ref(FlagUtils.sizes.md)
+
+const updateSize = () => {
+  const width = window.innerWidth
+  if (width < 640) {
+    size.value = FlagUtils.sizes.sm
+    return
+  }
+  if (width < 1024) {
+    size.value = FlagUtils.sizes.md
+    return
+  }
+  size.value = FlagUtils.sizes.lg
+}
+
+onMounted(() => {
+  updateSize()
+  window.addEventListener('resize', updateSize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateSize)
+})
+</script>
+
+<template>
+  <FlagUs :width="size" :height="size" />
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+### Getting component names dynamically
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { FlagUtils } from '@sankyu/react-circle-flags'
+
+export function FlagInfo({ code }: { code: string }) {
+  const componentName = FlagUtils.getComponentName(code)
+  const isValid = FlagUtils.isValidCountryCode(code)
+
+  return (
+    <div>
+      <p>Country Code: {code.toUpperCase()}</p>
+      <p>Component: {componentName}</p>
+      <p>Status: {isValid ? 'Valid' : 'Invalid'}</p>
+    </div>
+  )
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue'
+import { FlagUtils } from '@sankyu/vue-circle-flags'
+
+const props = defineProps<{ code: string }>()
+
+const componentName = computed(() => FlagUtils.getComponentName(props.code))
+const isValid = computed(() => FlagUtils.isValidCountryCode(props.code))
+</script>
+
+<template>
+  <div>
+    <p>Country Code: {{ props.code.toUpperCase() }}</p>
+    <p>Component: {{ componentName }}</p>
+    <p>Status: {{ isValid ? 'Valid' : 'Invalid' }}</p>
+  </div>
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+## Type Safety
+
+All `FlagUtils` methods are fully typed with TypeScript:
+
+```ts
+import { FlagUtils, type FlagSizeName } from '@sankyu/react-circle-flags'
+
+// Size name is a union type
+const size: FlagSizeName = FlagUtils.getSizeName(32) // 'md'
+const sizeOrNull: FlagSizeName | null = FlagUtils.getSizeName(100) // null
+
+// Size object is typed
+const small: number = FlagUtils.sizes.sm // 24
+```
+
+## See also
+
+<CardGrid stagger>
+  <LinkCard
+    title="Type Utilities"
+    description="Learn about type-safe flag code utilities"
+    href="./type-utilities/"
+  />
+  <LinkCard
+    title="Dynamic Flags"
+    description="Render flags from runtime ISO codes"
+    href="../getting-started/dynamic-flags/"
+  />
+  <LinkCard
+    title="API Reference"
+    description="Full FlagUtils API documentation"
+    href="/reference/api/variableflagutils/"
+  />
+</CardGrid>

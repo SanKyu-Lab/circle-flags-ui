@@ -1,0 +1,370 @@
+---
+title: Type Utilities
+description: Type-safe utilities for working with flag codes in TypeScript.
+---
+
+import { CardGrid } from '@astrojs/starlight/components'
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+import { LinkCard } from '@astrojs/starlight/components'
+
+Type utilities provide stronger type safety guarantees when working with flag codes in TypeScript.
+
+## Why Type Utilities?
+
+When working with flag codes from external sources (APIs, user input, databases), you often face a trade-off:
+
+- **Loose typing (`string`)**: Runtime errors, no autocomplete
+- **Strict typing (`FlagCode`)**: Compile-time errors, but requires validation
+
+Type utilities bridge this gap by providing:
+
+1. **Runtime validation** with `isFlagCode()`
+2. **Type coercion** with `coerceFlagCode()`
+3. **Type-safe unions** with `FlagCode` type
+
+## Import
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { coerceFlagCode, isFlagCode } from '@sankyu/react-circle-flags'
+import { type FlagCode } from '@sankyu/react-circle-flags'
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { coerceFlagCode, isFlagCode } from '@sankyu/vue-circle-flags'
+import { type FlagCode } from '@sankyu/vue-circle-flags'
+</script>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```tsx
+import { coerceFlagCode, isFlagCode } from '@sankyu/solid-circle-flags'
+import { type FlagCode } from '@sankyu/solid-circle-flags'
+```
+
+  </TabItem>
+</Tabs>
+
+## API Reference
+
+### `FlagCode` type
+
+A union type of all valid country/subdivision codes.
+
+```ts
+type FlagCode = 'ad' | 'ae' | 'af' | ... | 'zw' | 'gb-eng' | 'gb-nir' | ...
+```
+
+**Usage:**
+
+```ts
+// ✅ Valid - TypeScript will autocomplete all 400+ codes
+const code: FlagCode = 'us'
+
+// ❌ Error - Type '"invalid"' is not assignable to type 'FlagCode'
+const invalid: FlagCode = 'invalid'
+```
+
+### `isFlagCode(code: string): code is FlagCode`
+
+Type guard that checks if a string is a valid flag code.
+
+```ts
+isFlagCode('us') // true
+isFlagCode('US') // false (expects normalized lowercase input)
+isFlagCode('invalid') // false
+```
+
+### `coerceFlagCode(code: string, fallback?: FlagCode): FlagCode`
+
+Safely converts a string to a valid flag code.
+
+- If the value is a valid flag code (case-insensitive), returns the lowercase version
+- Otherwise, returns the fallback (default: `'xx'`)
+
+```ts
+coerceFlagCode('US') // 'us'
+coerceFlagCode('Us') // 'us'
+coerceFlagCode('invalid') // 'xx' (default fallback)
+coerceFlagCode('invalid', 'un') // 'un' (custom fallback)
+coerceFlagCode('GB-ENG') // 'gb-eng'
+```
+
+## Usage Examples
+
+### Type narrowing with `isFlagCode`
+
+Use `isFlagCode()` in conditionals to narrow types:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { isFlagCode } from '@sankyu/react-circle-flags'
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ code }: { code: string }) {
+  // Validate and normalize first
+  const normalized = code.trim().toLowerCase()
+
+  if (isFlagCode(normalized)) {
+    // TypeScript knows `normalized` is FlagCode here
+    return <DynamicFlag code={normalized} strict width={32} height={32} />
+  }
+
+  // Fallback for invalid codes
+  return <span className="text-red-500">{code.toUpperCase()} (invalid)</span>
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue'
+import { isFlagCode } from '@sankyu/vue-circle-flags'
+import { DynamicFlag } from '@sankyu/vue-circle-flags'
+
+const props = defineProps<{ code: string }>()
+
+const normalized = computed(() => props.code.trim().toLowerCase())
+const isValid = computed(() => isFlagCode(normalized.value))
+</script>
+
+<template>
+  <DynamicFlag v-if="isValid" :code="normalized" strict :width="32" :height="32" />
+  <span v-else class="text-red-500"> {{ props.code.toUpperCase() }} (invalid) </span>
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+### Safe coercion with `coerceFlagCode`
+
+Use `coerceFlagCode()` to handle unknown strings safely:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { coerceFlagCode } from '@sankyu/react-circle-flags'
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ codeFromApi }: { codeFromApi: string }) {
+  // Coerce to a safe FlagCode (invalid codes become 'xx')
+  const safeCode = coerceFlagCode(codeFromApi)
+
+  // Now we can use strict mode with full type safety
+  return <DynamicFlag code={safeCode} strict width={32} height={32} />
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue'
+import { coerceFlagCode } from '@sankyu/vue-circle-flags'
+import { DynamicFlag } from '@sankyu/vue-circle-flags'
+
+const props = defineProps<{ codeFromApi: string }>()
+
+const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
+</script>
+
+<template>
+  <DynamicFlag :code="safeCode" strict :width="32" :height="32" />
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+### Custom fallback
+
+Provide a custom fallback for invalid codes:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { coerceFlagCode } from '@sankyu/react-circle-flags'
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+import { type FlagCode } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({
+  code,
+  fallbackCode = 'un',
+}: {
+  code: string
+  fallbackCode?: FlagCode
+}) {
+  // Use a custom fallback instead of 'xx'
+  const safeCode = coerceFlagCode(code, fallbackCode)
+  return <DynamicFlag code={safeCode} strict width={32} height={32} />
+}
+```
+
+  </TabItem>
+</Tabs>
+
+### Form validation
+
+Validate form input with type safety:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { useState } from 'react'
+import { isFlagCode, type FlagCode } from '@sankyu/react-circle-flags'
+
+export function CountryForm() {
+  const [code, setCode] = useState('')
+  const [error, setError] = useState('')
+
+  const handleSubmit = () => {
+    const normalized = code.trim().toLowerCase()
+
+    if (!isFlagCode(normalized)) {
+      setError('Invalid country code')
+      return
+    }
+
+    // TypeScript knows `normalized` is FlagCode here
+    const validCode: FlagCode = normalized
+    console.log('Valid code:', validCode)
+    setError('')
+  }
+
+  return (
+    <form onSubmit={e => e.preventDefault()}>
+      <input
+        value={code}
+        onChange={e => setCode(e.target.value)}
+        placeholder="Enter country code"
+      />
+      {error && <p className="text-red-500">{error}</p>}
+      <button onClick={handleSubmit}>Submit</button>
+    </form>
+  )
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { isFlagCode, type FlagCode } from '@sankyu/vue-circle-flags'
+
+const code = ref('')
+const error = ref('')
+
+const handleSubmit = () => {
+  const normalized = code.value.trim().toLowerCase()
+
+  if (!isFlagCode(normalized)) {
+    error.value = 'Invalid country code'
+    return
+  }
+
+  // TypeScript knows `normalized` is FlagCode here
+  const validCode: FlagCode = normalized
+  console.log('Valid code:', validCode)
+  error.value = ''
+}
+</script>
+
+<template>
+  <form @submit.prevent="handleSubmit">
+    <input v-model="code" placeholder="Enter country code" />
+    <p v-if="error" class="text-red-500">{{ error }}</p>
+    <button type="submit">Submit</button>
+  </form>
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+## Strict Mode with DynamicFlag
+
+Combine type utilities with `strict` prop for maximum type safety:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+
+```tsx
+import { coerceFlagCode } from '@sankyu/react-circle-flags'
+import { DynamicFlag } from '@sankyu/react-circle-flags'
+
+export function CountryFlag({ codeFromApi }: { codeFromApi: string }) {
+  // Coerce unknown string to valid FlagCode
+  const safeCode = coerceFlagCode(codeFromApi)
+
+  // strict mode ensures TypeScript validates the code at compile time
+  return <DynamicFlag code={safeCode} strict width={32} height={32} />
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue'
+import { coerceFlagCode } from '@sankyu/vue-circle-flags'
+import { DynamicFlag } from '@sankyu/vue-circle-flags'
+
+const props = defineProps<{ codeFromApi: string }>()
+const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
+</script>
+
+<template>
+  <DynamicFlag :code="safeCode" strict :width="32" :height="32" />
+</template>
+```
+
+  </TabItem>
+</Tabs>
+
+## Comparison
+
+| Utility            | Runtime Check  | Return Type        | Use Case                       |
+| ------------------ | -------------- | ------------------ | ------------------------------ |
+| `isFlagCode()`     | Yes            | `code is FlagCode` | Type narrowing in conditionals |
+| `coerceFlagCode()` | Yes            | `FlagCode`         | Safe conversion with fallback  |
+| `FlagCode` type    | No (zero-cost) | `FlagCode`         | Compile-time type annotation   |
+
+## See also
+
+<CardGrid stagger>
+  <LinkCard
+    title="FlagUtils Toolkit"
+    description="Common utility functions for flag codes"
+    href="./flag-utils/"
+  />
+  <LinkCard
+    title="Dynamic Flags"
+    description="Render flags from runtime ISO codes"
+    href="../getting-started/dynamic-flags/"
+  />
+  <LinkCard
+    title="API Reference"
+    description="Full type utilities API documentation"
+    href="/reference/api/readme/"
+  />
+</CardGrid>
