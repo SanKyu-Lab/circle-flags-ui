@@ -17,4 +17,4 @@ type DynamicFlagProps =
 };
 ```
 
-Defined in: [react/src/index.tsx:229](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L229)
+Defined in: [react/src/dynamic-flag.tsx:15](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/dynamic-flag.tsx#L15)

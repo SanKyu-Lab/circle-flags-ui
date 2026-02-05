@@ -5,7 +5,7 @@ prev: false
 title: "FlagComponentProps"
 ---
 
-Defined in: [react/src/index.tsx:65](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/index.tsx#L65)
+Defined in: [react/src/flag-props.ts:4](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/flag-props.ts#L4)
 
 ## Extends
 

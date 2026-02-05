@@ -28,6 +28,7 @@ API Reference for @sankyu/react-circle-flags
 | Variable | Description |
 | ------ | ------ |
 | [FlagSizes](/reference/api/variableflagsizes/) | Standard flag sizes |
+| [FlagUtils](/reference/api/variableflagutils/) | - |
 
 ## Functions
 

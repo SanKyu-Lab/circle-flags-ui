@@ -20,5 +20,8 @@ export { FlagSizes } from './index'
 // Type narrowing helpers
 export { coerceFlagCode, isFlagCode } from './index'
 
+// Flag utilities
+export { FlagUtils } from './index'
+
 // Note: Individual flag components (FlagUs, FlagCn, etc.) are not documented here.
 // They are visually showcased in the FlagBrowser component on the website.
