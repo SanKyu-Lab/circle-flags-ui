@@ -39,6 +39,10 @@
 
 专为需要快速、清晰显示国旗且无需外部图片请求的应用而设计。
 
+## :world_map: 在线演示
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-vue?file=src%2FApp.vue&terminal=dev)
+
 ## ✨ 核心特性
 
 > [!TIP]

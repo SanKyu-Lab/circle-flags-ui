@@ -3,14 +3,21 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.14.0",
   "scripts": {
+    "postinstall": "node -e \"console.log('\\n[example-react] StackBlitz tip: dependencies should auto-install. If install is interrupted, run `pnpm install` once, then `pnpm dev`.\\n')\"",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "stackblitz": {
+    "installDependencies": true,
+    "startCommand": "pnpm dev",
+    "compileTrigger": "save"
+  },
   "dependencies": {
-    "@sankyu/react-circle-flags": "1.5.4",
+    "@sankyu/react-circle-flags": "1.6.2",
     "@tailwindcss/vite": "^4.1.18",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

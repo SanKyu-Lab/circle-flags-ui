@@ -3,13 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.14.0",
   "scripts": {
+    "postinstall": "node -e \"console.log('\\n[example-vue] StackBlitz tip: dependencies should auto-install. If install is interrupted, run `pnpm install` once, then `pnpm dev`.\\n')\"",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
+  "stackblitz": {
+    "installDependencies": true,
+    "startCommand": "pnpm dev",
+    "compileTrigger": "save"
+  },
   "dependencies": {
-    "@sankyu/vue-circle-flags": "0.0.3-beta",
+    "@sankyu/vue-circle-flags": "0.1.1-beta.2",
     "@tailwindcss/vite": "^4.1.18",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.27"

@@ -39,6 +39,10 @@ This library provides **400+ circular SVG flag components** for Solid.js with **
 
 Perfect for applications that need fast, crisp country flags without external image requests.
 
+## :world_map: Live Demo
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-solid?file=src%2FApp.tsx&terminal=dev)
+
 ## ✨ Key Features
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
