@@ -254,6 +254,92 @@ The library exports helpful types for advanced use cases:
   </TabItem>
 </Tabs>
 
+## Code conversion utilities
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    ```tsx
+    import { codeToComponentName, codeToEmoji } from '@sankyu/react-circle-flags'
+
+    // Convert country code to component name (PascalCase)
+    codeToComponentName('us') // 'FlagUs'
+    codeToComponentName('cn') // 'FlagCn'
+
+    // Convert country code to emoji
+    codeToEmoji('us') // '🇺🇸'
+    codeToEmoji('cn') // '🇨🇳'
+    codeToEmoji('jp') // '🇯🇵'
+    ```
+
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```typescript
+    import { codeToComponentName, codeToEmoji } from '@sankyu/vue-circle-flags'
+
+    codeToComponentName('us') // 'FlagUs'
+    codeToEmoji('us') // '🇺🇸'
+    ```
+
+  </TabItem>
+  <TabItem label="Solid">
+    ```typescript
+    import { codeToComponentName, codeToEmoji } from '@sankyu/solid-circle-flags'
+
+    codeToComponentName('us') // 'FlagUs'
+    codeToEmoji('us') // '🇺🇸'
+    ```
+
+  </TabItem>
+</Tabs>
+
+## FlagUtils toolkit
+
+The `FlagUtils` object provides convenient utility functions for working with flag codes:
+
+<Tabs syncKey="framework">
+  <TabItem label="React" icon="seti:react">
+    ```tsx
+    import { FlagUtils } from '@sankyu/react-circle-flags'
+
+    // Validate country codes
+    FlagUtils.isValidCountryCode('us')    // true
+    FlagUtils.isValidCountryCode('invalid') // false
+
+    // Format country codes
+    FlagUtils.formatCountryCode('US')     // "us"
+
+    // Get component names
+    FlagUtils.getComponentName('us')      // "FlagUs"
+
+    // Handle flag sizes
+    FlagUtils.getSizeName(48)             // "medium"
+    FlagUtils.sizes.medium                // 48
+    ```
+  </TabItem>
+  <TabItem label="Vue 3" icon="seti:vue">
+    ```typescript
+    import { FlagUtils } from '@sankyu/vue-circle-flags'
+
+    FlagUtils.isValidCountryCode('us')    // true
+    FlagUtils.formatCountryCode('US')     // "us"
+    FlagUtils.getComponentName('us')      // "FlagUs"
+    FlagUtils.getSizeName(48)             // "medium"
+    FlagUtils.sizes.medium                // 48
+    ```
+  </TabItem>
+  <TabItem label="Solid">
+    ```typescript
+    import { FlagUtils } from '@sankyu/solid-circle-flags'
+
+    FlagUtils.isValidCountryCode('us')    // true
+    FlagUtils.formatCountryCode('US')     // "us"
+    FlagUtils.getComponentName('us')      // "FlagUs"
+    FlagUtils.getSizeName(48)             // "medium"
+    FlagUtils.sizes.medium                // 48
+    ```
+  </TabItem>
+</Tabs>
+
 ## Type safety with DynamicFlag
 
 <Tabs syncKey="framework">
