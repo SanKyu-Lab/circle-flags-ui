@@ -115,7 +115,6 @@ jobs:
 
       - name: Determine previous tag
         id: prev
-        if: steps.check_published.outputs.already_published != 'true'
         run: |
           node scripts/gha/determine-prev-tag.mjs \
             --slug "${{ matrix.pkg.slug }}" \
@@ -142,7 +141,6 @@ jobs:
           (cd "${{ matrix.pkg.dir }}" && npm publish --access public --provenance)
 
       - name: Generate package changelog
-        if: steps.check_published.outputs.already_published != 'true'
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -159,12 +157,19 @@ jobs:
             --repo-owner "${{ github.repository_owner }}" \
             --repo-name "${{ github.event.repository.name }}"
 
+      - name: Prepare changelog artifact (preserve paths)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ".release-artifacts/${{ matrix.pkg.dir }}"
+          cp "${{ matrix.pkg.dir }}/CHANGELOG.md" ".release-artifacts/${{ matrix.pkg.dir }}/CHANGELOG.md"
+
       - name: Upload changelog artifact
-        if: steps.check_published.outputs.already_published != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: changelog-${{ matrix.pkg.slug }}
-          path: ${{ matrix.pkg.dir }}/CHANGELOG.md
+          path: .release-artifacts
+          if-no-files-found: warn
 
       - name: Upload release notes artifact
         if: steps.check_published.outputs.already_published != 'true'
@@ -235,7 +240,7 @@ jobs:
     needs:
       - detect
       - publish
-    if: needs.detect.outputs.has_packages == 'true'
+    if: ${{ always() && needs.detect.outputs.has_packages == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -254,6 +259,16 @@ jobs:
         with:
           pattern: changelog-*
           merge-multiple: true
+
+      - name: Debug downloaded changelogs
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Downloaded CHANGELOG.md files:"
+          find packages -maxdepth 2 -name CHANGELOG.md -print
+          echo ""
+          echo "Git status:"
+          git status --porcelain
 
       - name: Commit and push changelogs
         run: |
