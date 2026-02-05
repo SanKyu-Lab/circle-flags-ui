@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://react-circle-flags.js.org/">
-    <img src="https://raw.githubusercontent.com/SanKyu-Lab/react-circle-flags/main/.github/assets/favicon.svg" alt="@sankyu/react-circle-flags" width="120" height="120" />
+    <img src="https://raw.githubusercontent.com/SanKyu-Lab/circle-flags-ui/main/.github/assets/favicon.svg" alt="@sankyu/react-circle-flags" width="120" height="120" />
   </a>
 </div>
 
@@ -8,11 +8,11 @@
 
 # @sankyu/react-circle-flags
 
-[![npm 版本](https://img.shields.io/npm/v/%40sankyu%2Freact-circle-flags?style=flat-square&label=%40sankyu%2Freact-circle-flags)](https://www.npmjs.com/package/@sankyu/react-circle-flags) [![打包大小](https://img.shields.io/bundlephobia/minzip/@sankyu/react-circle-flags?style=flat-square&label=打包大小)](https://bundlephobia.com/package/@sankyu/react-circle-flags) [![npm 下载量](https://img.shields.io/npm/dm/@sankyu/react-circle-flags.svg?style=flat-square&label=NPM%20下载量)](https://www.npmjs.com/package/@sankyu/react-circle-flags) [![最后提交](https://img.shields.io/github/last-commit/SanKyu-Lab/react-circle-flags?style=flat-square&label=最后提交)](https://github.com/SanKyu-Lab/react-circle-flags/commits/main)
+[![npm 版本](https://img.shields.io/npm/v/%40sankyu%2Freact-circle-flags?style=flat-square&label=%40sankyu%2Freact-circle-flags)](https://www.npmjs.com/package/@sankyu/react-circle-flags) [![打包大小](https://img.shields.io/bundlephobia/minzip/@sankyu/react-circle-flags?style=flat-square&label=打包大小)](https://bundlephobia.com/package/@sankyu/react-circle-flags) [![npm 下载量](https://img.shields.io/npm/dm/@sankyu/react-circle-flags.svg?style=flat-square&label=NPM%20下载量)](https://www.npmjs.com/package/@sankyu/react-circle-flags) [![最后提交](https://img.shields.io/github/last-commit/SanKyu-Lab/circle-flags-ui?style=flat-square&label=最后提交)](https://github.com/SanKyu-Lab/circle-flags-ui/commits/main)
 
 <!-- CI/CD 与质量 -->
 
-[![CI](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/ci.yml/badge.svg)](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/ci.yml) [![发布](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/release.yml/badge.svg)](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/release.yml) [![codecov](https://codecov.io/gh/SanKyu-Lab/react-circle-flags/branch/main/graph/badge.svg?token=YHZ46T51AG)](https://codecov.io/gh/SanKyu-Lab/react-circle-flags)
+[![CI](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml) [![发布](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml/badge.svg)](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml) [![codecov](https://codecov.io/gh/SanKyu-Lab/circle-flags-ui/branch/main/graph/badge.svg)](https://codecov.io/gh/SanKyu-Lab/circle-flags-ui)
 
 [![支持 TypeScript](https://img.shields.io/badge/TypeScript-支持-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![Tree-shakable](https://badgen.net/bundlephobia/tree-shaking/@sankyu/react-circle-flags)](https://bundlephobia.com/package/@sankyu/react-circle-flags) [![MIT 许可证](https://img.shields.io/badge/许可证-MIT-green?style=flat-square&logo=opensourceinitiative)](./LICENSE)
 
@@ -20,7 +20,7 @@
 
 简体中文 | [English Version](./README.md)
 
-:star: **在 [GitHub](https://github.com/Sankyu-Lab/react-circle-flags) 上 Star 我们** | :bug: **在此 [提交问题](https://github.com/Sankyu-Lab/react-circle-flags/issues)**
+:star: **在 [GitHub](https://github.com/Sankyu-Lab/circle-flags-ui) 上 Star 我们** | :bug: **在此 [提交问题](https://github.com/Sankyu-Lab/circle-flags-ui/issues)**
 
 :rocket: **探索 [演示图库](https://react-circle-flags.js.org/browse)** | :book: **[阅读文档](https://react-circle-flags.js.org/docs/guides/getting-started/)**
 
@@ -159,7 +159,7 @@ console.log(buildMeta.circleFlagsCommitHash) // 例如：<示例-sha256-哈希�
 
 ## 🤝 贡献
 
-请参阅 [CONTRIBUTING.md](CONTRIBUTING.md) 了解贡献指南。
+请参阅 [CONTRIBUTING.md](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/CONTRIBUTING.md) 了解贡献指南。
 
 ## 📄 许可证
 

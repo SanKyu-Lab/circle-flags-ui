@@ -56,7 +56,7 @@ The `tsconfig.json` maps imports to the parent library source:
 {
   "compilerOptions": {
     "paths": {
-      "@sankyu/react-circle-flags": ["../src/index.tsx"]
+      "@sankyu/react-circle-flags": ["../packages/react/src/index.tsx"]
     }
   }
 }
@@ -65,7 +65,7 @@ The `tsconfig.json` maps imports to the parent library source:
 This allows importing directly from source:
 
 ```typescript
-import { FLAG_REGISTRY, FlagUS } from '@sankyu/react-circle-flags'
+import { FLAG_REGISTRY, FlagUs } from '@sankyu/react-circle-flags'
 ```
 
 ### Vite File System Access

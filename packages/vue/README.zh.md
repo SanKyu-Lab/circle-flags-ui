@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://react-circle-flags.js.org/">
-    <img src="https://raw.githubusercontent.com/SanKyu-Lab/react-circle-flags/main/.github/assets/favicon.svg" alt="@sankyu/vue-circle-flags" width="120" height="120" />
+    <img src="https://raw.githubusercontent.com/SanKyu-Lab/circle-flags-ui/main/.github/assets/favicon.svg" alt="@sankyu/vue-circle-flags" width="120" height="120" />
   </a>
 </div>
 
@@ -8,11 +8,11 @@
 
 # @sankyu/vue-circle-flags
 
-[![npm 版本](https://img.shields.io/npm/v/%40sankyu%2Fvue-circle-flags?style=flat-square&label=%40sankyu%2Fvue-circle-flags)](https://www.npmjs.com/package/@sankyu/vue-circle-flags) [![打包大小](https://img.shields.io/bundlephobia/minzip/@sankyu/vue-circle-flags?style=flat-square&label=打包大小)](https://bundlephobia.com/package/@sankyu/vue-circle-flags) [![npm 下载量](https://img.shields.io/npm/dm/@sankyu/vue-circle-flags.svg?style=flat-square&label=NPM%20下载量)](https://www.npmjs.com/package/@sankyu/vue-circle-flags) [![最后提交](https://img.shields.io/github/last-commit/SanKyu-Lab/react-circle-flags?style=flat-square&label=最后提交)](https://github.com/SanKyu-Lab/react-circle-flags/commits/main)
+[![npm 版本](https://img.shields.io/npm/v/%40sankyu%2Fvue-circle-flags?style=flat-square&label=%40sankyu%2Fvue-circle-flags)](https://www.npmjs.com/package/@sankyu/vue-circle-flags) [![打包大小](https://img.shields.io/bundlephobia/minzip/@sankyu/vue-circle-flags?style=flat-square&label=打包大小)](https://bundlephobia.com/package/@sankyu/vue-circle-flags) [![npm 下载量](https://img.shields.io/npm/dm/@sankyu/vue-circle-flags.svg?style=flat-square&label=NPM%20下载量)](https://www.npmjs.com/package/@sankyu/vue-circle-flags) [![最后提交](https://img.shields.io/github/last-commit/SanKyu-Lab/circle-flags-ui?style=flat-square&label=最后提交)](https://github.com/SanKyu-Lab/circle-flags-ui/commits/main)
 
 <!-- CI/CD 与质量 -->
 
-[![CI](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/ci.yml/badge.svg)](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/ci.yml) [![发布](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/release.yml/badge.svg)](https://github.com/SanKyu-Lab/react-circle-flags/actions/workflows/release.yml) [![codecov](https://codecov.io/gh/SanKyu-Lab/react-circle-flags/branch/main/graph/badge.svg?token=YHZ46T51AG)](https://codecov.io/gh/SanKyu-Lab/react-circle-flags)
+[![CI](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml) [![发布](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml/badge.svg)](https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml) [![codecov](https://codecov.io/gh/SanKyu-Lab/circle-flags-ui/branch/main/graph/badge.svg)](https://codecov.io/gh/SanKyu-Lab/circle-flags-ui)
 
 [![支持 TypeScript](https://img.shields.io/badge/TypeScript-支持-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![Tree-shakable](https://badgen.net/bundlephobia/tree-shaking/@sankyu/vue-circle-flags)](https://bundlephobia.com/package/@sankyu/vue-circle-flags) [![MIT 许可证](https://img.shields.io/badge/许可证-MIT-green?style=flat-square&logo=opensourceinitiative)](./LICENSE)
 
@@ -20,7 +20,7 @@
 
 简体中文 | [English Version](./README.md)
 
-:star: **在 [GitHub](https://github.com/Sankyu-Lab/react-circle-flags) 上 Star 我们** | :bug: **在此 [提交问题](https://github.com/Sankyu-Lab/react-circle-flags/issues)**
+:star: **在 [GitHub](https://github.com/Sankyu-Lab/circle-flags-ui) 上 Star 我们** | :bug: **在此 [提交问题](https://github.com/Sankyu-Lab/circle-flags-ui/issues)**
 
 :rocket: **探索 [演示图库](https://react-circle-flags.js.org/browse)** | :book: **[阅读文档](https://react-circle-flags.js.org/docs/guides/getting-started/)**
 
@@ -85,21 +85,21 @@ import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
 </template>
 ```
 
-### 使用 size 属性
+### 使用 `FlagSizes` 预设
 
 ```vue
 <script setup lang="ts">
-import { FlagJp, FlagDe, FlagFr } from '@sankyu/vue-circle-flags'
+import { FlagJp, FlagDe, FlagFr, FlagSizes } from '@sankyu/vue-circle-flags'
 </script>
 
 <template>
   <div>
-    <FlagJp size="sm" />
-    <!-- 16px -->
-    <FlagDe size="md" />
+    <FlagJp :width="FlagSizes.sm" :height="FlagSizes.sm" />
     <!-- 24px -->
-    <FlagFr size="lg" />
+    <FlagDe :width="FlagSizes.md" :height="FlagSizes.md" />
     <!-- 32px -->
+    <FlagFr :width="FlagSizes.lg" :height="FlagSizes.lg" />
+    <!-- 48px -->
   </div>
 </template>
 ```
@@ -108,21 +108,14 @@ import { FlagJp, FlagDe, FlagFr } from '@sankyu/vue-circle-flags'
 
 ```vue
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from 'vue'
+import { ref } from 'vue'
+import { DynamicFlag } from '@sankyu/vue-circle-flags'
 
 const countryCode = ref('us')
-
-const FlagComponent = computed(() => {
-  const code = countryCode.value.toLowerCase()
-  const componentName = `Flag${code.charAt(0).toUpperCase()}${code.slice(1)}`
-  return defineAsyncComponent(() =>
-    import('@sankyu/vue-circle-flags').then(module => module[componentName])
-  )
-})
 </script>
 
 <template>
-  <component :is="FlagComponent" :width="48" :height="48" />
+  <DynamicFlag :code="countryCode" :width="48" :height="48" />
 </template>
 ```
 
@@ -135,23 +128,25 @@ const FlagComponent = computed(() => {
 
 ### 属性
 
-| 属性     | 类型                                            | 默认值 | 描述             |
-| -------- | ----------------------------------------------- | ------ | ---------------- |
-| `width`  | `number \| string`                              | `32`   | 国旗宽度         |
-| `height` | `number \| string`                              | `32`   | 国旗高度         |
-| `size`   | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | -      | 预设尺寸         |
-| `title`  | `string`                                        | -      | SVG 的无障碍标题 |
+| 属性        | 类型               | 默认值 | 描述                |
+| ----------- | ------------------ | ------ | ------------------- |
+| `width`     | `number \| string` | `48`   | 国旗宽度            |
+| `height`    | `number \| string` | `48`   | 国旗高度            |
+| `title`     | `string`           | code   | SVG 的无障碍标题    |
+| `class`     | `string`           | -      | Vue 标准 class 绑定 |
+| `className` | `string`           | -      | 可选 className 别名 |
 
 ### 尺寸预设
 
-| 尺寸  | 像素 |
-| ----- | ---- |
-| `xs`  | 12px |
-| `sm`  | 16px |
-| `md`  | 24px |
-| `lg`  | 32px |
-| `xl`  | 48px |
-| `2xl` | 64px |
+| 尺寸   | 像素  |
+| ------ | ----- |
+| `xs`   | 16px  |
+| `sm`   | 24px  |
+| `md`   | 32px  |
+| `lg`   | 48px  |
+| `xl`   | 64px  |
+| `xxl`  | 96px  |
+| `xxxl` | 128px |
 
 ### 构建元信息
 
@@ -237,7 +232,7 @@ import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
 
 ## 🤝 贡献
 
-请参阅 [CONTRIBUTING.md](CONTRIBUTING.md) 了解贡献指南。
+请参阅 [CONTRIBUTING.md](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/CONTRIBUTING.md) 了解贡献指南。
 
 ## 📄 许可证
 

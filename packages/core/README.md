@@ -5,8 +5,8 @@ Internal shared utilities and types for circle-flags-ui packages.
 **This is a private package** - not published to npm. It provides shared functionality for:
 
 - `@sankyu/react-circle-flags`
-- `@sankyu/vue-circle-flags` (coming soon)
-- `@sankyu/solid-circle-flags` (coming soon)
+- `@sankyu/vue-circle-flags` (beta)
+- `@sankyu/solid-circle-flags` (beta)
 
 ## Exports
 
