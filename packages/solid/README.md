@@ -139,6 +139,11 @@ export default function App() {
 }
 ```
 
+> [!CAUTION]
+> `DynamicFlag` is offline-first and renders runtime codes synchronously, but it bundles all
+> 400+ flags (~600 KB, no tree-shaking). Prefer named imports when possible. If runtime codes
+> are bounded, use a finite named-import map.
+
 ## 📚 API
 
 ### Props

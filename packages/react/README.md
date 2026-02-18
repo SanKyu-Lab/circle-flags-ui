@@ -173,6 +173,11 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
 
 Importing individual flags ensures that only the used flags are included in your bundle.
 
+> [!CAUTION]
+> `DynamicFlag` is offline-first and renders runtime codes synchronously, but it bundles all
+> 400+ flags (~600 KB, no tree-shaking). Prefer named imports when possible. If runtime codes
+> are bounded, use a finite named-import map.
+
 > [!TIP]
 > For more information, you may refer to the [Bundle Size & Tree-shaking Guide](https://react-circle-flags.js.org/docs/guides/getting-started/bundle-size/).
 
