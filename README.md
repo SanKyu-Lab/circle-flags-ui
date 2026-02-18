@@ -33,10 +33,6 @@ Monorepo for **400+ circular SVG flag components** across React, Vue 3, and Soli
 - 📱 SSR-friendly for modern frameworks
 - 🧩 Shared core + framework-specific packages
 
-> [!CAUTION]
-> `DynamicFlag` is intended for runtime code rendering, but it bundles all 400+ flags
-> (~600 KB, no tree-shaking). For minimal bundles, prefer named imports or a finite map.
-
 ## Quick Start
 
 ### Install a package
