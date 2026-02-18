@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.2.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
