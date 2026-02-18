@@ -140,6 +140,10 @@ const countryCode = ref('us')
 </template>
 ```
 
+> [!CAUTION]
+> `DynamicFlag` 适合离线优先且需要同步渲染运行时代码的场景，但会打包全部 400+ 国旗
+> （约 ~600 KB，无法 tree-shaking）。若代码集合有限，优先使用具名导入或“具名导入 + map”。
+
 ### 其他使用示例
 
 > [!TIP]
