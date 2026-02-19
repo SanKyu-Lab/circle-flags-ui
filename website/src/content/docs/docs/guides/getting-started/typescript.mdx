@@ -11,7 +11,7 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
 ## SVG prop typing
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
     All flag components accept standard React SVG props:
 
     ```tsx
@@ -28,7 +28,7 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
     All flag components accept standard Vue SVG props:
 
     ```vue
@@ -49,7 +49,7 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
     ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
     All flag components accept standard Solid SVG props:
 
     ```tsx
@@ -92,7 +92,7 @@ TypeScript will automatically infer all available props when you use flag compon
     ```
 
   </TabItem>
-  <TabItem label="Reusable Wrapper" icon="seti:react">
+  <TabItem label="Reusable Wrapper" icon="simple-icons:react">
     ```tsx
     import type { ComponentProps, ComponentType } from 'react'
     import { FlagUs } from '@sankyu/react-circle-flags'
@@ -142,7 +142,7 @@ TypeScript will automatically infer all available props when you use flag compon
     ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
     ```tsx
     import type { Component } from 'solid-js'
     import { FlagCn, FlagUs } from '@sankyu/solid-circle-flags'
@@ -176,7 +176,7 @@ TypeScript will automatically infer all available props when you use flag compon
 The library exports helpful types for advanced use cases:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
     ```tsx
     import { coerceFlagCode, isFlagCode } from '@sankyu/react-circle-flags'
     import type { CountryCode, FlagCode, FlagComponentProps } from '@sankyu/react-circle-flags'
@@ -202,7 +202,7 @@ The library exports helpful types for advanced use cases:
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
     ```typescript
     import { coerceFlagCode, isFlagCode } from '@sankyu/vue-circle-flags'
     import type { CountryCode, FlagCode, FlagComponentProps } from '@sankyu/vue-circle-flags'
@@ -227,7 +227,7 @@ The library exports helpful types for advanced use cases:
     ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
     ```typescript
     import { coerceFlagCode, isFlagCode } from '@sankyu/solid-circle-flags'
     import type { CountryCode, FlagCode, FlagComponentProps } from '@sankyu/solid-circle-flags'
@@ -257,7 +257,7 @@ The library exports helpful types for advanced use cases:
 ## Flag code utilities
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
     ```tsx
     import { FlagUtils } from '@sankyu/react-circle-flags'
 
@@ -270,7 +270,7 @@ The library exports helpful types for advanced use cases:
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
     ```typescript
     import { FlagUtils } from '@sankyu/vue-circle-flags'
 
@@ -279,7 +279,7 @@ The library exports helpful types for advanced use cases:
     ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
     ```typescript
     import { FlagUtils } from '@sankyu/solid-circle-flags'
 
@@ -295,7 +295,7 @@ The library exports helpful types for advanced use cases:
 The `FlagUtils` object provides convenient utility functions for working with flag codes:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
     ```tsx
     import { FlagUtils } from '@sankyu/react-circle-flags'
 
@@ -315,7 +315,7 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
     ```typescript
     import { FlagUtils } from '@sankyu/vue-circle-flags'
 
@@ -327,7 +327,7 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
     ```typescript
     import { FlagUtils } from '@sankyu/solid-circle-flags'
 
@@ -344,7 +344,7 @@ The `FlagUtils` object provides convenient utility functions for working with fl
 ## Type safety with DynamicFlag
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
     ```tsx
     import { DynamicFlag } from '@sankyu/react-circle-flags'
     import type { FlagCode } from '@sankyu/react-circle-flags'
@@ -366,7 +366,7 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
     ```vue
     <script setup lang="ts">
     import { ref } from 'vue'
@@ -384,7 +384,7 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
     ```tsx
     import { createSignal } from 'solid-js'
     import { DynamicFlag } from '@sankyu/solid-circle-flags'

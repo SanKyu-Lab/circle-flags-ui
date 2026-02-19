@@ -34,7 +34,7 @@ Use named imports when you:
 Import only the flags you need from the main entry:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
 
 ```tsx
 import { FlagUs, FlagCn, FlagGb } from '@sankyu/react-circle-flags'
@@ -51,7 +51,7 @@ export function Header() {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
 
 ```vue
 <script setup lang="ts">
@@ -68,7 +68,7 @@ import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
 ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
 
 Solid (beta): named-import flags currently use `className` for CSS classes.
 
@@ -119,7 +119,7 @@ This component adds **~600 KB** to your bundle (it bundles ALL 400+ flags).
 Render any flag from runtime ISO codes without network requests:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="seti:react">
+  <TabItem label="React" icon="simple-icons:react">
 
 ```tsx
 import { DynamicFlag } from '@sankyu/react-circle-flags'
@@ -130,7 +130,7 @@ export function CountryFlag({ code }: { code: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
 
 ```vue
 <script setup lang="ts">
@@ -144,7 +144,7 @@ const props = defineProps<{ code: string }>()
 ```
 
   </TabItem>
-  <TabItem label="Solid">
+  <TabItem label="Solid.js" icon="simple-icons:solid">
 
 ```tsx
 import { DynamicFlag } from '@sankyu/solid-circle-flags'
@@ -278,7 +278,7 @@ The library works seamlessly with all modern frameworks:
     ```
 
   </TabItem>
-  <TabItem label="Nuxt.js" icon="seti:vue">
+  <TabItem label="Nuxt.js" icon="simple-icons:vuedotjs">
     ```vue
     <script setup lang="ts">
     import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
@@ -296,7 +296,7 @@ The library works seamlessly with all modern frameworks:
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
     ```vue
     <script setup lang="ts">
     import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
