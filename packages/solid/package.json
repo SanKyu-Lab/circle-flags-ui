@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/solid-circle-flags",
-  "version": "0.1.2-beta.3",
+  "version": "0.1.3-beta.4",
   "description": "400+ circular SVG Solid.js flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
   "type": "module",
   "main": "./dist/index.cjs",
