@@ -34,7 +34,7 @@ You must know (or cap) the set of possible country codes. Unknown codes should r
 :::
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { FlagCn, FlagGb, FlagUs } from '@sankyu/react-circle-flags'
@@ -55,7 +55,7 @@ export function CountryFlag({ code }: { code: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -83,7 +83,7 @@ const FlagComp = computed(() => {
 ```
 
   </TabItem>
-  <TabItem label="Solid.js" icon="simple-icons:solid">
+  <TabItem label="Solid.js" icon="seti:javascript">
 
 ```tsx
 import { FlagCn, FlagGb, FlagUs } from '@sankyu/solid-circle-flags'
@@ -115,7 +115,7 @@ Use this when you truly need to support **any** runtime code and still render sy
 :::
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { DynamicFlag } from '@sankyu/react-circle-flags'
@@ -126,7 +126,7 @@ export function CountryFlag({ code }: { code: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -140,7 +140,7 @@ const props = defineProps<{ code: string }>()
 ```
 
   </TabItem>
-  <TabItem label="Solid.js" icon="simple-icons:solid">
+  <TabItem label="Solid.js" icon="seti:javascript">
 
 ```tsx
 import { DynamicFlag } from '@sankyu/solid-circle-flags'
@@ -159,7 +159,7 @@ If you can guarantee that your runtime value is already a **valid** country code
 enable `strict` for stronger TypeScript constraints:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { DynamicFlag, coerceFlagCode } from '@sankyu/react-circle-flags'
@@ -172,7 +172,7 @@ export function CountryFlag({ codeFromApi }: { codeFromApi: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">

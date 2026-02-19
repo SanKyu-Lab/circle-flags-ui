@@ -12,14 +12,14 @@ import { LinkCard } from '@astrojs/starlight/components'
 ## Import
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { FlagUtils } from '@sankyu/react-circle-flags'
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -28,7 +28,7 @@ import { FlagUtils } from '@sankyu/vue-circle-flags'
 ```
 
   </TabItem>
-  <TabItem label="Solid.js" icon="simple-icons:solid">
+  <TabItem label="Solid.js" icon="seti:javascript">
 
 ```tsx
 import { FlagUtils } from '@sankyu/solid-circle-flags'
@@ -106,7 +106,7 @@ FlagUtils.sizes.xxxl // 128
 ### Validating user input
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { FlagUtils } from '@sankyu/react-circle-flags'
@@ -131,7 +131,7 @@ export function CountrySearch() {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -156,7 +156,7 @@ const isValid = computed(() => FlagUtils.isValidCountryCode(code.value))
 ### Responsive flag sizes
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { FlagUtils } from '@sankyu/react-circle-flags'
@@ -184,7 +184,7 @@ export function ResponsiveFlag() {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -228,7 +228,7 @@ onUnmounted(() => {
 ### Getting component names dynamically
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { FlagUtils } from '@sankyu/react-circle-flags'
@@ -248,7 +248,7 @@ export function FlagInfo({ code }: { code: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">

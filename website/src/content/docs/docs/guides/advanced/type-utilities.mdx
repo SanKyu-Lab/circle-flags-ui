@@ -25,7 +25,7 @@ Type utilities bridge this gap by providing:
 ## Import
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { coerceFlagCode, isFlagCode } from '@sankyu/react-circle-flags'
@@ -33,7 +33,7 @@ import { type FlagCode } from '@sankyu/react-circle-flags'
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -43,7 +43,7 @@ import { type FlagCode } from '@sankyu/vue-circle-flags'
 ```
 
   </TabItem>
-  <TabItem label="Solid.js" icon="simple-icons:solid">
+  <TabItem label="Solid.js" icon="seti:javascript">
 
 ```tsx
 import { coerceFlagCode, isFlagCode } from '@sankyu/solid-circle-flags'
@@ -105,7 +105,7 @@ coerceFlagCode('GB-ENG') // 'gb-eng'
 Use `isFlagCode()` in conditionals to narrow types:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { isFlagCode } from '@sankyu/react-circle-flags'
@@ -126,7 +126,7 @@ export function CountryFlag({ code }: { code: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -154,7 +154,7 @@ const isValid = computed(() => isFlagCode(normalized.value))
 Use `coerceFlagCode()` to handle unknown strings safely:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { coerceFlagCode } from '@sankyu/react-circle-flags'
@@ -170,7 +170,7 @@ export function CountryFlag({ codeFromApi }: { codeFromApi: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -196,7 +196,7 @@ const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
 Provide a custom fallback for invalid codes:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { coerceFlagCode } from '@sankyu/react-circle-flags'
@@ -224,7 +224,7 @@ export function CountryFlag({
 Validate form input with type safety:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { useState } from 'react'
@@ -263,7 +263,7 @@ export function CountryForm() {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
@@ -305,7 +305,7 @@ const handleSubmit = () => {
 Combine type utilities with `strict` prop for maximum type safety:
 
 <Tabs syncKey="framework">
-  <TabItem label="React" icon="simple-icons:react">
+  <TabItem label="React" icon="seti:react">
 
 ```tsx
 import { coerceFlagCode } from '@sankyu/react-circle-flags'
@@ -321,7 +321,7 @@ export function CountryFlag({ codeFromApi }: { codeFromApi: string }) {
 ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="simple-icons:vuedotjs">
+  <TabItem label="Vue 3" icon="seti:vue">
 
 ```vue
 <script setup lang="ts">
