@@ -32,6 +32,12 @@
 
 ---
 
+<div align="center">
+  <a href="https://react-circle-flags.js.org/">
+    <img src=".github/assets/og.png" alt="circle-flags-ui preview" width="830" />
+  </a>
+</div>
+
 ## 📦 Package Matrix
 
 | Framework                                                                                | Package                                                                                  | Status                                                                 | Live Demo                                                                                                                                                                                                                                                   | Docs                                 |
