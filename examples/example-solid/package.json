@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@sankyu/solid-circle-flags": "0.1.1-beta.2",
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.2.0",
     "solid-js": "^1.9.11",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^25.2.3",
