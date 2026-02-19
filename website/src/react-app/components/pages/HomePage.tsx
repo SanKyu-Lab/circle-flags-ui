@@ -19,7 +19,7 @@ export default function HomePage({
   return (
     <>
       <HeroSection flagCount={flagCount} onBrowseClick={onBrowseClick} onFlagClick={onFlagClick} />
-      <section className="space-y-8 mb-16">
+      <section className="space-y-10 mb-16">
         <GallerySection onFilterNavigate={onFilterNavigate} />
         <QuickStartSection />
       </section>

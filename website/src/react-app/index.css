@@ -111,6 +111,18 @@ body,
 body {
   overflow-x: hidden;
   letter-spacing: var(--tracking-normal);
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      color-mix(in oklab, var(--flag-blue-glow) 44%, transparent),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      color-mix(in oklab, var(--flag-green-glow) 35%, transparent),
+      transparent 40%
+    ),
+    var(--bg);
 }
 
 /* Typeface usage */
@@ -725,6 +737,69 @@ pre {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.hero-halo {
+  position: absolute;
+  top: -5rem;
+  left: -2.5rem;
+  z-index: -1;
+  width: min(88vw, 36rem);
+  height: min(88vw, 36rem);
+  border-radius: 9999px;
+  background:
+    radial-gradient(
+      circle at 35% 25%,
+      color-mix(in oklab, var(--flag-blue-glow) 95%, transparent),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 70% 62%,
+      color-mix(in oklab, var(--flag-gold-glow) 70%, transparent),
+      transparent 52%
+    );
+  filter: blur(24px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.framework-option {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 1rem;
+  padding: 0.75rem;
+  min-height: 7.75rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.framework-option:hover {
+  transform: translateY(-2px);
+}
+
+.framework-logo-wrap {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.7rem;
+  border: 1px solid var(--border-weak);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem;
+}
+
+.framework-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* Glow button */
