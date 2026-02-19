@@ -15,8 +15,8 @@
 
   <!-- CI/CD & Quality -->
 
-<a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml/badge.svg" alt="CI" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml/badge.svg" alt="Release" /></a>
-<a href="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui"><img src="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui/branch/main/graph/badge.svg" alt="codecov" /></a>
+<a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml/badge.svg" alt="CI" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/pr-checks.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/pr-checks.yml/badge.svg" alt="PR Checks" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml/badge.svg" alt="Release" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/deploy-website.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/deploy-website.yml/badge.svg" alt="Deploy Website" /></a>
+<a href="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui"><img src="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui/graph/badge.svg" alt="codecov" /></a>
 
   <br />
 

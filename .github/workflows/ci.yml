@@ -2,7 +2,10 @@
 name: CI
 
 on:
-  # Only allow manual trigger or triggered by Release workflow
+  # Upload coverage on every push to main so the Codecov badge stays fresh
+  push:
+    branches: [main]
+  # Also run after a successful Release
   workflow_dispatch:
   workflow_run:
     workflows: ['Release']

@@ -1,2 +1,1 @@
-pnpm run format:check
-pnpm run lint
+node scripts/hooks/smart-check.mjs --hook pre-push
