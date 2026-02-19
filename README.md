@@ -11,14 +11,10 @@
 
 <a href="https://www.npmjs.com/package/@sankyu/react-circle-flags"><img src="https://img.shields.io/npm/v/%40sankyu%2Freact-circle-flags?style=flat-square&label=react&logo=react&logoColor=white&color=61DAFB" alt="React npm" /></a> <a href="https://www.npmjs.com/package/@sankyu/vue-circle-flags"><img src="https://img.shields.io/npm/v/%40sankyu%2Fvue-circle-flags?style=flat-square&label=vue&logo=vuedotjs&logoColor=white&color=42b883" alt="Vue npm" /></a> <a href="https://www.npmjs.com/package/@sankyu/solid-circle-flags"><img src="https://img.shields.io/npm/v/%40sankyu%2Fsolid-circle-flags?style=flat-square&label=solid&logo=solid&logoColor=white&color=2C4F7C" alt="Solid npm" /></a>
 
-  <br />
-
   <!-- CI/CD & Quality -->
 
 <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/ci.yml/badge.svg" alt="CI" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/pr-checks.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/pr-checks.yml/badge.svg" alt="PR Checks" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/release.yml/badge.svg" alt="Release" /></a> <a href="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/deploy-website.yml"><img src="https://github.com/SanKyu-Lab/circle-flags-ui/actions/workflows/deploy-website.yml/badge.svg" alt="Deploy Website" /></a>
 <a href="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui"><img src="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui/graph/badge.svg" alt="codecov" /></a>
-
-  <br />
 
   <!-- Meta -->
 
