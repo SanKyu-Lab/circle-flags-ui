@@ -4,7 +4,18 @@ import { createHighlighter } from 'shiki'
 
 const highlighterPromise = createHighlighter({
   themes: [auroraX],
-  langs: ['tsx', 'typescript', 'javascript', 'bash', 'shell', 'json', 'markdown', 'plaintext'],
+  langs: [
+    'tsx',
+    'typescript',
+    'javascript',
+    'vue',
+    'html',
+    'bash',
+    'shell',
+    'json',
+    'markdown',
+    'plaintext',
+  ],
 })
 
 export function useShikiHtml(code: string, lang: string) {
