@@ -52,9 +52,9 @@ const renderLine = (line: CodeToken[], index: number) => (
 )
 
 const frameworkOptions = [
-  { id: 'react', label: 'React', badge: undefined },
-  { id: 'vue', label: 'Vue 3', badge: 'Beta' },
-  { id: 'solid', label: 'Solid', badge: 'Beta' },
+  { id: 'react', label: 'React', badge: undefined, icon: 'framework-icons/react.svg' },
+  { id: 'vue', label: 'Vue 3', badge: 'Beta', icon: 'framework-icons/vue.svg' },
+  { id: 'solid', label: 'Solid.js', badge: 'Beta', icon: 'framework-icons/solid.svg' },
 ] as const
 
 type Framework = (typeof frameworkOptions)[number]['id']
@@ -143,17 +143,24 @@ export default function CodeExample() {
       {/* Framework Selector */}
       <div className="flex items-center gap-2">
         <span className="text-xs uppercase tracking-[0.2em] text-(--muted)">Framework</span>
-        <div className="flex rounded-lg border border-(--border-weak) bg-(--overlay-soft) p-1">
+        <div className="flex flex-wrap rounded-lg border border-(--border-weak) bg-(--overlay-soft) p-1">
           {frameworkOptions.map(option => (
             <button
               key={option.id}
               onClick={() => setActiveFramework(option.id)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                 activeFramework === option.id
-                  ? 'bg-(--accent) text-white'
+                  ? 'bg-(--accent) text-white shadow-(--shadow-sm)'
                   : 'text-(--muted) hover:text-(--ink)'
               }`}
             >
+              <img
+                src={withBasePath(option.icon)}
+                alt={`${option.label} logo`}
+                className="h-3.5 w-3.5 object-contain"
+                loading="lazy"
+                decoding="async"
+              />
               {option.label}
               {option.badge ? (
                 <span className="ml-1.5 text-[10px] opacity-75">{option.badge}</span>
@@ -162,11 +169,6 @@ export default function CodeExample() {
           ))}
         </div>
       </div>
-      {activeFramework === 'solid' ? (
-        <p className="text-xs text-(--muted)">
-          Solid (beta): named-import flags currently use <code>className</code> for CSS classes.
-        </p>
-      ) : null}
 
       <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#192732]">
         <Tabs items={currentInstallCommands} activeId={activeManager} onChange={setActiveManager} />
