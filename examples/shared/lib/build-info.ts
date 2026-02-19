@@ -1,6 +1,13 @@
 export type FrameworkReleaseTag = 'react' | 'vue' | 'solid'
+export type FrameworkName = FrameworkReleaseTag
 
 const DEFAULT_REPO = 'SanKyu-Lab/circle-flags-ui'
+const DEFAULT_BRANCH = 'main'
+const FRAMEWORK_LOGO_FILE = {
+  react: 'react.svg',
+  vue: 'vue.svg',
+  solid: 'solidjs.svg',
+} as const
 
 export function formatBuiltAt(builtTimestamp: number, locale: string = 'zh-CN'): string {
   return new Date(builtTimestamp).toLocaleString(locale, {
@@ -31,4 +38,27 @@ export function getGithubReleaseTagUrl(
   repo: string = DEFAULT_REPO
 ): string {
   return `https://github.com/${repo}/releases/tag/${framework}-v${version}`
+}
+
+export function getProjectLogoUrl(
+  repo: string = DEFAULT_REPO,
+  branch: string = DEFAULT_BRANCH
+): string {
+  return `https://raw.githubusercontent.com/${repo}/${branch}/.github/assets/favicon.svg`
+}
+
+export function getFrameworkLogoUrl(
+  framework: FrameworkName,
+  repo: string = DEFAULT_REPO,
+  branch: string = DEFAULT_BRANCH
+): string {
+  return `https://raw.githubusercontent.com/${repo}/${branch}/.github/assets/${FRAMEWORK_LOGO_FILE[framework]}`
+}
+
+export function getPackageReadmeBlobUrl(
+  framework: FrameworkName,
+  repo: string = DEFAULT_REPO,
+  branch: string = DEFAULT_BRANCH
+): string {
+  return `https://github.com/${repo}/blob/${branch}/packages/${framework}/README.md`
 }

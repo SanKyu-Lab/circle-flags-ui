@@ -2,6 +2,9 @@ import { InfoLink } from './InfoLink'
 import {
   formatBuiltAt,
   getGithubCommitUrl,
+  getPackageReadmeBlobUrl,
+  getProjectLogoUrl,
+  getFrameworkLogoUrl,
   getGithubReleaseTagUrl,
   getNpmPackageUrl,
   shortCommit,
@@ -23,6 +26,9 @@ export function BuildInfoCard({
   const builtAtText = formatBuiltAt(builtTimestamp)
   const commitShort = shortCommit(commitHash)
   const npmUrl = getNpmPackageUrl(packageName)
+  const packageReadmeUrl = getPackageReadmeBlobUrl('react')
+  const projectLogoUrl = getProjectLogoUrl()
+  const frameworkLogoUrl = getFrameworkLogoUrl('react')
   const commitUrl = getGithubCommitUrl(commitHash)
   const releaseUrl = getGithubReleaseTagUrl('react', version)
 
@@ -30,9 +36,20 @@ export function BuildInfoCard({
     <div className="w-full p-5 border border-gray-200 rounded-2xl bg-neutral-50 shadow-sm flex flex-col gap-3">
       <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-200">
         BUILD INFO (
-        <InfoLink href={npmUrl} className="text-inherit hover:text-indigo-500 hover:cursor-alias">
-          {packageName}
-        </InfoLink>
+        <span className="inline-flex items-center gap-1 align-middle">
+          <InfoLink
+            href={packageReadmeUrl}
+            className="inline-flex items-center text-inherit hover:text-indigo-500 hover:cursor-alias hover:no-underline"
+          >
+            <img src={projectLogoUrl} alt="circle-flags-ui package README" className="size-4" />
+          </InfoLink>
+          <InfoLink
+            href={npmUrl}
+            className="inline-flex items-center text-inherit hover:text-indigo-500 hover:cursor-alias hover:no-underline"
+          >
+            <img src={frameworkLogoUrl} alt={packageName} className="size-4" />
+          </InfoLink>
+        </span>
         )
       </div>
 
