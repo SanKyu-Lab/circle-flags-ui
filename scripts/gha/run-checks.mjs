@@ -31,8 +31,8 @@ switch (options.checkId) {
     if (options.ensureGeneratedClean) {
       run('git', ['diff', '--exit-code'])
     }
-    run('pnpm', ['run', 'lint'])
-    run('pnpm', ['run', 'typecheck'])
+    // Run lint and typecheck in parallel via turbo (avoids double gen:flags)
+    run('pnpm', ['exec', 'turbo', 'run', 'lint', 'typecheck'])
     break
 
   case 'test':

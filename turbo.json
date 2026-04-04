@@ -5,8 +5,11 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["topo"]
     },
     "lint": {},
     "lint:fix": {},
