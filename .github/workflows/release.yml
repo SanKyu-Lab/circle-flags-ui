@@ -85,8 +85,6 @@ jobs:
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
-        with:
-          registry-url: https://registry.npmjs.org
 
       - name: Check if version is already published
         id: check_published
@@ -137,6 +135,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Trusted Publisher (OIDC) credentials
+          export NODE_AUTH_TOKEN=""
+          export NPM_TOKEN=""
+          export npm_config_registry="https://registry.npmjs.org/"
+          NPMRC="${RUNNER_TEMP}/npmrc"
+          : > "$NPMRC"
+          export NPM_CONFIG_USERCONFIG="$NPMRC"
+
           echo "Publishing ${{ matrix.pkg.name }}@${{ matrix.pkg.version }} from ${{ matrix.pkg.dir }}"
           (cd "${{ matrix.pkg.dir }}" && npm publish --access public --provenance)
 
