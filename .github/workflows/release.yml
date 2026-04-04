@@ -134,8 +134,6 @@ jobs:
 
       - name: Publish to npm
         if: steps.check_published.outputs.already_published != 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
