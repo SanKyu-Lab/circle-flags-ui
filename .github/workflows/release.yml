@@ -144,9 +144,16 @@ jobs:
           : > "$NPMRC"
           export NPM_CONFIG_USERCONFIG="$NPMRC"
 
+          VERSION="${{ matrix.pkg.version }}"
+          DIST_TAG="latest"
+          if [[ "$VERSION" == *-* ]]; then
+            DIST_TAG="beta"
+          fi
+
           echo "npm (pnpm dlx) version: $(pnpm dlx -s npm@11.5.1 --version)"
+          echo "dist-tag: $DIST_TAG"
           echo "Publishing ${{ matrix.pkg.name }}@${{ matrix.pkg.version }} from ${{ matrix.pkg.dir }}"
-          (cd "${{ matrix.pkg.dir }}" && pnpm dlx -s npm@11.5.1 publish --access public --provenance)
+          (cd "${{ matrix.pkg.dir }}" && pnpm dlx -s npm@11.5.1 publish --access public --provenance --tag "$DIST_TAG")
 
       - name: Generate package changelog
         shell: bash
