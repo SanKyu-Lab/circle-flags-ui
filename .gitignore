@@ -72,11 +72,13 @@ docs/
 bun.lock
 
 # Project-local agent skills
-!.agents/
-.agents/*
-!.agents/skills/
-!.agents/skills/**
+# !.agents/
+# .agents/*
+# !.agents/skills/
+# !.agents/skills/**
 
-!.claude/
-.claude/*
-!.claude/skills
+# !.claude/
+# .claude/*
+# !.claude/skills
+
+*-lock.json
