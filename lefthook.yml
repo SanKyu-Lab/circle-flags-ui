@@ -8,11 +8,12 @@ commit-msg:
       run: pnpm exec commitlint --edit {1}
     format:
       priority: 2
-      run: pnpm run format
+      glob: "**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}"
+      run: prettier --write {staged_files}
     lint:
       priority: 3
-      glob: "{scripts,packages,examples}/**"
-      run: pnpm run lint:fix
+      glob: "{packages,examples}/**/*.{ts,tsx}"
+      run: pnpm exec eslint --fix {staged_files}
     typecheck:
       priority: 4
       glob: "{packages,examples}/**/*.{ts,tsx}"
@@ -23,11 +24,12 @@ pre-push:
   commands:
     format:
       priority: 1
-      run: pnpm run format:check
+      glob: "**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}"
+      run: prettier --check {push_files}
     lint:
       priority: 2
-      glob: "{scripts,packages,examples}/**"
-      run: pnpm run lint
+      glob: "{packages,examples}/**/*.{ts,tsx}"
+      run: pnpm exec eslint {push_files}
     typecheck:
       priority: 3
       glob: "{packages,examples}/**/*.{ts,tsx}"
