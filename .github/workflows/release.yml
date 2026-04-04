@@ -86,6 +86,13 @@ jobs:
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
 
+      - name: Upgrade npm (required for Trusted Publishing OIDC)
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm i -g npm@^11.5.1
+          npm --version
+
       - name: Check if version is already published
         id: check_published
         run: |
