@@ -70,3 +70,13 @@ docs/
 !packages/*/.prettierignore
 !website/src/content/docs/reference/api/**
 bun.lock
+
+# Project-local agent skills
+!.agents/
+.agents/*
+!.agents/skills/
+!.agents/skills/**
+
+!.claude/
+.claude/*
+!.claude/skills
