@@ -8,15 +8,15 @@ commit-msg:
       run: pnpm exec commitlint --edit {1}
     format:
       priority: 2
-      glob: "**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}"
+      glob: '**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}'
       run: pnpm exec prettier --write {staged_files}
     lint:
       priority: 3
-      glob: "{packages,examples}/**/*.{ts,tsx}"
+      glob: '{packages,examples}/**/*.{ts,tsx}'
       run: pnpm exec eslint --fix {staged_files}
     typecheck:
       priority: 4
-      glob: "{packages,examples}/**/*.{ts,tsx}"
+      glob: '{packages,examples}/**/*.{ts,tsx}'
       run: pnpm run typecheck
 
 pre-push:
@@ -24,13 +24,13 @@ pre-push:
   commands:
     format:
       priority: 1
-      glob: "**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}"
+      glob: '**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}'
       run: pnpm exec prettier --check {push_files}
     lint:
       priority: 2
-      glob: "{packages,examples}/**/*.{ts,tsx}"
+      glob: '{packages,examples}/**/*.{ts,tsx}'
       run: pnpm exec eslint {push_files}
     typecheck:
       priority: 3
-      glob: "{packages,examples}/**/*.{ts,tsx}"
+      glob: '{packages,examples}/**/*.{ts,tsx}'
       run: pnpm run typecheck
