@@ -9,7 +9,7 @@ commit-msg:
     format:
       priority: 2
       glob: "**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}"
-      run: prettier --write {staged_files}
+      run: pnpm exec prettier --write {staged_files}
     lint:
       priority: 3
       glob: "{packages,examples}/**/*.{ts,tsx}"
@@ -25,7 +25,7 @@ pre-push:
     format:
       priority: 1
       glob: "**/*.{js,mjs,cjs,ts,tsx,json,yaml,yml,md,mdx,css,scss,html,astro}"
-      run: prettier --check {push_files}
+      run: pnpm exec prettier --check {push_files}
     lint:
       priority: 2
       glob: "{packages,examples}/**/*.{ts,tsx}"
