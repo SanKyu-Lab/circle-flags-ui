@@ -86,13 +86,6 @@ jobs:
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
 
-      - name: Upgrade npm (required for Trusted Publishing OIDC)
-        shell: bash
-        run: |
-          set -euo pipefail
-          npm i -g npm@^11.5.1
-          npm --version
-
       - name: Check if version is already published
         id: check_published
         run: |
@@ -110,7 +103,8 @@ jobs:
           echo "Checking if $PACKAGE_NAME@$VERSION is already published..."
 
           # Check npm registry
-          RESPONSE=$(npm view "$PACKAGE_NAME@$VERSION" --json 2>/dev/null || echo "{}")
+          # Use a known npm version without mutating the runner's global npm
+          RESPONSE=$(pnpm dlx -s npm@11.5.1 view "$PACKAGE_NAME@$VERSION" --json 2>/dev/null || echo "{}")
 
           if echo "$RESPONSE" | grep -q '"name"'; then
             echo "Version $VERSION is already published. Skipping."
@@ -150,8 +144,9 @@ jobs:
           : > "$NPMRC"
           export NPM_CONFIG_USERCONFIG="$NPMRC"
 
+          echo "npm (pnpm dlx) version: $(pnpm dlx -s npm@11.5.1 --version)"
           echo "Publishing ${{ matrix.pkg.name }}@${{ matrix.pkg.version }} from ${{ matrix.pkg.dir }}"
-          (cd "${{ matrix.pkg.dir }}" && npm publish --access public --provenance)
+          (cd "${{ matrix.pkg.dir }}" && pnpm dlx -s npm@11.5.1 publish --access public --provenance)
 
       - name: Generate package changelog
         shell: bash
