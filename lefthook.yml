@@ -1,0 +1,11 @@
+assert_lefthook_installed: true
+
+commit-msg:
+  commands:
+    smart-check:
+      run: node scripts/hooks/smart-check.mjs --hook commit-msg --commit-msg-file {1}
+
+pre-push:
+  commands:
+    smart-check:
+      run: node scripts/hooks/smart-check.mjs --hook pre-push

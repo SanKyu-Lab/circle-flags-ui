@@ -40,7 +40,7 @@
     "test:vue": "pnpm -F @sankyu/vue-circle-flags run test",
     "test:solid": "pnpm -F @sankyu/solid-circle-flags run test",
     "test:coverage": "pnpm -F @sankyu/react-circle-flags run test:coverage && pnpm -F @sankyu/vue-circle-flags run test:coverage",
-    "prepare": "husky",
+    "prepare": "lefthook install",
     "clean": "rm -rf packages/*/dist packages/*/generated node_modules/.cache"
   },
   "author": "Sankyu Lab <opensource.sankyu-lab@xmsl.dev>",
@@ -65,7 +65,7 @@
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "conventional-commits-parser": "^6.2.1",
     "country-region-data": "^4.1.0",
-    "husky": "^9.1.7",
+    "lefthook": "^2.1.4",
     "prettier": "^3.8.1",
     "semver": "^7.7.4",
     "simple-git": "^3.31.1",
