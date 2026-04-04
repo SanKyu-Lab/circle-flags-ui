@@ -74,6 +74,8 @@ jobs:
       fail-fast: false
       matrix:
         pkg: ${{ fromJSON(needs.detect.outputs.packages_json) }}
+    env:
+      TURBO_CACHE_DIR: .turbo
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
