@@ -8,10 +8,6 @@ on:
         type: string
         required: false
         default: 22.x
-      pnpm-version:
-        type: string
-        required: false
-        default: '10'
       ensure-generated-clean:
         type: boolean
         required: false
@@ -30,11 +26,6 @@ on:
         type: string
         required: false
         default: 22.x
-      pnpm-version:
-        description: pnpm version
-        type: string
-        required: false
-        default: '10'
       ensure-generated-clean:
         description: Fail if generated files changed
         type: boolean
@@ -50,6 +41,8 @@ jobs:
   check:
     name: ${{ matrix.check.name }}
     runs-on: ubuntu-latest
+    env:
+      TURBO_CACHE_DIR: .turbo
     strategy:
       fail-fast: false
       matrix:
@@ -73,7 +66,6 @@ jobs:
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: ${{ inputs.node-version }}
-          pnpm-version: ${{ inputs.pnpm-version }}
 
       - name: Run checks
         run: >
@@ -102,7 +94,6 @@ jobs:
             echo ""
             echo "- Check: \`${{ matrix.check.id }}\`"
             echo "- Node: \`${{ inputs.node-version }}\`"
-            echo "- pnpm: \`${{ inputs.pnpm-version }}\`"
             echo "- ensure-generated-clean: \`${{ inputs.ensure-generated-clean }}\`"
             echo "- upload-coverage: \`${{ inputs.upload-coverage }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
