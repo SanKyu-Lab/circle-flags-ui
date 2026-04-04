@@ -28,7 +28,9 @@
     "postbuild": "node ../../scripts/tasks/postbuild-core.mjs",
     "dev": "tsup --watch",
     "pretypecheck": "node ../../scripts/life-cycle.js ensure-generated --pkg core",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix"
   },
   "repository": {
     "type": "git",

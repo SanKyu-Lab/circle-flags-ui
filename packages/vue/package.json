@@ -23,12 +23,12 @@
   },
   "sideEffects": false,
   "scripts": {
-    "predev": "node ../../scripts/life-cycle.js build-core --pkg vue",
     "dev": "tsup --watch",
-    "prebuild": "node ../../scripts/life-cycle.js build-core --pkg vue",
     "build": "tsup",
     "postbuild": "node ../../scripts/life-cycle.js postbuild --pkg vue",
     "typecheck": "tsc --noEmit",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
