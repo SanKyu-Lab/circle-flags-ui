@@ -1,11 +1,34 @@
 assert_lefthook_installed: true
 
 commit-msg:
+  piped: true
   commands:
-    smart-check:
-      run: node scripts/hooks/smart-check.mjs --hook commit-msg --commit-msg-file {1}
+    commitlint:
+      priority: 1
+      run: pnpm exec commitlint --edit {1}
+    format:
+      priority: 2
+      run: pnpm run format
+    lint:
+      priority: 3
+      glob: "{scripts,packages,examples}/**"
+      run: pnpm run lint:fix
+    typecheck:
+      priority: 4
+      glob: "{packages,examples}/**/*.{ts,tsx}"
+      run: pnpm run typecheck
 
 pre-push:
+  piped: true
   commands:
-    smart-check:
-      run: node scripts/hooks/smart-check.mjs --hook pre-push
+    format:
+      priority: 1
+      run: pnpm run format:check
+    lint:
+      priority: 2
+      glob: "{scripts,packages,examples}/**"
+      run: pnpm run lint
+    typecheck:
+      priority: 3
+      glob: "{packages,examples}/**/*.{ts,tsx}"
+      run: pnpm run typecheck
