@@ -44,6 +44,6 @@
     "postcss": "^8.5.9",
     "starlight-links-validator": "^0.22.0",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   }
 }
