@@ -20,7 +20,7 @@
     "@sankyu/react-circle-flags": "workspace:*",
     "@shikijs/themes": "^4.0.2",
     "@use-gesture/react": "^10.3.1",
-    "astro": "^5.18.0",
+    "astro": "^6.1.5",
     "country-locale-map": "^1.9.12",
     "gsap": "^3.14.2",
     "lucide-react": "0.575.0",
