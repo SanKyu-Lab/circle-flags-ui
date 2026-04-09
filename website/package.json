@@ -15,7 +15,7 @@
     "format": "pnpm -C .. format"
   },
   "dependencies": {
-    "@astrojs/react": "^4.3.0",
+    "@astrojs/react": "^5.0.3",
     "@astrojs/starlight": "^0.38.3",
     "@sankyu/react-circle-flags": "workspace:*",
     "@shikijs/themes": "^4.0.2",
