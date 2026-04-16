@@ -72,6 +72,6 @@
     "semver": "^7.7.4",
     "simple-git": "^3.35.2",
     "turbo": "^2.9.5",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   }
 }
