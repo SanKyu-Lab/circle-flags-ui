@@ -61,17 +61,17 @@
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "commander": "^14.0.3",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "conventional-commits-parser": "^6.4.0",
     "country-region-data": "^4.1.0",
     "lefthook": "^2.1.5",
-    "oxlint": "^1.59.0",
-    "prettier": "^3.8.1",
+    "oxlint": "^1.60.0",
+    "prettier": "^3.8.3",
     "semver": "^7.7.4",
-    "simple-git": "^3.35.2",
-    "turbo": "^2.9.5",
+    "simple-git": "^3.36.0",
+    "turbo": "^2.9.6",
     "typescript": "^5.9.3"
   }
 }
