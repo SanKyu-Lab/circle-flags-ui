@@ -40,9 +40,9 @@
     "@tailwindcss/postcss": "^4.2.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "autoprefixer": "^10.4.27",
-    "postcss": "^8.5.9",
-    "starlight-links-validator": "^0.22.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "starlight-links-validator": "^0.23.0",
     "tailwindcss": "^4.2.1",
     "typescript": "^6.0.2"
   }
