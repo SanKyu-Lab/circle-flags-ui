@@ -15,12 +15,12 @@
     "format": "pnpm -C .. format"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.3",
+    "@astrojs/react": "^5.0.4",
     "@astrojs/starlight": "^0.38.3",
     "@sankyu/react-circle-flags": "workspace:*",
     "@shikijs/themes": "^4.0.2",
     "@use-gesture/react": "^10.3.1",
-    "astro": "^6.1.7",
+    "astro": "^6.1.9",
     "country-locale-map": "^1.9.12",
     "gsap": "^3.15.0",
     "lucide-react": "1.8.0",
@@ -30,7 +30,7 @@
     "sharp": "^0.34.2",
     "shiki": "^4.0.2",
     "starlight-auto-sidebar": "^0.2.0",
-    "starlight-llms-txt": "^0.8.0",
+    "starlight-llms-txt": "^0.8.1",
     "starlight-typedoc": "^0.21.5",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.11.0"
@@ -43,7 +43,7 @@
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.10",
     "starlight-links-validator": "^0.23.0",
-    "tailwindcss": "^4.2.1",
+    "tailwindcss": "^4.2.4",
     "typescript": "^6.0.2"
   }
 }
