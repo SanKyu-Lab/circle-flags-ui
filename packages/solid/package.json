@@ -69,7 +69,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@vitest/coverage-v8": "^4.1.5",
     "esbuild-plugin-solid": "^0.6.0",
-    "jsdom": "^29.1.0",
+    "jsdom": "^29.1.1",
     "solid-js": "^1.9.12",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
