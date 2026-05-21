@@ -70,7 +70,7 @@
     "@vitest/coverage-v8": "^4.1.5",
     "esbuild-plugin-solid": "^0.6.0",
     "jsdom": "^29.1.0",
-    "solid-js": "^1.9.12",
+    "solid-js": "^1.9.13",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vite-plugin-solid": "^2.11.12",
