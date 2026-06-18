@@ -11,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./flags/*": {
+      "types": "./dist/flags/*.d.ts",
+      "import": "./dist/flags/*.mjs",
+      "require": "./dist/flags/*.cjs"
     }
   },
   "files": [

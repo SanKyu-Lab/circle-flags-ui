@@ -103,6 +103,23 @@ export default function App() {
 }
 ```
 
+### Per-flag subpath imports
+
+Each flag is also exposed as its own module under `./flags/<code>` (ISO code,
+lowercase). This guarantees only the imported flag lands in your bundle even
+when your bundler can't tree-shake the barrel (e.g. Turbopack as of Next.js 16):
+
+```tsx
+import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
+import { FlagBr } from '@sankyu/react-circle-flags/flags/br'
+```
+
+> [!NOTE]
+> Named imports from the package root are equivalent under bundlers with
+> whole-barrel tree-shaking (webpack, Rollup, esbuild). Prefer subpaths when
+> you need the guarantee, or when measuring shows barrel imports bloating
+> your chunks.
+
 ### Other usage examples
 
 > [!TIP]

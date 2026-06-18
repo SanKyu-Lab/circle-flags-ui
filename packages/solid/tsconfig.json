@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "target": "ES2020",
     "module": "ESNext",
     "lib": ["ES2020", "DOM"],
@@ -8,6 +9,7 @@
     "strict": true,
     "moduleResolution": "bundler",
     "baseUrl": ".",
+    "rootDir": "../..",
     "paths": {
       "@sankyu/circle-flags-core": ["../core/src"],
       "@sankyu/circle-flags-core/*": ["../core/src/*"],
