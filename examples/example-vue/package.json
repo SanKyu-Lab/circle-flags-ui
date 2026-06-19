@@ -13,7 +13,6 @@
     "startCommand": "npm run dev"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@sankyu/vue-circle-flags": "0.1.6",
     "@tailwindcss/vite": "^4.3.0",
     "tailwindcss": "^4.3.0",

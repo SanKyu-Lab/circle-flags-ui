@@ -13,7 +13,6 @@
     "startCommand": "npm run dev"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@sankyu/solid-circle-flags": "0.1.5",
     "@tailwindcss/vite": "^4.3.0",
     "solid-js": "^1.9.13",

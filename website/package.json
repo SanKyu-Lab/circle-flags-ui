@@ -23,7 +23,7 @@
     "astro": "^6.4.8",
     "country-locale-map": "^1.9.13",
     "gsap": "^3.15.0",
-    "lucide-react": "1.20.0",
+    "lucide-react": "1.21.0",
     "nuqs": "^2.8.9",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

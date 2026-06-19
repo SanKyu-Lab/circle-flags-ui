@@ -17,6 +17,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@sankyu/svelte-circle-flags": ["../../packages/svelte/src/index.ts"]
     }
