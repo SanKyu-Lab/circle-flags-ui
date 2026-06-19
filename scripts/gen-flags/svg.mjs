@@ -134,7 +134,7 @@ export function svgToVueComponent(svg, code) {
     componentCode: `import { defineComponent, h } from 'vue'
 import type { PropType, VNode } from 'vue'
 import type { FlagComponentProps } from '@sankyu/circle-flags-core'
-import { escapeHtml } from '../../src/internal/escape-html'
+import { escapeHtml } from '@sankyu/circle-flags-core'
 
 /**
  * ${emoji} *${countryName}* flag component
@@ -224,7 +224,7 @@ export function svgToSolidComponent(svg, code) {
     componentCode: `import { mergeProps, splitProps } from 'solid-js'
 import type { Component, JSX } from 'solid-js'
 import type { FlagComponentProps } from '@sankyu/circle-flags-core'
-import { escapeHtml } from '../../src/internal/escape-html'
+import { escapeHtml } from '@sankyu/circle-flags-core'
 
 /**
  * ${emoji} *${countryName}* flag component
@@ -316,7 +316,7 @@ export function svgToSvelteComponent(svg, code) {
   return {
     componentCode: `<script lang="ts">
   import type { SVGAttributes } from 'svelte/elements'
-  import { escapeHtml } from '../../src/internal/escape-html'
+  import { escapeHtml } from '@sankyu/circle-flags-core'
 
   /**
    * ${emoji} *${countryName}* flag component

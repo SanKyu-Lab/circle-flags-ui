@@ -72,3 +72,76 @@ export function coerceFlagCode(code: string, fallback: FlagCode = 'xx'): FlagCod
   if (Object.prototype.hasOwnProperty.call(FLAG_REGISTRY, normalized)) return normalized as FlagCode
   return fallback
 }
+
+/**
+ * Escape HTML special characters to prevent XSS when injecting raw HTML.
+ */
+export function escapeHtml(input: string): string {
+  return input.replace(/[&<>"']/g, ch => {
+    switch (ch) {
+      case '&':
+        return '&amp;'
+      case '<':
+        return '&lt;'
+      case '>':
+        return '&gt;'
+      case '"':
+        return '&quot;'
+      case "'":
+        return '&#39;'
+      default:
+        return ch
+    }
+  })
+}
+
+/**
+ * Sanitize an SVG string by removing scripts, event handlers and javascript: URLs.
+ *
+ * Falls back to the raw string in non-DOM environments (e.g. SSR/Node).
+ */
+export function sanitizeSvg(raw: string): string {
+  if (typeof DOMParser === 'undefined') return raw
+
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(raw, 'image/svg+xml')
+  const svg = doc.documentElement
+
+  if (!svg || doc.querySelector('parsererror')) return raw
+
+  svg.querySelectorAll('script,foreignObject').forEach(el => el.remove())
+
+  svg.querySelectorAll('*').forEach(el => {
+    Array.from(el.attributes).forEach(attr => {
+      const name = attr.name.toLowerCase()
+      const value = attr.value.trim().toLowerCase()
+
+      if (name.startsWith('on')) {
+        try {
+          el.removeAttribute(attr.name)
+        } catch {
+          try {
+            el.setAttribute(attr.name, '')
+          } catch {
+            // Ignore in test / non-DOM environments
+          }
+        }
+        return
+      }
+
+      if ((name === 'href' || name === 'xlink:href') && value.startsWith('javascript:')) {
+        try {
+          el.removeAttribute(attr.name)
+        } catch {
+          try {
+            el.setAttribute(attr.name, '')
+          } catch {
+            // Ignore in test / non-DOM environments
+          }
+        }
+      }
+    })
+  })
+
+  return svg.outerHTML
+}

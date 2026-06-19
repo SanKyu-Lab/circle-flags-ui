@@ -16,10 +16,6 @@
     "./flags/*.svelte": {
       "types": "./dist/flags/*.svelte.d.ts",
       "svelte": "./dist/flags/*.svelte"
-    },
-    "./internal/escape-html": {
-      "types": "./dist/internal/escape-html.d.ts",
-      "import": "./dist/internal/escape-html.js"
     }
   },
   "files": [

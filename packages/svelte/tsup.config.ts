@@ -25,7 +25,7 @@ export default defineConfig(options => {
   return [
     {
       ...baseConfig,
-      entry: ['src/index.ts', 'src/internal/escape-html.ts'],
+      entry: ['src/index.ts'],
       clean: !isWatch,
       dts: true,
       format: ['esm', 'cjs'],

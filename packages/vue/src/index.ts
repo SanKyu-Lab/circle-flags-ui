@@ -6,6 +6,7 @@ import {
   coerceFlagCode,
   FlagSizes,
   getSizeName,
+  sanitizeSvg,
   FLAG_REGISTRY,
   type FlagCode,
   type FlagComponentProps as CoreFlagComponentProps,
@@ -13,7 +14,6 @@ import {
 } from '@sankyu/circle-flags-core'
 
 import * as AllFlags from '../generated/flags'
-import { sanitizeSvg } from './internal/sanitize-svg'
 
 export interface FlagComponentProps extends CoreFlagComponentProps {
   width?: number | string

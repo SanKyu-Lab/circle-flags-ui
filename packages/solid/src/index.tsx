@@ -6,6 +6,7 @@ import {
   coerceFlagCode,
   FlagSizes,
   getSizeName,
+  sanitizeSvg,
   FLAG_REGISTRY,
   type FlagCode,
   type FlagComponentProps as CoreFlagComponentProps,
@@ -122,7 +123,7 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
         return response.text()
       })
       .then(svg => {
-        setSvgContent(svg)
+        setSvgContent(sanitizeSvg(svg))
         setError(false)
       })
       .catch(err => {
