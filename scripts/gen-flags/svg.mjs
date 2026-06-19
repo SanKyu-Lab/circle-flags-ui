@@ -269,3 +269,94 @@ export const ${componentName}: Component<${componentName}Props> = (props) => {
     optimizedSize,
   }
 }
+
+/**
+ * Convert SVG string to Svelte 5 component string
+ *
+ * Strategy:
+ * - Keep SVG inner markup as a constant string
+ * - Use `innerHTML` on the <svg> to avoid generating thousands of DOM nodes
+ * - Escape user-provided title to avoid injection
+ */
+export function svgToSvelteComponent(svg, code) {
+  const svgSize = svg.length
+
+  // No optimization needed - upstream circle-flags SVGs are already optimized
+  let processedSvg = svg
+  const optimizedSize = processedSvg.length
+
+  // Remove XML declaration if present
+  processedSvg = processedSvg.replace(/<\?xml.*?\?>\s*/g, '')
+
+  // Extract viewBox and other attributes
+  const viewBoxMatch = processedSvg.match(/viewBox="([^"]+)"/)
+  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 512 512'
+
+  // Extract any existing title for accessibility
+  const titleMatch = processedSvg.match(/<title[^>]*>([^<]*)<\/title>/)
+  const existingTitle = titleMatch ? titleMatch[1] : null
+
+  // Extract the inner content (everything between <svg> tags)
+  let innerContent = processedSvg
+    .replace(/<svg[^>]*>/, '')
+    .replace(/<\/svg>/, '')
+    .trim()
+
+  // Remove existing title to avoid duplication
+  innerContent = innerContent.replace(/<title[^>]*>[^<]*<\/title>/, '').trim()
+
+  const componentName = codeToComponentName(code)
+  const countryName = getCountryName(code)
+  const emoji = codeToEmoji(code)
+  const upperCode = code.toUpperCase()
+
+  const innerStringLiteral = JSON.stringify(innerContent)
+  const defaultTitle = existingTitle ? `'${existingTitle}'` : `'${upperCode}'`
+
+  return {
+    componentCode: `<script lang="ts">
+  import type { SVGAttributes } from 'svelte/elements'
+  import { escapeHtml } from '../../src/internal/escape-html'
+
+  /**
+   * ${emoji} *${countryName}* flag component
+   *
+   * @example
+   * <${componentName} width={64} height={64} class="flag-icon" />
+   */
+  interface Props extends Omit<SVGAttributes<SVGSVGElement>, 'width' | 'height'> {
+    width?: number | string
+    height?: number | string
+    className?: string
+    title?: string
+  }
+
+  let {
+    width = 48,
+    height = 48,
+    class: classProp = undefined,
+    className: classNameProp = undefined,
+    title = ${defaultTitle},
+    ...rest
+  }: Props = $props()
+
+  const finalClass = $derived(classNameProp ?? classProp)
+  const SVG_BODY: string = ${innerStringLiteral}
+</script>
+
+<svg
+  {...rest}
+  viewBox="${viewBox}"
+  {width}
+  {height}
+  class={finalClass}
+  role="img"
+  aria-label={title}
+>
+  {@html '<title>' + escapeHtml(title) + '</title>' + SVG_BODY}
+</svg>
+`,
+    svgSize,
+    optimizedSize,
+  }
+}

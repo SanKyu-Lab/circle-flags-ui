@@ -22,6 +22,7 @@
     "build:react": "turbo run build --filter=@sankyu/react-circle-flags",
     "build:vue": "turbo run build --filter=@sankyu/vue-circle-flags",
     "build:solid": "turbo run build --filter=@sankyu/solid-circle-flags",
+    "build:svelte": "turbo run build --filter=@sankyu/svelte-circle-flags",
     "dev": "pnpm -r --if-present run dev",
     "dev:package": "turbo run dev --filter='./packages/*'",
     "dev:website": "pnpm -F './website' run dev",
@@ -39,6 +40,7 @@
     "test:react": "turbo run test --filter=@sankyu/react-circle-flags",
     "test:vue": "turbo run test --filter=@sankyu/vue-circle-flags",
     "test:solid": "turbo run test --filter=@sankyu/solid-circle-flags",
+    "test:svelte": "turbo run test --filter=@sankyu/svelte-circle-flags",
     "test:coverage": "turbo run test:coverage --filter='./packages/*'",
     "prepare": "lefthook install",
     "clean": "rm -rf packages/*/dist packages/*/generated node_modules/.cache"
