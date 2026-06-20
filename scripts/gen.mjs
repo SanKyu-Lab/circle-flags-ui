@@ -1,6 +1,13 @@
 import { existsSync } from 'node:fs'
 import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
+import {
+  CORE_GENERATED_DIR,
+  REACT_OUTPUT_DIR,
+  SOLID_OUTPUT_DIR,
+  SVELTE_OUTPUT_DIR,
+  VUE_OUTPUT_DIR,
+} from './gen-flags/constants.mjs'
 import { generateFlags } from './gen-flags.mjs'
 import { isMain } from './lib/is-main.mjs'
 import { syncExampleShared } from './sync-example-shared.mjs'
@@ -8,26 +15,35 @@ import { repoRootFromImportMeta } from './lib/repo-root.mjs'
 
 const repoRoot = repoRootFromImportMeta(import.meta.url)
 
-const hasAnyGeneratedFlags = async () => {
-  const reactFlagsDir = join(repoRoot, 'packages/react/generated/flags')
-  const reactIndex = join(reactFlagsDir, 'index.ts')
-  if (!existsSync(reactFlagsDir) || !existsSync(reactIndex)) return false
-
-  const entries = await readdir(reactFlagsDir)
+const hasReactFlags = async () => {
+  const dir = join(repoRoot, REACT_OUTPUT_DIR)
+  const index = join(dir, 'index.ts')
+  if (!existsSync(dir) || !existsSync(index)) return false
+  const entries = await readdir(dir)
   return entries.some(name => name.endsWith('.tsx') && name !== 'index.ts')
 }
 
+const hasFrameworkFlags = (dir, ext) => {
+  const index = join(repoRoot, dir, `index.${ext}`)
+  return existsSync(index)
+}
+
 const hasCoreRegistry = () => {
-  const registry = join(repoRoot, 'packages/core/src/generated/registry.ts')
-  return existsSync(registry)
+  return existsSync(join(repoRoot, CORE_GENERATED_DIR, 'registry.ts'))
+}
+
+const hasAllGeneratedFlags = async () => {
+  const hasReact = await hasReactFlags()
+  const hasVue = hasFrameworkFlags(VUE_OUTPUT_DIR, 'ts')
+  const hasSolid = hasFrameworkFlags(SOLID_OUTPUT_DIR, 'ts')
+  const hasSvelte = hasFrameworkFlags(SVELTE_OUTPUT_DIR, 'ts')
+  return hasReact && hasVue && hasSolid && hasSvelte && hasCoreRegistry()
 }
 
 const main = async () => {
   await syncExampleShared()
 
-  const hasFlags = await hasAnyGeneratedFlags()
-  const hasCore = hasCoreRegistry()
-  if (hasFlags && hasCore) {
+  if (await hasAllGeneratedFlags()) {
     console.log('✅ Detected generated flags, skipping generation')
     return
   }
