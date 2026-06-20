@@ -25,6 +25,6 @@
     "verbatimModuleSyntax": true,
     "types": ["svelte", "node"]
   },
-  "include": ["src/**/*", "generated/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
 }

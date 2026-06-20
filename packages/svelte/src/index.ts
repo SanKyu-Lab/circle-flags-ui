@@ -33,6 +33,6 @@ export type { BuildMeta } from './meta'
 
 export type CountryCode = FlagCode
 
-export * from '../generated/flags'
+export * from './flags'
 
 export { FLAG_REGISTRY, coerceFlagCode, isFlagCode, type FlagCode } from '@sankyu/circle-flags-core'

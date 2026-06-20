@@ -41,6 +41,7 @@ lerna-debug.log*
 circle-flags/
 generated/
 **/generated/
+packages/svelte/src/flags/
 
 # Generated API docs
 docs/

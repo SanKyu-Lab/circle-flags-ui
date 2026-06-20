@@ -2,7 +2,7 @@
   import type { Component } from 'svelte'
   import type { SVGAttributes } from 'svelte/elements'
   import { coerceFlagCode, FLAG_REGISTRY } from '@sankyu/circle-flags-core'
-  import * as AllFlags from '../generated/flags'
+  import * as AllFlags from './flags'
 
   interface Props extends Omit<SVGAttributes<SVGSVGElement>, 'width' | 'height' | 'title'> {
     code: string
