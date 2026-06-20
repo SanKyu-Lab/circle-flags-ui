@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 export const postbuildSvelte = () => {
@@ -35,4 +35,19 @@ export const postbuildSvelte = () => {
     unlinkSync(dctsPath)
     console.log('✅ Removed redundant index.d.cts')
   }
+
+  // Declaration maps reference the unpublished src/generated directories, so
+  // they are useless in the npm tarball and only bloat the package. Remove them.
+  const removeDtsMaps = dir => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = join(dir, entry.name)
+      if (entry.isDirectory()) {
+        removeDtsMaps(fullPath)
+      } else if (entry.name.endsWith('.d.ts.map')) {
+        unlinkSync(fullPath)
+      }
+    }
+  }
+  removeDtsMaps(distDir)
+  console.log('✅ Removed stale .d.ts.map files')
 }
