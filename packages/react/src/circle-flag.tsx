@@ -56,10 +56,12 @@ export const CircleFlag = ({
       return
     }
 
+    const controller = new AbortController()
+
     const fetchSvg = async () => {
       try {
         const url = `${cdnUrl.replace(/\/$/, '')}/${normalizedCode}.svg`
-        const response = await fetch(url)
+        const response = await fetch(url, { signal: controller.signal })
 
         if (!response.ok) {
           throw new Error(`Failed to load flag: ${response.statusText}`)
@@ -70,12 +72,19 @@ export const CircleFlag = ({
         setSvgContent(sanitizedSvg)
         setError(false)
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
         console.warn(`Failed to load flag for country code: ${finalCountryCode}`, err)
         setError(true)
       }
     }
 
-    fetchSvg()
+    void fetchSvg()
+
+    return () => {
+      controller.abort()
+    }
   }, [finalCountryCode, cdnUrl, normalizedCode])
 
   if (!svgContent && !error) {

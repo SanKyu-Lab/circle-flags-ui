@@ -59,9 +59,10 @@
     error = false
     svgContent = null
 
+    const controller = new AbortController()
     const url = `${cdnUrl.replace(/\/$/, '')}/${normalizedCode}.svg`
 
-    fetch(url)
+    fetch(url, { signal: controller.signal })
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to load flag: ${response.statusText}`)
@@ -73,6 +74,9 @@
         error = false
       })
       .catch(err => {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
         console.warn(`Failed to load flag for country code: ${finalCode}`, err)
         svgContent = null
         error = true
@@ -80,6 +84,10 @@
       .finally(() => {
         loading = false
       })
+
+    return () => {
+      controller.abort()
+    }
   })
 </script>
 
