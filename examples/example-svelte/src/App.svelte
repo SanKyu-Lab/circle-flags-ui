@@ -58,7 +58,7 @@
   }))
 
   const PKG_NAME = '@sankyu/svelte-circle-flags'
-  const meta = buildMeta()
+  const meta = buildMeta
 </script>
 
 <main class="min-h-screen bg-gray-50 p-6">

@@ -19,7 +19,8 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@sankyu/svelte-circle-flags": ["../../packages/svelte/src/index.ts"]
+      "@sankyu/svelte-circle-flags": ["../../packages/svelte/src/index.ts"],
+      "@sankyu/svelte-circle-flags/*": ["../../packages/svelte/src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.svelte"]
