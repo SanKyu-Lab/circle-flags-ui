@@ -277,7 +277,13 @@ ${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
 // • Size reduction: ${(((totalOriginalSize - totalOptimizedSize) / totalOriginalSize) * 100).toFixed(1)}%
 //
 
-${flags.map(f => `export { default as ${f.componentName} } from './${f.code}.svelte'`).join('\n')}
+${flags
+  .map(f =>
+    f.aliasOf
+      ? `export { ${f.componentName} } from './${f.code}.svelte'`
+      : `export { default as ${f.componentName} } from './${f.code}.svelte'`
+  )
+  .join('\n')}
 `
 
   await writeFile(`${SVELTE_OUTPUT_DIR}/index.ts`, svelteIndexContent, 'utf-8')
