@@ -36,3 +36,5 @@ export type CountryCode = FlagCode
 export * from './flags'
 
 export { FLAG_REGISTRY, coerceFlagCode, isFlagCode, type FlagCode } from '@sankyu/circle-flags-core'
+
+export type { FlagComponentProps } from '@sankyu/circle-flags-core'
