@@ -172,13 +172,13 @@ Prefer named imports or `DynamicFlag` instead.
 
 ### Props
 
-| Prop        | Type               | Default | Description                                |
-| ----------- | ------------------ | ------- | ------------------------------------------ |
-| `width`     | `number \| string` | `48`    | Width of the flag                          |
-| `height`    | `number \| string` | `48`    | Height of the flag                         |
-| `title`     | `string`           | code    | Accessible title for the SVG               |
-| `class`     | `string`           | -       | Standard Svelte class binding              |
-| `className` | `string`           | -       | Optional className alias                   |
+| Prop        | Type               | Default | Description                   |
+| ----------- | ------------------ | ------- | ----------------------------- |
+| `width`     | `number \| string` | `48`    | Width of the flag             |
+| `height`    | `number \| string` | `48`    | Height of the flag            |
+| `title`     | `string`           | code    | Accessible title for the SVG  |
+| `class`     | `string`           | -       | Standard Svelte class binding |
+| `className` | `string`           | -       | Optional className alias      |
 
 ### Size Presets
 
