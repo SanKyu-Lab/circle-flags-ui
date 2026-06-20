@@ -1,23 +1,37 @@
-import { describe, expect, it } from 'vitest'
-import { render } from '@testing-library/svelte'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { render, waitFor } from '@testing-library/svelte'
 import {
   CircleFlag,
   DynamicFlag,
   FlagUs,
   FlagGb,
   FlagJp,
+  FlagAc,
   FLAG_REGISTRY,
   FlagUtils,
   buildMeta,
 } from './index'
 
 describe('@sankyu/svelte-circle-flags', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('exports CircleFlag, DynamicFlag and named flags', () => {
     expect(CircleFlag).toBeDefined()
     expect(DynamicFlag).toBeDefined()
     expect(FlagUs).toBeDefined()
     expect(FlagGb).toBeDefined()
     expect(FlagJp).toBeDefined()
+    expect(FlagAc).toBeDefined()
+  })
+
+  it('renders an alias flag component', () => {
+    const { container } = render(FlagAc, { props: { width: 64, height: 64 } })
+    const svg = container.querySelector('svg')
+    expect(svg).toBeTruthy()
+    expect(svg?.getAttribute('viewBox')).toBe('0 0 512 512')
+    expect(svg?.querySelector('title')?.textContent).toBe('SH-AC')
   })
 
   it('exports registry and utilities', () => {
@@ -50,5 +64,74 @@ describe('@sankyu/svelte-circle-flags', () => {
     const svg = container.querySelector('svg')
     expect(svg).toBeTruthy()
     expect(svg?.querySelector('title')?.textContent).toBe('NOT-A-CODE')
+  })
+
+  describe('CircleFlag', () => {
+    it('loads and renders an SVG from the CDN', async () => {
+      const svg = '<svg><title>US</title><circle /></svg>'
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({ ok: true, text: () => Promise.resolve(svg) })
+      ) as unknown as typeof fetch
+
+      const { container } = render(CircleFlag, { props: { countryCode: 'us' } })
+      await waitFor(() => {
+        expect(container.querySelector('div')?.innerHTML).toContain('<svg')
+      })
+      expect(container.querySelector('div')?.innerHTML).toContain('US')
+    })
+
+    it('shows fallback when the CDN request fails', async () => {
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({ ok: false, statusText: 'Not Found' })
+      ) as unknown as typeof fetch
+
+      const { container } = render(CircleFlag, { props: { countryCode: 'xx' } })
+      await waitFor(() => {
+        expect(container.querySelector('text')?.textContent).toBe('XX')
+      })
+    })
+
+    it('aborts in-flight requests on unmount', async () => {
+      const abortSpy = vi.fn()
+      const fetchNever = vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          text: () =>
+            new Promise(() => {
+              // never resolves
+            }),
+        })
+      ) as unknown as typeof fetch
+
+      globalThis.fetch = fetchNever
+      globalThis.AbortController = class extends AbortController {
+        abort(reason) {
+          abortSpy(reason)
+          super.abort(reason)
+        }
+      } as unknown as typeof AbortController
+
+      const { unmount } = render(CircleFlag, { props: { countryCode: 'us' } })
+      unmount()
+      expect(abortSpy).toHaveBeenCalled()
+    })
+
+    it('sanitizes SVG containing a script tag', async () => {
+      const svg = '<svg><script>alert(1)</script><title>US</title></svg>'
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({ ok: true, text: () => Promise.resolve(svg) })
+      ) as unknown as typeof fetch
+
+      const { container } = render(CircleFlag, { props: { countryCode: 'us' } })
+      await waitFor(() => {
+        expect(container.querySelector('div')?.innerHTML).toContain('US')
+      })
+      expect(container.querySelector('div')?.innerHTML).not.toContain('<script>')
+    })
+
+    it('renders fallback for an empty country code', () => {
+      const { container } = render(CircleFlag, { props: { countryCode: '   ' } })
+      expect(container.querySelector('text')?.textContent).toBe('')
+    })
   })
 })
