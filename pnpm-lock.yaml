@@ -137,8 +137,8 @@ importers:
   examples/example-svelte:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: 1.5.4
-        version: 1.5.4
+        specifier: ^1.6.5
+        version: link:../../packages/core
       '@sankyu/svelte-circle-flags':
         specifier: 0.0.1-beta.0
         version: link:../../packages/svelte
@@ -214,7 +214,7 @@ importers:
   packages/react:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.5.4
+        specifier: ^1.6.5
         version: link:../core
     devDependencies:
       '@babel/core':
@@ -266,7 +266,7 @@ importers:
   packages/solid:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.5.4
+        specifier: ^1.6.5
         version: link:../core
     devDependencies:
       '@testing-library/jest-dom':
@@ -300,12 +300,9 @@ importers:
   packages/svelte:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.5.4
+        specifier: ^1.6.5
         version: link:../core
     devDependencies:
-      '@sveltejs/package':
-        specifier: ^2.3.10
-        version: 2.5.8(svelte@5.56.3(@typescript-eslint/types@8.59.1))(typescript@5.9.3)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^6.0.0
         version: 6.2.4(svelte@5.56.3(@typescript-eslint/types@8.59.1))(vite@7.3.5(@types/node@25.6.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
@@ -315,9 +312,6 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.0.18
         version: 4.1.5(vitest@4.1.5)
-      esbuild-svelte:
-        specifier: ^0.9.5
-        version: 0.9.5(esbuild@0.27.7)(svelte@5.56.3(@typescript-eslint/types@8.59.1))
       jsdom:
         specifier: ^28.1.0
         version: 28.1.0
@@ -339,9 +333,6 @@ importers:
       tsdown:
         specifier: ^0.22.3
         version: 0.22.3(tsx@4.21.0)(typescript@5.9.3)(vue-tsc@3.2.7(typescript@5.9.3))
-      tsup:
-        specifier: ^8.5.1
-        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -352,7 +343,7 @@ importers:
   packages/vue:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.5.4
+        specifier: ^1.6.5
         version: link:../core
     devDependencies:
       '@vitest/coverage-v8':
@@ -2944,9 +2935,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@sankyu/circle-flags-core@1.5.4':
-    resolution: {integrity: sha512-U0T09zKxhx3RVuxJ2/fAQrLiY0YMm+eOIAR+451P+KkbYNFrABKR1Bf1Z0V5cwIijqba9th3FvpqYbcNlSpBQA==}
-
   '@shikijs/core@4.2.0':
     resolution: {integrity: sha512-Hc87Ab1Ld/vEbZRCbwx344I5v+4RU8CVToUTRkqXL1+TjbuOp9U5Xa0M23V4GEWHxVn+yO5otb+HkQVm3ptWQQ==}
     engines: {node: '>=20'}
@@ -3018,13 +3006,6 @@ packages:
   '@sveltejs/load-config@0.1.1':
     resolution: {integrity: sha512-BXXm+VOH/9X4N7Dd1iZ2MqA1h7M+9i2noI8QYuLDY8QcN2WHYn7D/VK/+IJNfcAmRw7ACNJ538UT9GXIhnBTiA==}
     engines: {node: '>= 18.0.0'}
-
-  '@sveltejs/package@2.5.8':
-    resolution: {integrity: sha512-zeBbsXYvHiBu56v4gJaGQoEHzg96w0E1j3dOMX8vo56s6vI5eQ57ZEZhudjwjnegnVitRRu5MrmhO0eNvaonIw==}
-    engines: {node: ^16.14 || >=18}
-    hasBin: true
-    peerDependencies:
-      svelte: ^3.44.0 || ^4.0.0 || ^5.0.0-next.1
 
   '@sveltejs/vite-plugin-svelte-inspector@5.0.2':
     resolution: {integrity: sha512-TZzRTcEtZffICSAoZGkPSl6Etsj2torOVrx6Uw0KpXxrec9Gg6jFWQ60Q3+LmNGfZSxHRCZL7vXVZIWmuV50Ig==}
@@ -4256,13 +4237,6 @@ packages:
     peerDependencies:
       esbuild: '>=0.20'
       solid-js: '>= 1.0'
-
-  esbuild-svelte@0.9.5:
-    resolution: {integrity: sha512-16FUSj64aiS28CCxYeK3hVxCyU4PwGBSkeArawAtnWSV7l0Gc+frIOP88MNj8Q7tDAGyEJAHT6OpOvM24BG46w==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      esbuild: '>=0.17.0'
-      svelte: '>=4.2.1 <6'
 
   esbuild@0.25.12:
     resolution: {integrity: sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==}
@@ -9317,8 +9291,6 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.61.1':
     optional: true
 
-  '@sankyu/circle-flags-core@1.5.4': {}
-
   '@shikijs/core@4.2.0':
     dependencies:
       '@shikijs/primitive': 4.2.0
@@ -9398,17 +9370,6 @@ snapshots:
       acorn: 8.16.0
 
   '@sveltejs/load-config@0.1.1': {}
-
-  '@sveltejs/package@2.5.8(svelte@5.56.3(@typescript-eslint/types@8.59.1))(typescript@5.9.3)':
-    dependencies:
-      chokidar: 5.0.0
-      kleur: 4.1.5
-      sade: 1.8.1
-      semver: 7.8.4
-      svelte: 5.56.3(@typescript-eslint/types@8.59.1)
-      svelte2tsx: 0.7.56(svelte@5.56.3(@typescript-eslint/types@8.59.1))(typescript@5.9.3)
-    transitivePeerDependencies:
-      - typescript
 
   '@sveltejs/vite-plugin-svelte-inspector@5.0.2(@sveltejs/vite-plugin-svelte@6.2.4(rolldown-vite@7.2.5(@types/node@25.6.0)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.3))(svelte@5.56.3(@typescript-eslint/types@8.59.1)))(rolldown-vite@7.2.5(@types/node@25.6.0)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.3))(svelte@5.56.3(@typescript-eslint/types@8.59.1))':
     dependencies:
@@ -10773,12 +10734,6 @@ snapshots:
       solid-js: 1.9.13
     transitivePeerDependencies:
       - supports-color
-
-  esbuild-svelte@0.9.5(esbuild@0.27.7)(svelte@5.56.3(@typescript-eslint/types@8.59.1)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      esbuild: 0.27.7
-      svelte: 5.56.3(@typescript-eslint/types@8.59.1)
 
   esbuild@0.25.12:
     optionalDependencies:
@@ -13570,34 +13525,6 @@ snapshots:
 
   tslib@2.8.1:
     optional: true
-
-  tsup@8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.3):
-    dependencies:
-      bundle-require: 5.1.0(esbuild@0.27.2)
-      cac: 6.7.14
-      chokidar: 4.0.3
-      consola: 3.4.2
-      debug: 4.4.3
-      esbuild: 0.27.2
-      fix-dts-default-cjs-exports: 1.0.1
-      joycon: 3.1.1
-      picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.21.0)(yaml@2.8.3)
-      resolve-from: 5.0.0
-      rollup: 4.55.1
-      source-map: 0.7.6
-      sucrase: 3.35.1
-      tinyexec: 0.3.2
-      tinyglobby: 0.2.15
-      tree-kill: 1.2.2
-    optionalDependencies:
-      postcss: 8.5.15
-      typescript: 5.9.3
-    transitivePeerDependencies:
-      - jiti
-      - supports-color
-      - tsx
-      - yaml
 
   tsup@8.5.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.21.0)(typescript@6.0.3)(yaml@2.8.3):
     dependencies:

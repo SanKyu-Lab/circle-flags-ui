@@ -13,7 +13,7 @@
     "startCommand": "npm run dev"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "1.5.4",
+    "@sankyu/circle-flags-core": "^1.6.5",
     "@sankyu/svelte-circle-flags": "0.0.1-beta.0",
     "@tailwindcss/vite": "^4.2.1",
     "svelte": "^5.28.6",

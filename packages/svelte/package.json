@@ -62,14 +62,12 @@
     "svelte": ">=5.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.5.4"
+    "@sankyu/circle-flags-core": "^1.6.5"
   },
   "devDependencies": {
-    "@sveltejs/package": "^2.3.10",
     "@sveltejs/vite-plugin-svelte": "^6.0.0",
     "@testing-library/svelte": "^5.2.7",
     "@vitest/coverage-v8": "^4.0.18",
-    "esbuild-svelte": "^0.9.5",
     "jsdom": "^28.1.0",
     "rollup-plugin-svelte": "^7.2.3",
     "svelte": "^5.28.6",
@@ -77,7 +75,6 @@
     "svelte-preprocess": "^6.0.5",
     "svelte2tsx": "^0.7.56",
     "tsdown": "^0.22.3",
-    "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   }

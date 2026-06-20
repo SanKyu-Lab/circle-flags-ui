@@ -57,7 +57,7 @@
     "react": ">=16.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.5.4"
+    "@sankyu/circle-flags-core": "^1.6.5"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
