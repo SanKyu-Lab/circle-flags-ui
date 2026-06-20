@@ -5,7 +5,7 @@ prev: false
 title: "CircleFlagProps"
 ---
 
-Defined in: [react/src/circle-flag.tsx:62](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L62)
+Defined in: [react/src/circle-flag.tsx:16](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L16)
 
 :::caution[Deprecated]
 `CircleFlag` is deprecated and not recommended for new code.
@@ -26,20 +26,20 @@ Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag
 ### ~~cdnUrl?~~
 
 ```ts
-optional cdnUrl: string;
+optional cdnUrl?: string;
 ```
 
-Defined in: [react/src/circle-flag.tsx:66](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L66)
+Defined in: [react/src/circle-flag.tsx:20](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L20)
 
 ***
 
 ### ~~code?~~
 
 ```ts
-optional code: string;
+optional code?: string;
 ```
 
-Defined in: [react/src/circle-flag.tsx:65](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L65)
+Defined in: [react/src/circle-flag.tsx:19](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L19)
 
 :::caution[Deprecated]
 Use 'countryCode' instead
@@ -50,17 +50,17 @@ Use 'countryCode' instead
 ### ~~countryCode?~~
 
 ```ts
-optional countryCode: string;
+optional countryCode?: string;
 ```
 
-Defined in: [react/src/circle-flag.tsx:63](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L63)
+Defined in: [react/src/circle-flag.tsx:17](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L17)
 
 ***
 
 ### ~~title?~~
 
 ```ts
-optional title: string;
+optional title?: string;
 ```
 
-Defined in: [react/src/circle-flag.tsx:67](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L67)
+Defined in: [react/src/circle-flag.tsx:21](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/circle-flag.tsx#L21)

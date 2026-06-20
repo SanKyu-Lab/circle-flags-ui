@@ -19,7 +19,7 @@ Defined in: [react/src/flag-utils.ts:12](https://github.com/SanKyu-Lab/circle-fl
 
 ## Type Declaration
 
-### formatCountryCode()
+### formatCountryCode
 
 ```ts
 formatCountryCode: (code) => string;
@@ -35,7 +35,7 @@ formatCountryCode: (code) => string;
 
 `string`
 
-### getComponentName()
+### getComponentName
 
 ```ts
 getComponentName: (code) => string;
@@ -51,7 +51,7 @@ getComponentName: (code) => string;
 
 `string`
 
-### getSizeName()
+### getSizeName
 
 ```ts
 getSizeName: (pixels) => FlagSizeName | null;
@@ -67,7 +67,7 @@ getSizeName: (pixels) => FlagSizeName | null;
 
 `FlagSizeName` \| `null`
 
-### isValidCountryCode()
+### isValidCountryCode
 
 ```ts
 isValidCountryCode: (code) => boolean;
