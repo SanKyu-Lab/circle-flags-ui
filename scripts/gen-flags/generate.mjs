@@ -8,9 +8,15 @@ import {
   FLAGS_DIR,
   REACT_OUTPUT_DIR,
   SOLID_OUTPUT_DIR,
+  SVELTE_OUTPUT_DIR,
   VUE_OUTPUT_DIR,
 } from './constants.mjs'
-import { svgToReactComponent, svgToSolidComponent, svgToVueComponent } from './svg.mjs'
+import {
+  svgToReactComponent,
+  svgToSolidComponent,
+  svgToSvelteComponent,
+  svgToVueComponent,
+} from './svg.mjs'
 import { codeToComponentName } from './utils.mjs'
 import { repoRootFromImportMeta } from '../lib/repo-root.mjs'
 
@@ -50,15 +56,21 @@ function ensureCircleFlagsRepo() {
   console.log('✓ circle-flags repository is ready\n')
 }
 
-const writeComponentsFromSvg = async (svgPath, { reactPath, vuePath, solidPath }, code) => {
+const writeComponentsFromSvg = async (
+  svgPath,
+  { reactPath, vuePath, solidPath, sveltePath },
+  code
+) => {
   const svgContent = await readFile(svgPath, 'utf-8')
   const react = svgToReactComponent(svgContent, code)
   const vue = svgToVueComponent(svgContent, code)
   const solid = svgToSolidComponent(svgContent, code)
+  const svelte = svgToSvelteComponent(svgContent, code)
 
   await writeFile(reactPath, react.componentCode, 'utf-8')
   await writeFile(vuePath, vue.componentCode, 'utf-8')
   await writeFile(solidPath, solid.componentCode, 'utf-8')
+  await writeFile(sveltePath, svelte.componentCode, 'utf-8')
 
   return {
     svgSize: react.svgSize,
@@ -67,13 +79,16 @@ const writeComponentsFromSvg = async (svgPath, { reactPath, vuePath, solidPath }
 }
 
 const writeAliasComponents = async (
-  { reactPath, vuePath, solidPath },
+  { reactPath, vuePath, solidPath, sveltePath },
   { componentName, targetCode, targetComponentName }
 ) => {
   const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
   await writeFile(reactPath, aliasContent, 'utf-8')
   await writeFile(vuePath, aliasContent, 'utf-8')
   await writeFile(solidPath, aliasContent, 'utf-8')
+
+  const svelteAliasContent = `<script module lang="ts">\n  export { default as ${componentName} } from './${targetCode}.svelte'\n</script>\n`
+  await writeFile(sveltePath, svelteAliasContent, 'utf-8')
 }
 
 /**
@@ -88,6 +103,7 @@ export async function generateFlags() {
   await mkdir(REACT_OUTPUT_DIR, { recursive: true })
   await mkdir(VUE_OUTPUT_DIR, { recursive: true })
   await mkdir(SOLID_OUTPUT_DIR, { recursive: true })
+  await mkdir(SVELTE_OUTPUT_DIR, { recursive: true })
   await mkdir(CORE_GENERATED_DIR, { recursive: true })
 
   const files = await readdir(FLAGS_DIR)
@@ -106,6 +122,7 @@ export async function generateFlags() {
     const reactOutputPath = `${REACT_OUTPUT_DIR}/${code}.tsx`
     const vueOutputPath = `${VUE_OUTPUT_DIR}/${code}.ts`
     const solidOutputPath = `${SOLID_OUTPUT_DIR}/${code}.tsx`
+    const svelteOutputPath = `${SVELTE_OUTPUT_DIR}/${code}.svelte`
 
     try {
       const stats = await lstat(svgPath)
@@ -123,6 +140,7 @@ export async function generateFlags() {
               reactPath: reactOutputPath,
               vuePath: vueOutputPath,
               solidPath: solidOutputPath,
+              sveltePath: svelteOutputPath,
             },
             { componentName, targetCode, targetComponentName }
           )
@@ -146,6 +164,7 @@ export async function generateFlags() {
           reactPath: reactOutputPath,
           vuePath: vueOutputPath,
           solidPath: solidOutputPath,
+          sveltePath: svelteOutputPath,
         },
         code
       )
@@ -247,6 +266,28 @@ ${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
 
   await writeFile(`${SOLID_OUTPUT_DIR}/index.ts`, solidIndexContent, 'utf-8')
   console.log('✅ Generated solid generated/flags/index.ts\n')
+
+  const svelteIndexContent = `// Auto-generated flag exports for tree-shaking
+// Each flag can be imported individually: import { FlagUs } from '@sankyu/svelte-circle-flags'
+//
+// 📊 Package Statistics:
+// • Total flags: ${flags.length}
+// • Original SVG size: ${(totalOriginalSize / 1024).toFixed(1)}KB
+// • Optimized size: ${(totalOptimizedSize / 1024).toFixed(1)}KB
+// • Size reduction: ${(((totalOriginalSize - totalOptimizedSize) / totalOriginalSize) * 100).toFixed(1)}%
+//
+
+${flags
+  .map(f =>
+    f.aliasOf
+      ? `export { ${f.componentName} } from './${f.code}.svelte'`
+      : `export { default as ${f.componentName} } from './${f.code}.svelte'`
+  )
+  .join('\n')}
+`
+
+  await writeFile(`${SVELTE_OUTPUT_DIR}/index.ts`, svelteIndexContent, 'utf-8')
+  console.log('✅ Generated svelte generated/flags/index.ts\n')
 
   const aliases = {}
   for (const flag of flags) {

@@ -14,7 +14,7 @@
     "startCommand": "npm run dev"
   },
   "dependencies": {
-    "@sankyu/react-circle-flags": "1.6.4",
+    "@sankyu/react-circle-flags": "1.6.7",
     "@tailwindcss/vite": "^4.3.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

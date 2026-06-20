@@ -7,6 +7,7 @@ node_modules/
 dist/
 build/
 *.tsbuildinfo
+.svelte-kit/
 
 # Testing
 coverage/
@@ -41,6 +42,7 @@ lerna-debug.log*
 circle-flags/
 generated/
 **/generated/
+packages/svelte/src/flags/
 
 # Generated API docs
 docs/

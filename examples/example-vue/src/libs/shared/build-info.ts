@@ -1,7 +1,7 @@
 // DO NOT CHANGE ANY PART OF THIS FILE
 // This file is auto-generated from examples/shared/lib.
 
-export type FrameworkReleaseTag = 'react' | 'vue' | 'solid'
+export type FrameworkReleaseTag = 'react' | 'vue' | 'solid' | 'svelte'
 export type FrameworkName = FrameworkReleaseTag
 
 const DEFAULT_REPO = 'SanKyu-Lab/circle-flags-ui'
@@ -10,6 +10,7 @@ const FRAMEWORK_LOGO_FILE = {
   react: 'react.svg',
   vue: 'vue.svg',
   solid: 'solidjs.svg',
+  svelte: 'svelte.svg',
 } as const
 
 export function formatBuiltAt(builtTimestamp: number, locale: string = 'zh-CN'): string {

@@ -6,6 +6,7 @@ import {
   coerceFlagCode,
   FlagSizes,
   getSizeName,
+  sanitizeSvg,
   FLAG_REGISTRY,
   type FlagCode,
   type FlagComponentProps as CoreFlagComponentProps,
@@ -13,7 +14,6 @@ import {
 } from '@sankyu/circle-flags-core'
 
 import * as AllFlags from '../generated/flags'
-import { sanitizeSvg } from './internal/sanitize-svg'
 
 export interface FlagComponentProps extends CoreFlagComponentProps {
   width?: number | string
@@ -155,6 +155,7 @@ const _CircleFlag = defineComponent({
   setup(props, { attrs }): () => VNode {
     const svgContent = ref<string | null>(null)
     const error = ref(false)
+    let currentController: AbortController | null = null
 
     const finalCountryCode = computed(() => props.countryCode ?? props.code ?? '')
     const normalizedCode = computed(() => finalCountryCode.value.toLowerCase())
@@ -169,9 +170,12 @@ const _CircleFlag = defineComponent({
         return
       }
 
+      currentController?.abort()
+      currentController = new AbortController()
+
       try {
         const url = `${props.cdnUrl.replace(/\/$/, '')}/${normalizedCode.value}.svg`
-        const response = await fetch(url)
+        const response = await fetch(url, { signal: currentController.signal })
         if (!response.ok) {
           throw new Error(`Failed to load flag: ${response.statusText}`)
         }
@@ -180,6 +184,9 @@ const _CircleFlag = defineComponent({
         svgContent.value = sanitizeSvg(svg)
         error.value = false
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
         console.warn(`Failed to load flag for country code: ${finalCountryCode.value}`, err)
         svgContent.value = null
         error.value = true

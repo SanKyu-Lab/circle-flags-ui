@@ -11,11 +11,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    },
-    "./internal/escape-html": {
-      "types": "./dist/internal/escape-html.d.ts",
-      "import": "./dist/internal/escape-html.mjs",
-      "require": "./dist/internal/escape-html.cjs"
     }
   },
   "files": [
@@ -52,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SanKyu-Lab/circle-flags-ui.git",
+    "url": "git+https://github.com/SanKyu-Lab/circle-flags-ui.git",
     "directory": "packages/solid"
   },
   "bugs": {
@@ -63,7 +58,7 @@
     "solid-js": ">=1.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.5.4"
+    "@sankyu/circle-flags-core": "^1.6.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
