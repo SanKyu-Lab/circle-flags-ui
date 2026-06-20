@@ -87,7 +87,7 @@ const writeAliasComponents = async (
   await writeFile(vuePath, aliasContent, 'utf-8')
   await writeFile(solidPath, aliasContent, 'utf-8')
 
-  const svelteAliasContent = `<script context="module" lang="ts">\n  export { default as ${componentName} } from './${targetCode}.svelte'\n</script>\n`
+  const svelteAliasContent = `<script module lang="ts">\n  export { default as ${componentName} } from './${targetCode}.svelte'\n</script>\n`
   await writeFile(sveltePath, svelteAliasContent, 'utf-8')
 }
 
