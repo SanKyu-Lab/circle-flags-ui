@@ -20,6 +20,7 @@
     class?: string
     className?: string
     title?: string
+    [key: string]: unknown
   }
 
   let {
@@ -31,6 +32,7 @@
     class: classProp = undefined,
     className: classNameProp = undefined,
     title: titleProp,
+    ...rest
   }: Props = $props()
 
   const finalCode = $derived((countryCode ?? code ?? '').trim())
@@ -82,6 +84,9 @@
         error = true
       })
       .finally(() => {
+        // Ignore the finally callback when this effect was aborted; a newer
+        // effect will own the loading state.
+        if (controller.signal.aborted) return
         loading = false
       })
 
@@ -93,6 +98,7 @@
 
 {#if loading}
   <svg
+    {...rest}
     class={finalClass}
     viewBox="0 0 512 512"
     width={toCssSize(width)}
@@ -106,6 +112,7 @@
   </svg>
 {:else if error || !svgContent}
   <svg
+    {...rest}
     class={finalClass}
     viewBox="0 0 512 512"
     width={toCssSize(width)}
@@ -122,6 +129,7 @@
   </svg>
 {:else}
   <div
+    {...rest}
     class={finalClass}
     style:width={toCssSize(width)}
     style:height={toCssSize(height)}
