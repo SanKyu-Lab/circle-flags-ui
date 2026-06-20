@@ -96,18 +96,41 @@ export function escapeHtml(input: string): string {
 }
 
 /**
+ * Regex-based SVG sanitizer for environments without DOMParser (SSR/Node).
+ * Removes scripts, event handlers and javascript: URLs.
+ */
+function sanitizeSvgRegex(raw: string): string {
+  return (
+    raw
+      // Remove <script> blocks including their content
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      // Remove <foreignObject> blocks including their content
+      .replace(/<foreignObject\b[^<]*(?:(?!<\/foreignObject>)<[^<]*)*<\/foreignObject>/gi, '')
+      // Remove event-handler attributes (on*="..." or on*='...' or on*=...)
+      .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+      // Neutralize javascript: URLs in href / xlink:href attributes
+      .replace(/(\s+(?:xlink:)?href\s*=\s*["'])javascript:[^"']*/gi, '$1')
+  )
+}
+
+/**
  * Sanitize an SVG string by removing scripts, event handlers and javascript: URLs.
  *
- * Falls back to the raw string in non-DOM environments (e.g. SSR/Node).
+ * Uses DOMParser when available for robust parsing, otherwise falls back to a
+ * regex-based sanitizer suitable for SSR/Node environments.
  */
 export function sanitizeSvg(raw: string): string {
-  if (typeof DOMParser === 'undefined') return raw
+  if (typeof DOMParser === 'undefined') {
+    return sanitizeSvgRegex(raw)
+  }
 
   const parser = new DOMParser()
   const doc = parser.parseFromString(raw, 'image/svg+xml')
   const svg = doc.documentElement
 
-  if (!svg || doc.querySelector('parsererror')) return raw
+  if (!svg || doc.querySelector('parsererror')) {
+    return sanitizeSvgRegex(raw)
+  }
 
   svg.querySelectorAll('script,foreignObject').forEach(el => el.remove())
 
