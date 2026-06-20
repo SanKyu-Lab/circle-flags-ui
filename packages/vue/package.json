@@ -58,7 +58,7 @@
     "vue": ">=3.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.6.5"
+    "@sankyu/circle-flags-core": "^1.6.6"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.9",

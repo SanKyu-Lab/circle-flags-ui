@@ -140,7 +140,7 @@ importers:
   examples/example-svelte:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.6.5
+        specifier: ^1.6.6
         version: link:../../packages/core
       '@sankyu/svelte-circle-flags':
         specifier: 0.0.1-beta.1
@@ -217,7 +217,7 @@ importers:
   packages/react:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.6.5
+        specifier: ^1.6.6
         version: link:../core
     devDependencies:
       '@babel/core':
@@ -269,7 +269,7 @@ importers:
   packages/solid:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.6.5
+        specifier: ^1.6.6
         version: link:../core
     devDependencies:
       '@testing-library/jest-dom':
@@ -303,7 +303,7 @@ importers:
   packages/svelte:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.6.5
+        specifier: ^1.6.6
         version: link:../core
     devDependencies:
       '@sveltejs/package':
@@ -340,7 +340,7 @@ importers:
   packages/vue:
     dependencies:
       '@sankyu/circle-flags-core':
-        specifier: ^1.6.5
+        specifier: ^1.6.6
         version: link:../core
     devDependencies:
       '@vitest/coverage-v8':

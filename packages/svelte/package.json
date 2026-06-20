@@ -63,7 +63,7 @@
     "svelte": ">=5.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.6.5"
+    "@sankyu/circle-flags-core": "^1.6.6"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.11",
