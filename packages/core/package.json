@@ -1,6 +1,7 @@
 {
   "name": "@sankyu/circle-flags-core",
   "version": "1.6.5",
+  "private": true,
   "description": "Shared core utilities for circle-flags packages",
   "type": "module",
   "main": "./dist/index.cjs",
