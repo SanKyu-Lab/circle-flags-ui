@@ -3,11 +3,19 @@ import { defineConfig, fontProviders } from 'astro/config'
 import react from '@astrojs/react'
 import starlight from '@astrojs/starlight'
 import { fileURLToPath } from 'node:url'
+import { createRequire } from 'node:module'
 import { siteConfig } from './src/config/siteConfig'
 import starlightLlmsTxt from 'starlight-llms-txt'
 import starlightTypeDoc from 'starlight-typedoc'
 import starlightAutoSidebar from 'starlight-auto-sidebar'
 import starlightLinksValidator from 'starlight-links-validator'
+
+const require = createRequire(import.meta.url)
+// starlight-links-validator is incompatible with Astro 7's markdown processor
+// (https://github.com/HiDeoo/starlight-links-validator/issues/165). Skip it until
+// upstream ships an Astro 7-compatible release, then remove this gate.
+const astroMajorVersion = Number.parseInt(require('astro/package.json').version, 10)
+const supportsLinkValidator = astroMajorVersion < 7
 
 const isAstroCheck = process.argv.includes('check')
 const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
@@ -22,7 +30,7 @@ const corePkgSrcDir = fileURLToPath(new URL('../packages/core/src/', import.meta
 
 const starlightPlugins = [
   starlightAutoSidebar(),
-  ...(!isAstroCheck
+  ...(!isAstroCheck && supportsLinkValidator
     ? [
         starlightLinksValidator({
           errorOnFallbackPages: false,
