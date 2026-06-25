@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "rootDir": "..",
     "paths": {
       "@sankyu/circle-flags-core": ["../core/src"],
