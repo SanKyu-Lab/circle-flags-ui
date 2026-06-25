@@ -71,7 +71,7 @@
     "@testing-library/svelte": "^5.2.7",
     "@vitest/coverage-v8": "^4.1.9",
     "jsdom": "^28.1.0",
-    "svelte": "^5.28.6",
+    "svelte": "^5.56.4",
     "svelte-check": "^4.2.1",
     "svelte-preprocess": "^6.0.5",
     "typescript": "^5.9.3",
