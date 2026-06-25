@@ -34,7 +34,7 @@ jobs:
       packages_md: ${{ steps.changed.outputs.packages_md }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -74,17 +74,17 @@ jobs:
       fail-fast: false
       matrix:
         pkg: ${{ fromJSON(needs.detect.outputs.packages_json) }}
+    env:
+      TURBO_CACHE_DIR: .turbo
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm + Node.js
         uses: ./.github/actions/setup-pnpm
-        with:
-          registry-url: https://registry.npmjs.org
 
       - name: Check if version is already published
         id: check_published
@@ -103,7 +103,8 @@ jobs:
           echo "Checking if $PACKAGE_NAME@$VERSION is already published..."
 
           # Check npm registry
-          RESPONSE=$(npm view "$PACKAGE_NAME@$VERSION" --json 2>/dev/null || echo "{}")
+          # Use a known npm version without mutating the runner's global npm
+          RESPONSE=$(pnpm dlx -s npm@11.5.1 view "$PACKAGE_NAME@$VERSION" --json 2>/dev/null || echo "{}")
 
           if echo "$RESPONSE" | grep -q '"name"'; then
             echo "Version $VERSION is already published. Skipping."
@@ -132,13 +133,27 @@ jobs:
 
       - name: Publish to npm
         if: steps.check_published.outputs.already_published != 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
+          # Trusted Publisher (OIDC) credentials
+          export NODE_AUTH_TOKEN=""
+          export NPM_TOKEN=""
+          export npm_config_registry="https://registry.npmjs.org/"
+          NPMRC="${RUNNER_TEMP}/npmrc"
+          : > "$NPMRC"
+          export NPM_CONFIG_USERCONFIG="$NPMRC"
+
+          VERSION="${{ matrix.pkg.version }}"
+          DIST_TAG="latest"
+          if [[ "$VERSION" == *-* ]]; then
+            DIST_TAG="beta"
+          fi
+
+          echo "npm (pnpm dlx) version: $(pnpm dlx -s npm@11.5.1 --version)"
+          echo "dist-tag: $DIST_TAG"
           echo "Publishing ${{ matrix.pkg.name }}@${{ matrix.pkg.version }} from ${{ matrix.pkg.dir }}"
-          (cd "${{ matrix.pkg.dir }}" && npm publish --access public --provenance)
+          (cd "${{ matrix.pkg.dir }}" && pnpm dlx -s npm@11.5.1 publish --access public --provenance --tag "$DIST_TAG")
 
       - name: Generate package changelog
         shell: bash
@@ -188,7 +203,7 @@ jobs:
 
       - name: Create GitHub release
         if: steps.check_published.outputs.already_published != 'true' && steps.tag.outputs.created == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require("fs");
@@ -243,7 +258,7 @@ jobs:
     if: ${{ always() && needs.detect.outputs.has_packages == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -252,10 +267,9 @@ jobs:
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: 22.x
-          pnpm-version: '10'
 
       - name: Download changelog artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: changelog-*
           merge-multiple: true

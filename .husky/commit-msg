@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-node scripts/hooks/smart-check.mjs --hook commit-msg --commit-msg-file "$1"

@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/circle-flags-core",
-  "version": "1.6.3",
+  "version": "1.6.6",
   "description": "Shared core utilities for circle-flags packages",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -28,11 +28,13 @@
     "postbuild": "node ../../scripts/tasks/postbuild-core.mjs",
     "dev": "tsup --watch",
     "pretypecheck": "node ../../scripts/life-cycle.js ensure-generated --pkg core",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SanKyu-Lab/circle-flags-ui.git",
+    "url": "git+https://github.com/SanKyu-Lab/circle-flags-ui.git",
     "directory": "packages/core"
   },
   "bugs": {
@@ -40,6 +42,6 @@
   },
   "devDependencies": {
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

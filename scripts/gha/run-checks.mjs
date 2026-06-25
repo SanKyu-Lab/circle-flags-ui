@@ -31,8 +31,8 @@ switch (options.checkId) {
     if (options.ensureGeneratedClean) {
       run('git', ['diff', '--exit-code'])
     }
-    run('pnpm', ['run', 'lint'])
-    run('pnpm', ['run', 'typecheck'])
+    // Run lint and typecheck in parallel via turbo (avoids double gen:flags)
+    run('pnpm', ['exec', 'turbo', 'run', 'lint', 'typecheck'])
     break
 
   case 'test':
@@ -42,8 +42,9 @@ switch (options.checkId) {
 
   case 'build':
     run('pnpm', ['run', 'build'], { NODE_ENV: 'production' })
-    run('ls', ['-la', 'packages/react/dist/'])
-    run('ls', ['-la', 'packages/vue/dist/'])
+    for (const pkg of ['react', 'vue', 'solid', 'svelte']) {
+      run('ls', ['-la', `packages/${pkg}/dist/`])
+    }
     break
 
   default:

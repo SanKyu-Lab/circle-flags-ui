@@ -72,3 +72,99 @@ export function coerceFlagCode(code: string, fallback: FlagCode = 'xx'): FlagCod
   if (Object.prototype.hasOwnProperty.call(FLAG_REGISTRY, normalized)) return normalized as FlagCode
   return fallback
 }
+
+/**
+ * Escape HTML special characters to prevent XSS when injecting raw HTML.
+ */
+export function escapeHtml(input: string): string {
+  return input.replace(/[&<>"']/g, ch => {
+    switch (ch) {
+      case '&':
+        return '&amp;'
+      case '<':
+        return '&lt;'
+      case '>':
+        return '&gt;'
+      case '"':
+        return '&quot;'
+      case "'":
+        return '&#39;'
+      default:
+        return ch
+    }
+  })
+}
+
+/**
+ * Regex-based SVG sanitizer for environments without DOMParser (SSR/Node).
+ * Removes scripts, event handlers and javascript: URLs.
+ */
+function sanitizeSvgRegex(raw: string): string {
+  return (
+    raw
+      // Remove <script> blocks including their content
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      // Remove <foreignObject> blocks including their content
+      .replace(/<foreignObject\b[^<]*(?:(?!<\/foreignObject>)<[^<]*)*<\/foreignObject>/gi, '')
+      // Remove event-handler attributes (on*="..." or on*='...' or on*=...)
+      .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+      // Neutralize javascript: URLs in href / xlink:href attributes
+      .replace(/(\s+(?:xlink:)?href\s*=\s*["'])javascript:[^"']*/gi, '$1')
+  )
+}
+
+/**
+ * Sanitize an SVG string by removing scripts, event handlers and javascript: URLs.
+ *
+ * Uses DOMParser when available for robust parsing, otherwise falls back to a
+ * regex-based sanitizer suitable for SSR/Node environments.
+ */
+export function sanitizeSvg(raw: string): string {
+  if (typeof DOMParser === 'undefined') {
+    return sanitizeSvgRegex(raw)
+  }
+
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(raw, 'image/svg+xml')
+  const svg = doc.documentElement
+
+  if (!svg || doc.querySelector('parsererror')) {
+    return sanitizeSvgRegex(raw)
+  }
+
+  svg.querySelectorAll('script,foreignObject').forEach(el => el.remove())
+
+  svg.querySelectorAll('*').forEach(el => {
+    Array.from(el.attributes).forEach(attr => {
+      const name = attr.name.toLowerCase()
+      const value = attr.value.trim().toLowerCase()
+
+      if (name.startsWith('on')) {
+        try {
+          el.removeAttribute(attr.name)
+        } catch {
+          try {
+            el.setAttribute(attr.name, '')
+          } catch {
+            // Ignore in test / non-DOM environments
+          }
+        }
+        return
+      }
+
+      if ((name === 'href' || name === 'xlink:href') && value.startsWith('javascript:')) {
+        try {
+          el.removeAttribute(attr.name)
+        } catch {
+          try {
+            el.setAttribute(attr.name, '')
+          } catch {
+            // Ignore in test / non-DOM environments
+          }
+        }
+      }
+    })
+  })
+
+  return svg.outerHTML
+}

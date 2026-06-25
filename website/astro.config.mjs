@@ -3,11 +3,19 @@ import { defineConfig, fontProviders } from 'astro/config'
 import react from '@astrojs/react'
 import starlight from '@astrojs/starlight'
 import { fileURLToPath } from 'node:url'
+import { createRequire } from 'node:module'
 import { siteConfig } from './src/config/siteConfig'
 import starlightLlmsTxt from 'starlight-llms-txt'
 import starlightTypeDoc from 'starlight-typedoc'
 import starlightAutoSidebar from 'starlight-auto-sidebar'
 import starlightLinksValidator from 'starlight-links-validator'
+
+const require = createRequire(import.meta.url)
+// starlight-links-validator is incompatible with Astro 7's markdown processor
+// (https://github.com/HiDeoo/starlight-links-validator/issues/165). Skip it until
+// upstream ships an Astro 7-compatible release, then remove this gate.
+const astroMajorVersion = Number.parseInt(require('astro/package.json').version, 10)
+const supportsLinkValidator = astroMajorVersion < 7
 
 const isAstroCheck = process.argv.includes('check')
 const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true'
@@ -22,7 +30,7 @@ const corePkgSrcDir = fileURLToPath(new URL('../packages/core/src/', import.meta
 
 const starlightPlugins = [
   starlightAutoSidebar(),
-  ...(!isAstroCheck
+  ...(!isAstroCheck && supportsLinkValidator
     ? [
         starlightLinksValidator({
           errorOnFallbackPages: false,
@@ -145,50 +153,48 @@ Use \`/llms-small.txt\` for fast context loading, \`/llms-full.txt\` for complet
 export default defineConfig({
   site: siteConfig.site,
   base: siteConfig.base,
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.fontsource(),
-        name: 'DM Sans',
-        cssVariable: '--font-sans',
-        weights: [400, 500, 700],
-        styles: ['normal'],
-        subsets: ['latin'],
-        fallbacks: ['system-ui', '-apple-system', 'sans-serif'],
-        optimizedFallbacks: true,
-      },
-      {
-        provider: fontProviders.fontsource(),
-        name: 'Syne',
-        cssVariable: '--font-display',
-        weights: [700, 800],
-        styles: ['normal'],
-        subsets: ['latin'],
-        fallbacks: ['system-ui', 'sans-serif'],
-        optimizedFallbacks: true,
-      },
-      {
-        provider: fontProviders.fontsource(),
-        name: 'Fira Code',
-        cssVariable: '--font-mono',
-        weights: [400, 500],
-        styles: ['normal'],
-        subsets: ['latin'],
-        fallbacks: ['Menlo', 'SFMono-Regular', 'ui-monospace', 'monospace'],
-        optimizedFallbacks: true,
-      },
-      {
-        provider: fontProviders.fontsource(),
-        name: 'Crimson Pro',
-        cssVariable: '--font-serif',
-        weights: [400, 600],
-        styles: ['normal'],
-        subsets: ['latin'],
-        fallbacks: ['Georgia', 'Times New Roman', 'serif'],
-        optimizedFallbacks: true,
-      },
-    ],
-  },
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: 'DM Sans',
+      cssVariable: '--font-sans',
+      weights: [400, 500, 700],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['system-ui', '-apple-system', 'sans-serif'],
+      optimizedFallbacks: true,
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Syne',
+      cssVariable: '--font-display',
+      weights: [700, 800],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['system-ui', 'sans-serif'],
+      optimizedFallbacks: true,
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Fira Code',
+      cssVariable: '--font-mono',
+      weights: [400, 500],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['Menlo', 'SFMono-Regular', 'ui-monospace', 'monospace'],
+      optimizedFallbacks: true,
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Crimson Pro',
+      cssVariable: '--font-serif',
+      weights: [400, 600],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['Georgia', 'Times New Roman', 'serif'],
+      optimizedFallbacks: true,
+    },
+  ],
   integrations: [
     react(),
     starlight({
@@ -243,7 +249,7 @@ export default defineConfig({
         },
         {
           label: 'API Reference',
-          autogenerate: { directory: 'reference/api' },
+          items: [{ autogenerate: { directory: 'reference/api' } }],
         },
         {
           label: 'Examples',

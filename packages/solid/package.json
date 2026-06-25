@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/solid-circle-flags",
-  "version": "0.1.3-beta.4",
+  "version": "0.1.5",
   "description": "400+ circular SVG Solid.js flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -11,11 +11,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    },
-    "./internal/escape-html": {
-      "types": "./dist/internal/escape-html.d.ts",
-      "import": "./dist/internal/escape-html.mjs",
-      "require": "./dist/internal/escape-html.cjs"
     }
   },
   "files": [
@@ -28,12 +23,12 @@
   },
   "sideEffects": false,
   "scripts": {
-    "predev": "node ../../scripts/life-cycle.js build-core --pkg solid",
     "dev": "tsup --watch",
-    "prebuild": "node ../../scripts/life-cycle.js build-core --pkg solid",
     "build": "tsup",
     "postbuild": "node ../../scripts/life-cycle.js postbuild --pkg solid",
     "typecheck": "tsc --noEmit",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
@@ -52,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SanKyu-Lab/circle-flags-ui.git",
+    "url": "git+https://github.com/SanKyu-Lab/circle-flags-ui.git",
     "directory": "packages/solid"
   },
   "bugs": {
@@ -63,17 +58,17 @@
     "solid-js": ">=1.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.5.4"
+    "@sankyu/circle-flags-core": "^1.6.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.9",
     "esbuild-plugin-solid": "^0.6.0",
-    "jsdom": "^28.1.0",
-    "solid-js": "^1.9.11",
+    "jsdom": "^29.1.1",
+    "solid-js": "^1.9.13",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vite-plugin-solid": "^2.10.2",
-    "vitest": "^4.0.18"
+    "typescript": "^6.0.3",
+    "vite-plugin-solid": "^2.11.12",
+    "vitest": "^4.1.9"
   }
 }

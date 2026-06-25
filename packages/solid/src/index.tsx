@@ -6,6 +6,7 @@ import {
   coerceFlagCode,
   FlagSizes,
   getSizeName,
+  sanitizeSvg,
   FLAG_REGISTRY,
   type FlagCode,
   type FlagComponentProps as CoreFlagComponentProps,
@@ -113,8 +114,9 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
       return
     }
 
+    const controller = new AbortController()
     const url = `${local.cdnUrl!.replace(/\/$/, '')}/${normalizedCode()}.svg`
-    fetch(url)
+    fetch(url, { signal: controller.signal })
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to load flag: ${response.statusText}`)
@@ -122,14 +124,21 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
         return response.text()
       })
       .then(svg => {
-        setSvgContent(svg)
+        setSvgContent(sanitizeSvg(svg))
         setError(false)
       })
       .catch(err => {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return
+        }
         console.warn(`Failed to load flag for country code: ${code}`, err)
         setSvgContent(null)
         setError(true)
       })
+
+    return () => {
+      controller.abort()
+    }
   })
 
   return (

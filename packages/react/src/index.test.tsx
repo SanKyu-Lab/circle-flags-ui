@@ -180,7 +180,8 @@ describe('CircleFlag CDN loading', () => {
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        'https://hatscripts.github.io/circle-flags/flags/io.svg'
+        'https://hatscripts.github.io/circle-flags/flags/io.svg',
+        expect.objectContaining({ signal: expect.any(AbortSignal) })
       )
     })
   })
@@ -333,7 +334,7 @@ describe('CircleFlag CDN loading', () => {
     global.DOMParser = originalParser
   })
 
-  test('should fall back when DOMParser is unavailable', async () => {
+  test('should sanitize when DOMParser is unavailable', async () => {
     const originalParser = global.DOMParser
     // @ts-expect-error - simulate absence
     global.DOMParser = undefined
@@ -346,7 +347,7 @@ describe('CircleFlag CDN loading', () => {
 
     await waitFor(() => {
       const container = screen.getByTestId('flag-no-parser')
-      expect(container.innerHTML).toContain('<script>')
+      expect(container.innerHTML).not.toContain('<script>')
     })
 
     global.DOMParser = originalParser

@@ -16,7 +16,7 @@ Defined in: [react/src/flag-props.ts:4](https://github.com/SanKyu-Lab/circle-fla
 ### title?
 
 ```ts
-optional title: string;
+optional title?: string;
 ```
 
 Defined in: [core/src/types.ts:13](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/core/src/types.ts#L13)

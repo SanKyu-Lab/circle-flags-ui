@@ -1,4 +1,4 @@
-import { ExternalLink, Github } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { withBasePath } from '../../routing/paths'
 import { buildMeta } from '@sankyu/react-circle-flags'
 
@@ -46,7 +46,6 @@ export default function AppFooter() {
             rel="noreferrer"
             className="flex items-center gap-2 rounded-full border border-(--border-weak) bg-(--overlay-soft) px-4 py-1.5 text-(--ink) transition hover:border-(--accent) hover:text-(--accent)"
           >
-            <Github className="h-4 w-4 opacity-70" aria-hidden />
             GitHub
           </a>
         </div>

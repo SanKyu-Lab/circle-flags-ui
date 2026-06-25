@@ -1,4 +1,4 @@
-import { Github, Globe2 } from 'lucide-react'
+import { Globe2 } from 'lucide-react'
 import { withBasePath } from '../../routing/paths'
 import { type ReactNode } from 'react'
 
@@ -54,10 +54,6 @@ export default function TopNav({ currentPage, onPageChange, children }: TopNavPr
               rel="noreferrer"
               className="group flex items-center gap-2 rounded-full border border-transparent px-4 py-1.5 text-sm font-medium text-(--muted) transition-all hover:border-(--border-weak) hover:bg-(--overlay-mid) hover:text-(--ink)"
             >
-              <Github
-                className="h-4 w-4 opacity-70 transition group-hover:opacity-100"
-                aria-hidden
-              />
               GitHub
             </a>
             {children}

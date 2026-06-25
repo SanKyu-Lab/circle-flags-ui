@@ -1,0 +1,29 @@
+{
+  "name": "example-svelte",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "stackblitz": {
+    "installDependencies": true,
+    "startCommand": "npm run dev"
+  },
+  "dependencies": {
+    "@sankyu/circle-flags-core": "^1.6.6",
+    "@sankyu/svelte-circle-flags": "0.0.1-beta.1",
+    "@tailwindcss/vite": "^4.3.1",
+    "svelte": "^5.56.4",
+    "tailwindcss": "^4.3.1"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@tsconfig/svelte": "^5.0.8",
+    "@types/node": "^26.0.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.1.0"
+  }
+}

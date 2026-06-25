@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/react-circle-flags",
-  "version": "1.6.4",
+  "version": "1.6.7",
   "description": "400+ circular SVG React flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -23,14 +23,12 @@
   },
   "sideEffects": false,
   "scripts": {
-    "predev": "node ../../scripts/life-cycle.js build-core --pkg react",
     "dev": "tsup --watch",
-    "prebuild": "node ../../scripts/life-cycle.js build-core --pkg react",
     "build": "tsup",
     "postbuild": "node ../../scripts/life-cycle.js postbuild --pkg react",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
@@ -48,7 +46,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SanKyu-Lab/circle-flags-ui.git",
+    "url": "git+https://github.com/SanKyu-Lab/circle-flags-ui.git",
     "directory": "packages/react"
   },
   "bugs": {
@@ -59,32 +57,23 @@
     "react": ">=16.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.5.4"
+    "@sankyu/circle-flags-core": "^1.6.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.0",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.28.5",
-    "@eslint/js": "^9.39.2",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/mocha": "^10.0.10",
-    "@types/react": "^19.2.14",
-    "@typescript-eslint/eslint-plugin": "^8.56.0",
-    "@typescript-eslint/parser": "^8.56.0",
-    "@vitest/coverage-v8": "^4.0.18",
-    "eslint": "^10.0.2",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "globals": "^17.3.0",
-    "jsdom": "^28.1.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "@types/react": "^19.2.17",
+    "@vitest/coverage-v8": "^4.1.9",
+    "jsdom": "^29.1.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }

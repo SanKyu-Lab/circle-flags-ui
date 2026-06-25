@@ -56,8 +56,6 @@ website/public/docs/**
 # Misc
 .*/
 !.github/
-!.husky/
-.husky/_/
 
 *.bak
 *.old

@@ -53,6 +53,11 @@ const taskPostbuild = async pkg => {
       await postbuildVue()
       return
     }
+    case 'svelte': {
+      const { postbuildSvelte } = await import('./tasks/postbuild-svelte.mjs')
+      await postbuildSvelte()
+      return
+    }
     default:
       throw new Error(`Unknown --pkg for postbuild: ${pkg}`)
   }
@@ -63,7 +68,7 @@ export const runLifeCycle = async argv => {
     .name('life-cycle')
     .description('Unified entry for npm/pnpm lifecycle scripts (pre*/post*)')
     .argument('<task>', 'Task name')
-    .option('--pkg <pkg>', 'Package slug: react|vue|solid|core')
+    .option('--pkg <pkg>', 'Package slug: react|vue|solid|svelte|core')
     .parse(argv)
 
   const opts = program.opts()
