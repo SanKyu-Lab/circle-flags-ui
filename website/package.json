@@ -15,12 +15,12 @@
     "format": "pnpm -C .. format"
   },
   "dependencies": {
-    "@astrojs/react": "^6.0.0",
-    "@astrojs/starlight": "^0.41.2",
+    "@astrojs/react": "^6.0.1",
+    "@astrojs/starlight": "^0.41.3",
     "@sankyu/react-circle-flags": "workspace:*",
-    "@shikijs/themes": "^4.3.0",
+    "@shikijs/themes": "^4.3.1",
     "@use-gesture/react": "^10.3.1",
-    "astro": "^7.0.5",
+    "astro": "^7.0.7",
     "country-locale-map": "^1.9.13",
     "gsap": "^3.15.0",
     "lucide-react": "1.23.0",
@@ -28,11 +28,11 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "sharp": "^0.35.3",
-    "shiki": "^4.3.0",
+    "shiki": "^4.3.1",
     "starlight-auto-sidebar": "^0.4.0",
     "starlight-llms-txt": "^0.11.0",
     "starlight-typedoc": "^0.23.0",
-    "typedoc": "^0.28.19",
+    "typedoc": "^0.28.20",
     "typedoc-plugin-markdown": "^4.12.0"
   },
   "devDependencies": {
