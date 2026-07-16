@@ -16,6 +16,7 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "types": ["svelte", "vite/client"],
     "baseUrl": ".",
     "ignoreDeprecations": "6.0"
   },

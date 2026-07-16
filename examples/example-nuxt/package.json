@@ -1,0 +1,26 @@
+{
+  "name": "example-nuxt",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "circleFlagsUi": {
+    "syncShared": false
+  },
+  "scripts": {
+    "dev": "nuxt dev --host 0.0.0.0 --port 31006",
+    "build": "nuxt typecheck && nuxt build",
+    "start": "node .output/server/index.mjs",
+    "verify:ssr": "node ../../scripts/verify-ssr-example.mjs --url http://127.0.0.1:32006 --expect 'data-ssr-example=\"nuxt\"' --expect '<svg' -- node .output/server/index.mjs"
+  },
+  "dependencies": {
+    "@sankyu/vue-circle-flags": "0.1.6",
+    "nuxt": "^4.4.8",
+    "vue": "^3.5.40",
+    "vue-router": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "~6.0.3",
+    "vue-tsc": "^3.3.7"
+  }
+}

@@ -39,13 +39,23 @@ const writeGeneratedFile = async (destPath, sourceContent) => {
   await writeFile(destPath, GENERATED_BANNER + sourceContent, 'utf8')
 }
 
+const shouldSyncSharedLib = async exampleDir => {
+  const packageJson = JSON.parse(await readFile(join(exampleDir, 'package.json'), 'utf8'))
+  return packageJson.circleFlagsUi?.syncShared !== false
+}
+
 export const syncExampleShared = async () => {
   const sourceFiles = (await listFilesRecursively(SHARED_LIB_DIR)).filter(shouldCopyFile)
 
   const exampleEntries = await readdir(EXAMPLES_DIR, { withFileTypes: true })
-  const exampleDirs = exampleEntries
+  const candidateDirs = exampleEntries
     .filter(entry => entry.isDirectory() && entry.name.startsWith('example-'))
     .map(entry => join(EXAMPLES_DIR, entry.name))
+  const exampleDirs = []
+
+  for (const exampleDir of candidateDirs) {
+    if (await shouldSyncSharedLib(exampleDir)) exampleDirs.push(exampleDir)
+  }
 
   for (const exampleDir of exampleDirs) {
     const destRoot = join(exampleDir, DEST_SUBDIR)

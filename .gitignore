@@ -84,3 +84,7 @@ bun.lock
 # !.claude/skills
 
 *-lock.json
+!examples/example-react/package-lock.json
+!examples/example-vue/package-lock.json
+!examples/example-solid/package-lock.json
+!examples/example-svelte/package-lock.json

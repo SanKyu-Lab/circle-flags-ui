@@ -1,0 +1,26 @@
+{
+  "name": "example-next",
+  "private": true,
+  "version": "0.0.0",
+  "circleFlagsUi": {
+    "syncShared": false
+  },
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0 --port 31005",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0 --port 31005",
+    "verify:ssr": "node ../../scripts/verify-ssr-example.mjs --url http://127.0.0.1:32005 --expect 'data-ssr-example=\"next\"' --expect '<svg' -- pnpm exec next start --hostname 127.0.0.1 --port 32005"
+  },
+  "dependencies": {
+    "@sankyu/react-circle-flags": "1.6.7",
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "~6.0.3"
+  }
+}

@@ -16,14 +16,14 @@
     "@sankyu/vue-circle-flags": "0.1.6",
     "@tailwindcss/vite": "^4.3.2",
     "tailwindcss": "^4.3.2",
-    "vue": "^3.5.39"
+    "vue": "^3.5.40"
   },
   "devDependencies": {
-    "@types/node": "^26.0.1",
-    "@vitejs/plugin-vue": "^6.0.7",
+    "@types/node": "^26.1.1",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@vue/tsconfig": "^0.9.1",
     "typescript": "~6.0.3",
-    "vite": "^8.1.0",
-    "vue-tsc": "^3.3.5"
+    "vite": "^8.1.4",
+    "vue-tsc": "^3.3.7"
   }
 }

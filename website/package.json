@@ -17,6 +17,7 @@
   "dependencies": {
     "@astrojs/react": "^6.0.1",
     "@astrojs/starlight": "^0.41.3",
+    "@gsap/react": "^2.1.2",
     "@sankyu/react-circle-flags": "workspace:*",
     "@shikijs/themes": "^4.3.1",
     "@use-gesture/react": "^10.3.1",
@@ -44,6 +45,6 @@
     "postcss": "^8.5.19",
     "starlight-links-validator": "^0.25.2",
     "tailwindcss": "^4.3.2",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   }
 }

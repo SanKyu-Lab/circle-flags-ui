@@ -41,7 +41,7 @@ switch (options.checkId) {
     break
 
   case 'build':
-    run('pnpm', ['run', 'build'], { NODE_ENV: 'production' })
+    run('pnpm', ['run', 'test:examples'], { NODE_ENV: 'production' })
     for (const pkg of ['react', 'vue', 'solid', 'svelte']) {
       run('ls', ['-la', `packages/${pkg}/dist/`])
     }

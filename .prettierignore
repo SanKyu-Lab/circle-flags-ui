@@ -53,6 +53,9 @@ website/src/content/docs/reference/api/**
 website/public/docs/
 website/public/docs/**
 
+# Framework-generated type stubs
+examples/example-next/next-env.d.ts
+
 # Misc
 .*/
 !.github/

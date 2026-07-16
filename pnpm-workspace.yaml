@@ -3,6 +3,10 @@ packages:
   - 'website'
   - 'examples/*'
 
+overrides:
+  lodash: ^4.18.1
+  rollup: ^4.62.2
+
 onlyBuiltDependencies:
   - core-js
   - esbuild
