@@ -1,0 +1,123 @@
+---
+title: SSR Compatibility
+description: Use circle-flags-ui with Next.js App Router, Nuxt, and modern Vite-based frameworks.
+---
+
+import { Card, CardGrid, LinkCard, TabItem, Tabs } from '@astrojs/starlight/components'
+
+The flag packages render inline SVG and do not need browser APIs. Named flag imports and
+`DynamicFlag` can therefore render in the first server response with Next.js and Nuxt.
+
+<CardGrid>
+  <Card title="Named imports" icon="rocket">
+    Recommended for SSR and CSR. They are synchronous, tree-shakeable, and require no client-only
+    boundary.
+  </Card>
+  <Card title="DynamicFlag" icon="shuffle">
+    SSR-safe and synchronous, but it imports the complete flag registry. Use it only when the code
+    cannot be bounded at build time.
+  </Card>
+  <Card title="CircleFlag" icon="triangle-alert">
+    Deprecated. It fetches SVG after mounting, so the server can only render its loading state. Do
+    not use it when the flag must appear in the initial HTML.
+  </Card>
+</CardGrid>
+
+## Tested examples
+
+| Rendering | Stack                      | Verification                                                      |
+| --------- | -------------------------- | ----------------------------------------------------------------- |
+| CSR       | React + Vite 8             | TypeScript and production bundle build                            |
+| SSR       | Next.js App Router + React | Production build, server startup, first-response SVG assertion    |
+| CSR       | Vue 3 + Vite 8             | Vue TypeScript and production bundle build                        |
+| SSR       | Nuxt 4 + Vue 3             | Nuxt typecheck/build, Nitro startup, first-response SVG assertion |
+| CSR       | Svelte 5 + Vite 8          | Svelte compiler and production bundle build                       |
+| CSR       | Solid.js + Vite 8          | TypeScript and production bundle build                            |
+
+<LinkCard
+  title="Browse all compatibility examples"
+  description="Open the build-tested example projects in the repository."
+  href="https://github.com/SanKyu-Lab/circle-flags-ui/tree/main/examples"
+/>
+
+## Next.js App Router
+
+App Router files are Server Components by default. Consumers do not need to add a `use client`
+directive: the React package entry declares its own boundary because it also exposes the deprecated,
+hook-based `CircleFlag`. Next.js can still prerender named flags and `DynamicFlag` into the first
+HTML response.
+
+```tsx
+import { DynamicFlag, FlagJp } from '@sankyu/react-circle-flags'
+
+export default function Page() {
+  return (
+    <main>
+      <FlagJp width={64} height={64} title="Japan" />
+      <DynamicFlag code="de" width={64} height={64} title="Germany" />
+    </main>
+  )
+}
+```
+
+Keep the import at the public package entry. Importing generated files or internal source paths
+bypasses the package export map and can fail when Next.js resolves the server graph.
+
+## Nuxt
+
+Import Vue components directly in `<script setup>`. Do not wrap named flags or `DynamicFlag` in
+`<ClientOnly>`; doing so removes the flag markup from the initial HTML.
+
+```vue
+<script setup lang="ts">
+import { DynamicFlag, FlagJp } from '@sankyu/vue-circle-flags'
+</script>
+
+<template>
+  <main>
+    <FlagJp :width="64" :height="64" title="Japan" />
+    <DynamicFlag code="de" :width="64" :height="64" title="Germany" />
+  </main>
+</template>
+```
+
+## Vite 8 clients
+
+Vite 8 uses a newer Node.js baseline. This affects the example toolchain, not the browser runtime of
+the published flag packages. Use a Node.js version accepted by your chosen framework; the monorepo
+uses the stricter Nuxt-compatible range so every example can share one environment.
+
+<Tabs>
+  <TabItem label="React">
+    Use `@vitejs/plugin-react` and strict subpaths such as `@sankyu/react-circle-flags/flags/us`.
+  </TabItem>
+  <TabItem label="Vue 3">
+    Use `@vitejs/plugin-vue` and strict subpaths such as `@sankyu/vue-circle-flags/flags/us`.
+  </TabItem>
+  <TabItem label="Svelte 5">
+    Use `@sveltejs/vite-plugin-svelte` and import named components from
+    `@sankyu/svelte-circle-flags`.
+  </TabItem>
+  <TabItem label="Solid.js">
+    Use `vite-plugin-solid` and strict subpaths such as `@sankyu/solid-circle-flags/flags/us`.
+  </TabItem>
+</Tabs>
+
+## Troubleshooting
+
+### The server HTML contains a placeholder instead of the flag
+
+Replace deprecated `CircleFlag` with a named import or `DynamicFlag`. `CircleFlag` performs a
+client-side network request after mount and cannot embed the fetched SVG during SSR.
+
+### The client bundle becomes unexpectedly large
+
+`DynamicFlag` intentionally includes all flags for arbitrary runtime codes. Prefer per-flag
+subpaths, or create a finite map of those imports when runtime values come from a known set. The
+main entry remains convenient, but strict `flags/*` subpaths provide deterministic bundle isolation.
+
+### A monorepo example resolves stale output
+
+Build the package before the framework example. From this repository, `pnpm run test:examples`
+builds packages first, then every compatibility app, and finally verifies the production SSR
+responses.

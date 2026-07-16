@@ -10,7 +10,7 @@ Optimize your bundle size by choosing the right approach for your use case.
 
 ## Import strategies overview
 
-### 1. Named Imports
+### 1. Per-flag Subpath Imports
 
 - **Best for:** Static flags known at build time
 - **Bundle impact:** ~950 bytes per flag
@@ -30,17 +30,17 @@ Optimize your bundle size by choosing the right approach for your use case.
 
 ## Bundle size comparison
 
-| Method                       | Bundle Size | Tree-shaking | Loading | Use Case                         |
-| ---------------------------- | ----------- | ------------ | ------- | -------------------------------- |
-| **Named imports (3 flags)**  | ~2.8 KB     | ✅ Excellent | Instant | Known flags at build time        |
-| **Named imports (10 flags)** | ~9.5 KB     | ✅ Excellent | Instant | Common flags header              |
-| **DynamicFlag**              | ~600 KB     | ❌ None      | Instant | CDN-restricted, all flags needed |
+| Method                          | Bundle Size | Tree-shaking     | Loading | Use Case                         |
+| ------------------------------- | ----------- | ---------------- | ------- | -------------------------------- |
+| **Per-flag imports (3 flags)**  | ~2.8 KB     | ✅ Deterministic | Instant | Known flags at build time        |
+| **Per-flag imports (10 flags)** | ~9.5 KB     | ✅ Deterministic | Instant | Common flags header              |
+| **DynamicFlag**                 | ~600 KB     | ❌ None          | Instant | CDN-restricted, all flags needed |
 
 ## Expected bundle sizes
 
 :::note[Size Reference (approx.)]
 
-- **Each flag component (named import):** ~950 bytes (minified)
+- **Each flag component (per-flag subpath):** ~950 bytes (minified)
 - **DynamicFlag (includes all flags):** ~600 KB (minified)
 - **10 named imports:** ~9.5 KB total (minified)
   :::
@@ -59,7 +59,8 @@ Optimize your bundle size by choosing the right approach for your use case.
     Run bundle analysis regularly to catch unexpected size increases.
   </Card>
   <Card title="Prefer Offline-first" icon="star">
-    Default to named imports. If you must support any runtime code synchronously, use DynamicFlag.
+    Default to per-flag subpath imports. If you must support any runtime code synchronously, use
+    DynamicFlag.
   </Card>
 </CardGrid>
 

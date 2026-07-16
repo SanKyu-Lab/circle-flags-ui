@@ -31,13 +31,16 @@ Use named imports when you:
 - **Tree-shaking:** ✅ Excellent
 - **Loading:** Synchronous, instant
 
-Import only the flags you need from the main entry:
+For guaranteed per-flag isolation across Vite, webpack, and framework SSR bundlers, import each
+component from its `flags/*` subpath:
 
 <Tabs syncKey="framework">
   <TabItem label="React" icon="seti:react">
 
 ```tsx
-import { FlagUs, FlagCn, FlagGb } from '@sankyu/react-circle-flags'
+import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
+import { FlagCn } from '@sankyu/react-circle-flags/flags/cn'
+import { FlagGb } from '@sankyu/react-circle-flags/flags/gb'
 
 export function Header() {
   return (
@@ -55,7 +58,9 @@ export function Header() {
 
 ```vue
 <script setup lang="ts">
-import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
+import { FlagUs } from '@sankyu/vue-circle-flags/flags/us'
+import { FlagCn } from '@sankyu/vue-circle-flags/flags/cn'
+import { FlagGb } from '@sankyu/vue-circle-flags/flags/gb'
 </script>
 
 <template>
@@ -73,7 +78,9 @@ import { FlagUs, FlagCn, FlagGb } from '@sankyu/vue-circle-flags'
 Solid (beta): named-import flags currently use `className` for CSS classes.
 
 ```tsx
-import { FlagUs, FlagCn, FlagGb } from '@sankyu/solid-circle-flags'
+import { FlagUs } from '@sankyu/solid-circle-flags/flags/us'
+import { FlagCn } from '@sankyu/solid-circle-flags/flags/cn'
+import { FlagGb } from '@sankyu/solid-circle-flags/flags/gb'
 
 export function Header() {
   return (
@@ -87,7 +94,28 @@ export function Header() {
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { FlagUs } from '@sankyu/svelte-circle-flags/flags/us'
+  import { FlagCn } from '@sankyu/svelte-circle-flags/flags/cn'
+  import { FlagGb } from '@sankyu/svelte-circle-flags/flags/gb'
+</script>
+
+<div>
+  <FlagUs width={32} height={32} />
+  <FlagCn width={32} height={32} />
+  <FlagGb width={32} height={32} />
+</div>
+```
+
+  </TabItem>
 </Tabs>
+
+The shorter main-entry form (`import { FlagUs } from '@sankyu/react-circle-flags'`) remains
+supported. Use the explicit subpath when bundle size must be deterministic, because the main entry
+also exposes `DynamicFlag` and its complete registry.
 
 :::note[API Reference]
 See full props definition: [FlagComponentProps →](/reference/api/interfaceflagcomponentprops/)
@@ -186,7 +214,7 @@ All flag components follow a consistent naming pattern:
 The library works seamlessly with all modern frameworks:
 
 <Tabs syncKey="framework">
-  <TabItem label="Next.js" icon="vercel">
+  <TabItem label="Next.js App Router (SSR)" icon="vercel">
     ```tsx
     import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
 
@@ -222,7 +250,7 @@ The library works seamlessly with all modern frameworks:
     ```
 
   </TabItem>
-  <TabItem label="Vite (React)" icon="seti:javascript">
+  <TabItem label="React + Vite 8" icon="seti:javascript">
     ```tsx
     import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
 
@@ -239,24 +267,6 @@ The library works seamlessly with all modern frameworks:
     }
 
     export default App
-    ```
-
-  </TabItem>
-  <TabItem label="SolidStart">
-    ```tsx
-    import { FlagUs, FlagCn } from '@sankyu/solid-circle-flags'
-
-    export default function Home() {
-      return (
-        <main>
-          <h1>Country Flags</h1>
-          <div class="flex gap-4">
-            <FlagUs width={64} height={64} className="rounded-full" />
-            <FlagCn width={64} height={64} className="rounded-full" />
-          </div>
-        </main>
-      )
-    }
     ```
 
   </TabItem>
@@ -278,7 +288,7 @@ The library works seamlessly with all modern frameworks:
     ```
 
   </TabItem>
-  <TabItem label="Nuxt.js" icon="seti:vue">
+  <TabItem label="Nuxt 4 (SSR)" icon="seti:vue">
     ```vue
     <script setup lang="ts">
     import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
@@ -296,7 +306,7 @@ The library works seamlessly with all modern frameworks:
     ```
 
   </TabItem>
-  <TabItem label="Vue 3" icon="seti:vue">
+  <TabItem label="Vue 3 + Vite 8" icon="seti:vue">
     ```vue
     <script setup lang="ts">
     import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
@@ -314,7 +324,29 @@ The library works seamlessly with all modern frameworks:
     ```
 
   </TabItem>
+  <TabItem label="Svelte 5 + Vite 8">
+    ```svelte
+    <script lang="ts">
+      import { FlagUs, FlagCn } from '@sankyu/svelte-circle-flags'
+    </script>
+
+    <main>
+      <h1>Country Flags</h1>
+      <div class="flags">
+        <FlagUs width={48} height={48} />
+        <FlagCn width={48} height={48} />
+      </div>
+    </main>
+    ```
+
+  </TabItem>
 </Tabs>
+
+The repository includes build-tested [Next.js SSR](https://github.com/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-next),
+[Nuxt SSR](https://github.com/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-nuxt), and
+[Vite examples](https://github.com/SanKyu-Lab/circle-flags-ui/tree/main/examples). For SSR
+boundaries, bundle trade-offs, and troubleshooting, see the
+[SSR compatibility guide](/docs/guides/advanced/ssr-compatibility/).
 
 ## Next steps
 
