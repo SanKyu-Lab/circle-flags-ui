@@ -1,231 +1,130 @@
 import { useState } from 'react'
-import { Check, Copy, ExternalLink } from 'lucide-react'
-import Tabs from '../animated-ui/Tabs'
-import LinkButton from '../ui/LinkButton'
+import { Check, Copy } from 'lucide-react'
 import { useShikiHtml } from '../../utils/useShikiHtml'
 import { withBasePath } from '../../routing/paths'
 
-interface CodeToken {
-  type?: 'keyword' | 'string' | 'comment'
-  value: string
-}
-
-const usageLines: CodeToken[][] = [
-  [
-    { type: 'keyword', value: 'import' },
-    { value: ' { FlagUs, FlagCn } ' },
-    { type: 'keyword', value: 'from' },
-    { value: ' ' },
-    { type: 'string', value: "'@sankyu/react-circle-flags'" },
-  ],
-  [],
-  [{ type: 'keyword', value: 'function' }, { value: ' Header() {' }],
-  [{ value: '  return (' }],
-  [{ value: '    <div className="flex items-center gap-3">' }],
-  [{ value: '      <FlagUs width={40} height={40} />' }],
-  [{ value: '      <FlagCn width={40} height={40} />' }],
-  [{ value: '    </div>' }],
-  [{ value: '  )' }],
-  [{ value: '}' }],
-]
-
-const renderLine = (line: CodeToken[], index: number) => (
-  <div key={index} className="whitespace-pre leading-6">
-    {line.length === 0 ? <>&nbsp;</> : null}
-    {line.map((token, tokenIndex) => (
-      <span
-        key={tokenIndex}
-        className={
-          token.type === 'keyword'
-            ? 'token keyword'
-            : token.type === 'string'
-              ? 'token string'
-              : token.type === 'comment'
-                ? 'token comment'
-                : undefined
-        }
-      >
-        {token.value}
-      </span>
-    ))}
-  </div>
-)
-
 const frameworkOptions = [
-  { id: 'react', label: 'React', badge: undefined, icon: 'framework-icons/react.svg' },
-  { id: 'vue', label: 'Vue 3', badge: 'Beta', icon: 'framework-icons/vue.svg' },
-  { id: 'solid', label: 'Solid.js', badge: 'Beta', icon: 'framework-icons/solid.svg' },
+  {
+    id: 'react',
+    label: 'React',
+    icon: 'framework-icons/react.svg',
+    install: 'pnpm add @sankyu/react-circle-flags',
+    lang: 'tsx',
+    usage: `import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
+
+export function Locale() {
+  return <FlagUs width={40} height={40} title="United States" />
+}`,
+  },
+  {
+    id: 'vue',
+    label: 'Vue',
+    icon: 'framework-icons/vue.svg',
+    install: 'pnpm add @sankyu/vue-circle-flags',
+    lang: 'vue',
+    usage: `<script setup lang="ts">
+import { FlagUs } from '@sankyu/vue-circle-flags/flags/us'
+</script>
+
+<template>
+  <FlagUs :width="40" :height="40" title="United States" />
+</template>`,
+  },
+  {
+    id: 'solid',
+    label: 'Solid',
+    icon: 'framework-icons/solid.svg',
+    install: 'pnpm add @sankyu/solid-circle-flags',
+    lang: 'tsx',
+    usage: `import { FlagUs } from '@sankyu/solid-circle-flags/flags/us'
+
+export function Locale() {
+  return <FlagUs width={40} height={40} title="United States" />
+}`,
+  },
+  {
+    id: 'svelte',
+    label: 'Svelte',
+    icon: 'framework-icons/svelte.svg',
+    install: 'pnpm add @sankyu/svelte-circle-flags',
+    lang: 'svelte',
+    usage: `<script lang="ts">
+  import FlagUs from '@sankyu/svelte-circle-flags/flags/us'
+</script>
+
+<FlagUs width={40} height={40} title="United States" />`,
+  },
 ] as const
 
 type Framework = (typeof frameworkOptions)[number]['id']
 
-const installCommands = {
-  react: [
-    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/react-circle-flags' },
-    { id: 'npm', label: 'npm', command: 'npm install @sankyu/react-circle-flags' },
-    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/react-circle-flags' },
-    { id: 'bun', label: 'bun', command: 'bun add @sankyu/react-circle-flags' },
-  ],
-  vue: [
-    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/vue-circle-flags' },
-    { id: 'npm', label: 'npm', command: 'npm install @sankyu/vue-circle-flags' },
-    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/vue-circle-flags' },
-    { id: 'bun', label: 'bun', command: 'bun add @sankyu/vue-circle-flags' },
-  ],
-  solid: [
-    { id: 'pnpm', label: 'pnpm', command: 'pnpm add @sankyu/solid-circle-flags' },
-    { id: 'npm', label: 'npm', command: 'npm install @sankyu/solid-circle-flags' },
-    { id: 'yarn', label: 'yarn', command: 'yarn add @sankyu/solid-circle-flags' },
-    { id: 'bun', label: 'bun', command: 'bun add @sankyu/solid-circle-flags' },
-  ],
-}
-
-const usageCodeByFramework = {
-  react: `import { FlagUs, FlagCn } from '@sankyu/react-circle-flags'
-
-function Header() {
-  return (
-    <div className="flex items-center gap-3">
-      <FlagUs width={40} height={40} />
-      <FlagCn width={40} height={40} />
-    </div>
-  )
-}`,
-  vue: `<script setup lang="ts">
-import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
-</script>
-
-<template>
-  <div class="flex items-center gap-3">
-    <FlagUs :width="40" :height="40" />
-    <FlagCn :width="40" :height="40" />
-  </div>
-</template>`,
-  solid: `import { FlagUs, FlagCn } from '@sankyu/solid-circle-flags'
-
-export function Header() {
-  return (
-    <div class="flex items-center gap-3">
-      <FlagUs width={40} height={40} />
-      <FlagCn width={40} height={40} />
-    </div>
-  )
-}`,
-}
-
 export default function CodeExample() {
   const [activeFramework, setActiveFramework] = useState<Framework>('react')
-  const [activeManager, setActiveManager] = useState('pnpm')
   const [copied, setCopied] = useState(false)
-
-  const currentInstallCommands = installCommands[activeFramework]
-  const usageCode = usageCodeByFramework[activeFramework]
-  const usageHtml = useShikiHtml(usageCode, activeFramework === 'vue' ? 'vue' : 'tsx')
-
-  const activeCommand =
-    currentInstallCommands.find(entry => entry.id === activeManager) ?? currentInstallCommands[0]
-  const commandText = activeCommand?.command ?? ''
-  const commandHtml = useShikiHtml(commandText ? `$ ${commandText}` : '', 'bash')
+  const current =
+    frameworkOptions.find(framework => framework.id === activeFramework) ?? frameworkOptions[0]
+  const usageHtml = useShikiHtml(current.usage, current.lang)
 
   const handleCopy = async () => {
-    if (!commandText) return
     try {
-      await navigator.clipboard.writeText(commandText)
+      await navigator.clipboard.writeText(current.install)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
+      window.setTimeout(() => setCopied(false), 1400)
     } catch {
       setCopied(false)
     }
   }
 
   return (
-    <div className="space-y-4">
-      {/* Framework Selector */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs uppercase tracking-[0.2em] text-(--muted)">Framework</span>
-        <div className="flex flex-wrap rounded-lg border border-(--border-weak) bg-(--overlay-soft) p-1">
-          {frameworkOptions.map(option => (
-            <button
-              key={option.id}
-              onClick={() => setActiveFramework(option.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                activeFramework === option.id
-                  ? 'bg-(--accent) text-white shadow-(--shadow-sm)'
-                  : 'text-(--muted) hover:text-(--ink)'
-              }`}
-            >
-              <img
-                src={withBasePath(option.icon)}
-                alt={`${option.label} logo`}
-                className="h-3.5 w-3.5 object-contain"
-                loading="lazy"
-                decoding="async"
-              />
-              {option.label}
-              {option.badge ? (
-                <span className="ml-1.5 text-[10px] opacity-75">{option.badge}</span>
-              ) : null}
-            </button>
-          ))}
-        </div>
+    <div className="overflow-hidden rounded-2xl border border-(--border-strong) bg-(--code-bg) shadow-(--shadow-md)">
+      <div className="flex overflow-x-auto border-b border-(--code-border) p-2">
+        {frameworkOptions.map(framework => (
+          <button
+            key={framework.id}
+            type="button"
+            onClick={() => setActiveFramework(framework.id)}
+            className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-(--accent) ${
+              activeFramework === framework.id
+                ? 'bg-(--code-surface) text-(--code-text)'
+                : 'text-(--code-muted) hover:text-(--code-text)'
+            }`}
+          >
+            <img
+              src={withBasePath(framework.icon)}
+              alt=""
+              className="h-4 w-4 object-contain"
+              loading="lazy"
+              decoding="async"
+            />
+            {framework.label}
+          </button>
+        ))}
       </div>
 
-      <div className="code-block p-4 space-y-3 rounded-2xl border border-(--border-strong) bg-[#192732]">
-        <Tabs items={currentInstallCommands} activeId={activeManager} onChange={setActiveManager} />
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs uppercase tracking-[0.2em] text-(--muted)">Install</p>
-          <LinkButton
-            href={withBasePath('docs/guides/getting-started/installation/')}
-            target="_blank"
-            variant="ghost"
-            className="p-0"
-          >
-            Installation Guide
-            <ExternalLink className="h-4 w-4" aria-hidden />
-          </LinkButton>
-        </div>
-        {commandText ? (
-          <div className="relative rounded-xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-3">
-            {commandHtml ? (
-              <div
-                className="overflow-x-auto text-sm"
-                dangerouslySetInnerHTML={{ __html: commandHtml }}
-              />
-            ) : (
-              <pre className="overflow-x-auto text-sm text-(--ink)/90">
-                <code className="whitespace-pre text-left">$ {commandText}</code>
-              </pre>
-            )}
-            <button
-              type="button"
-              aria-label="Copy install command"
-              onClick={handleCopy}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-(--border) bg-(--overlay-soft) p-2 text-(--ink) shadow-(--shadow-sm) hover:bg-(--overlay-mid) transition-all"
-            >
-              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              <span className="sr-only">{copied ? 'Copied' : 'Copy'}</span>
-            </button>
-          </div>
-        ) : null}
+      <div className="flex items-center gap-3 border-b border-(--code-border) px-4 py-3 sm:px-5">
+        <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-sm text-(--code-text)">
+          {current.install}
+        </code>
+        <button
+          type="button"
+          aria-label="Copy install command"
+          onClick={handleCopy}
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-(--code-muted) outline-none transition-colors hover:bg-(--code-surface) hover:text-(--code-text) focus-visible:ring-2 focus-visible:ring-(--accent)"
+        >
+          {copied ? (
+            <Check className="h-4 w-4" aria-hidden />
+          ) : (
+            <Copy className="h-4 w-4" aria-hidden />
+          )}
+        </button>
       </div>
-      <div className="code-block p-4 bg-[#192732]">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs uppercase tracking-[0.2em] text-(--muted)">Usage</p>
-          <LinkButton
-            href={withBasePath('docs/guides/getting-started/usage/')}
-            target="_blank"
-            variant="ghost"
-            className="p-0"
-          >
-            Usage Guide
-            <ExternalLink className="h-4 w-4" aria-hidden />
-          </LinkButton>
-        </div>
+
+      <div className="min-h-72 overflow-x-auto p-5 text-sm sm:p-6">
         {usageHtml ? (
-          <div className="mt-3 overflow-hidden" dangerouslySetInnerHTML={{ __html: usageHtml }} />
+          <div dangerouslySetInnerHTML={{ __html: usageHtml }} />
         ) : (
-          <pre className="mt-3 overflow-x-auto text-sm text-(--ink)/90">
-            <code>{usageLines.map(renderLine)}</code>
+          <pre className="m-0 text-(--code-text)">
+            <code>{current.usage}</code>
           </pre>
         )}
       </div>

@@ -25,6 +25,9 @@ const shouldRunTypeDoc = isCI && isTypeDocEnabled && process.env.SKIP_TYPEDOC !=
 
 const reactPkgEntry = fileURLToPath(new URL('../packages/react/src/index.tsx', import.meta.url))
 const reactPkgSrcDir = fileURLToPath(new URL('../packages/react/src/', import.meta.url))
+const reactPkgDistFlagsDir = fileURLToPath(
+  new URL('../packages/react/dist/flags/', import.meta.url)
+)
 const corePkgEntry = fileURLToPath(new URL('../packages/core/src/index.ts', import.meta.url))
 const corePkgSrcDir = fileURLToPath(new URL('../packages/core/src/', import.meta.url))
 
@@ -71,7 +74,7 @@ const starlightPlugins = [
     projectName:
       'circle-flags-ui Docs (@sankyu/react-circle-flags, @sankyu/vue-circle-flags, @sankyu/solid-circle-flags)',
     description:
-      'Documentation for circle-flags-ui: 400+ circular SVG flags across React (stable), Vue 3 (beta), and Solid.js (beta), with TypeScript types, SSR support, and tree-shaking.',
+      'Documentation for circle-flags-ui: 400+ circular SVG flags across React (stable), Vue 3 (beta), Solid.js (beta), and Svelte 5 (beta), with TypeScript types, tree-shaking, and SSR verification for Next.js and Nuxt.',
     details: `Vibe-coding assistant guidance:
 
 - Start from \`guides/getting-started/installation\`, then choose one framework path (React, Vue 3, or Solid.js) and keep code examples framework-consistent.
@@ -166,32 +169,12 @@ export default defineConfig({
     },
     {
       provider: fontProviders.fontsource(),
-      name: 'Syne',
-      cssVariable: '--font-display',
-      weights: [700, 800],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['system-ui', 'sans-serif'],
-      optimizedFallbacks: true,
-    },
-    {
-      provider: fontProviders.fontsource(),
       name: 'Fira Code',
       cssVariable: '--font-mono',
       weights: [400, 500],
       styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['Menlo', 'SFMono-Regular', 'ui-monospace', 'monospace'],
-      optimizedFallbacks: true,
-    },
-    {
-      provider: fontProviders.fontsource(),
-      name: 'Crimson Pro',
-      cssVariable: '--font-serif',
-      weights: [400, 600],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['Georgia', 'Times New Roman', 'serif'],
       optimizedFallbacks: true,
     },
   ],
@@ -232,6 +215,7 @@ export default defineConfig({
         {
           label: 'Advanced',
           items: [
+            { label: 'SSR Compatibility', slug: 'docs/guides/advanced/ssr-compatibility' },
             { label: 'FlagUtils Toolkit', slug: 'docs/guides/advanced/flag-utils' },
             { label: 'Type Utilities', slug: 'docs/guides/advanced/type-utilities' },
             { label: 'Using CDN', slug: 'docs/guides/advanced/cdn-usage' },
@@ -304,6 +288,10 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: [
+        {
+          find: /^@sankyu\/react-circle-flags\/flags\/(.*)$/,
+          replacement: `${reactPkgDistFlagsDir}$1.mjs`,
+        },
         { find: '@sankyu/react-circle-flags', replacement: reactPkgEntry },
         { find: /^@sankyu\/react-circle-flags\/(.*)$/, replacement: `${reactPkgSrcDir}$1` },
         { find: '@sankyu/circle-flags-core', replacement: corePkgEntry },
@@ -321,7 +309,7 @@ export default defineConfig({
         output: {
           assetFileNames: assetInfo => {
             // Keep font files in _astro/files directory to match CSS references
-            if (assetInfo.name && /\.(woff|woff2|ttf|eot)$/.test(assetInfo.name)) {
+            if (assetInfo.names.some(name => /\.(woff|woff2|ttf|eot)$/.test(name))) {
               return '_astro/files/[name][extname]'
             }
             return '_astro/[name]-[hash][extname]'

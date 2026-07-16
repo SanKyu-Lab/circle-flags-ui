@@ -5,6 +5,7 @@
     "ignoreDeprecations": "6.0",
     "paths": {
       "@sankyu/react-circle-flags": ["../packages/react/src/index.tsx"],
+      "@sankyu/react-circle-flags/flags/*": ["../packages/react/dist/index.d.ts"],
       "@sankyu/react-circle-flags/*": ["../packages/react/src/*"]
     }
   },

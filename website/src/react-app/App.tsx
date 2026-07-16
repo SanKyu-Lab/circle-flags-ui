@@ -43,7 +43,7 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen bg-(--bg) text-(--ink) relative overflow-hidden geometric-bg"
+      className="relative min-h-[100dvh] overflow-x-hidden bg-(--bg) text-(--ink)"
       data-theme="dark"
     >
       <AppBackground />
@@ -55,7 +55,7 @@ export default function App() {
         onRouteChange={navigate}
       />
 
-      <main className="relative max-w-6xl mx-auto px-6 py-12">
+      <main className="relative mx-auto w-full max-w-7xl px-5 sm:px-8">
         {route === 'home' && (
           <HomePage
             flagCount={flagCount}
@@ -67,7 +67,7 @@ export default function App() {
           />
         )}
         {route === 'browse' && (
-          <Suspense fallback={<div className="text-sm text-(--muted)">Loading flags...</div>}>
+          <Suspense fallback={<div className="py-16 text-sm text-(--muted)">Loading flags...</div>}>
             <BrowserPage flagCount={flagCount} />
           </Suspense>
         )}

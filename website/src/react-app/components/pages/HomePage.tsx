@@ -18,11 +18,9 @@ export default function HomePage({
 }: HomePageProps) {
   return (
     <>
-      <HeroSection flagCount={flagCount} onBrowseClick={onBrowseClick} onFlagClick={onFlagClick} />
-      <section className="space-y-10 mb-16">
-        <GallerySection onFilterNavigate={onFilterNavigate} />
-        <QuickStartSection />
-      </section>
+      <HeroSection onBrowseClick={onBrowseClick} onFlagClick={onFlagClick} />
+      <GallerySection flagCount={flagCount} onFilterNavigate={onFilterNavigate} />
+      <QuickStartSection />
       <AppFooter />
     </>
   )

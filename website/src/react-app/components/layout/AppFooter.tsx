@@ -1,70 +1,43 @@
 import { ExternalLink } from 'lucide-react'
 import { withBasePath } from '../../routing/paths'
-import { buildMeta } from '@sankyu/react-circle-flags'
 
 export default function AppFooter() {
-  const { version, commitHash = 'dev' } = buildMeta
-  const shortCommit = commitHash === 'dev' ? 'dev' : commitHash.slice(0, 7)
-
   return (
-    <footer className="relative mt-20 overflow-hidden rounded-2xl border border-(--border-weak) bg-(--bg) px-6 py-8 text-xs text-(--muted) shadow-[0_15px_60px_-25px_rgba(0,0,0,0.3)]">
-      <div className="pointer-events-none absolute inset-0 opacity-70" aria-hidden>
-        <div className="absolute inset-0 bg-linear-to-br from-(--accent)/12 via-transparent to-(--ink)/8" />
-        <div className="absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--accent)/10 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto flex max-w-6xl flex-wrap items-start justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-(--border-weak) bg-(--overlay-soft) shadow-inner shadow-(--accent)/20">
-            <img src={withBasePath('favicon.svg')} alt="Circle Flags logo" className="h-6 w-6" />
-          </div>
+    <footer className="mt-24 border-t border-(--border-weak) py-8 text-sm text-(--muted-light)">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <img
+            src={withBasePath('favicon.svg')}
+            alt=""
+            className="h-8 w-8"
+            width="32"
+            height="32"
+          />
           <div>
-            <p className="text-sm font-semibold tracking-tight text-(--ink)">
-              Sankyu Lab - Circle Flags UI
-            </p>
-            <p className="mt-1 text-(--muted)">
-              A curated playground for React, Vue & Solid packages
-            </p>
+            <p className="font-semibold text-(--ink)">Circle Flags UI</p>
+            <p>Maintained by Sankyu Lab.</p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 text-sm font-medium">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
           <a
             href={withBasePath('docs/guides/getting-started/')}
-            target="_blank"
-            className="cursor-alias rounded-full border border-(--border-weak) bg-(--overlay-soft) px-4 py-1.5 text-(--ink) transition hover:border-(--accent) hover:text-(--accent)"
-            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-(--ink) hover:text-(--accent)"
           >
-            <span className="inline-flex items-center gap-2">
-              Documentation
-              <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-            </span>
+            Documentation
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden />
           </a>
           <a
             href="https://github.com/SanKyu-Lab/circle-flags-ui"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 rounded-full border border-(--border-weak) bg-(--overlay-soft) px-4 py-1.5 text-(--ink) transition hover:border-(--accent) hover:text-(--accent)"
+            className="inline-flex items-center gap-1.5 text-(--ink) hover:text-(--accent)"
           >
             GitHub
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden />
           </a>
+          <span>© {new Date().getFullYear()} Sankyu Lab</span>
         </div>
-      </div>
-
-      <div className="relative mx-auto mt-6 flex max-w-6xl flex-wrap items-center gap-3 text-[11px]">
-        <span className="text-(--muted)">
-          © {new Date().getFullYear()} Sankyu Lab. All rights reserved.
-        </span>
-        <span className="inline-flex items-center gap-2 rounded-full border border-(--border-weak) bg-(--overlay-soft) px-3 py-1 text-(--ink)">
-          <span
-            className="h-1.5 w-1.5 rounded-full bg-(--accent) shadow-[0_0_0_6px_rgba(0,0,0,0.04)]"
-            aria-hidden
-          />
-          Crafted with
-          <code>
-            @sankyu/react-circle-flags@{version}-{shortCommit}
-          </code>
-        </span>
       </div>
     </footer>
   )
