@@ -1,5 +1,6 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { writeFlagDeclarations } from './write-flag-declarations.mjs'
 
 export const postbuildSolid = async () => {
   console.log('🔧 Running Solid.js postbuild...')
@@ -18,6 +19,8 @@ export const postbuildSolid = async () => {
     const updated = `import { template as _$template } from "solid-js/web";\n${content}`
     await writeFile(filePath, updated, 'utf-8')
   }
+
+  writeFlagDeclarations(distFlagsDir)
 
   console.log('✅ Solid.js postbuild complete\n')
 }

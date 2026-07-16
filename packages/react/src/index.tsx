@@ -1,3 +1,5 @@
+'use client'
+
 export { CircleFlag } from './circle-flag'
 export type { CircleFlagProps } from './circle-flag'
 

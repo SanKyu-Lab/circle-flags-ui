@@ -45,10 +45,10 @@ Perfect for applications that need fast, crisp country flags without external im
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
-- ⚡ **Zero dependencies** - Only requires React as peer dependency
+- ⚡ **Lightweight shared core** - Only React is required as a peer dependency
 - 🎨 **Inline SVG** - No external requests, works offline
 - 🔧 **Fully customizable** - All standard SVG props supported
-- 📱 **SSR compatible** - Works with `Next.js`, `Remix`, etc.
+- 📱 **SSR verified** - First-response SVG rendering is tested with Next.js App Router
 - 🪶 **Lightweight** - Each flag is ~1KB
 
 ## 📦 Installation
@@ -171,7 +171,12 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
 
 `@sankyu/react-circle-flags` is designed to be tree-shakable.
 
-Importing individual flags ensures that only the used flags are included in your bundle.
+Use per-flag subpaths when you need deterministic bundle isolation:
+
+```tsx
+import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
+import { FlagCn } from '@sankyu/react-circle-flags/flags/cn'
+```
 
 > [!CAUTION]
 > `DynamicFlag` is offline-first and renders runtime codes synchronously, but it bundles all

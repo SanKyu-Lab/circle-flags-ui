@@ -47,10 +47,10 @@ Perfect for applications that need fast, crisp country flags without external im
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
-- ⚡ **Zero dependencies** - Only requires Solid.js as peer dependency
+- ⚡ **Lightweight shared core** - Only Solid.js is required as a peer dependency
 - 🎨 **Inline SVG** - No external requests, works offline
 - 🔧 **Fully customizable** - All standard SVG props supported
-- 📱 **SSR compatible** - Works with `SolidStart`, etc.
+- 📱 **Vite 8 compatible** - Verified against the latest client-side Solid toolchain
 - 🪶 **Lightweight** - Each flag is ~1KB
 
 ## 📦 Installation
@@ -232,11 +232,12 @@ const invalid: FlagCode = 'xyz' // ✗ Type error
 
 `@sankyu/solid-circle-flags` is designed to be tree-shakable.
 
-Importing individual flags ensures that only the used flags are included in your bundle.
+Use per-flag subpaths when you need deterministic bundle isolation.
 
 ```tsx
 // ✓ Good - only FlagUs and FlagCn are bundled
-import { FlagUs, FlagCn } from '@sankyu/solid-circle-flags'
+import { FlagUs } from '@sankyu/solid-circle-flags/flags/us'
+import { FlagCn } from '@sankyu/solid-circle-flags/flags/cn'
 ```
 
 ## 🤝 Contributing

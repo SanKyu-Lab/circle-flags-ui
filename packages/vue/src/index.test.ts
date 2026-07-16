@@ -28,7 +28,7 @@ describe('@sankyu/vue-circle-flags', () => {
 
   it('CircleFlag shows loading state before fetch resolves', async () => {
     const fetchNever = vi.fn(() => new Promise(() => {})) as unknown as typeof fetch
-    globalThis.fetch = fetchNever as any
+    globalThis.fetch = fetchNever
 
     const wrapper = mount(CircleFlag, { props: { countryCode: 'us' } })
     await flushPromises()
@@ -47,7 +47,7 @@ describe('@sankyu/vue-circle-flags', () => {
       } as unknown as Response
     }) as unknown as typeof fetch
 
-    globalThis.fetch = fetchOk as any
+    globalThis.fetch = fetchOk
 
     const wrapper = mount(CircleFlag, { props: { countryCode: 'us' } })
     await flushPromises()

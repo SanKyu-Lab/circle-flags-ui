@@ -164,7 +164,7 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
       }
     >
       <div
-        {...(rest as any)}
+        {...(rest as unknown as JSX.HTMLAttributes<HTMLDivElement>)}
         class={local.class || local.className}
         style={{
           width: toCssSize(local.width),
@@ -193,6 +193,8 @@ type DynamicFlagPropsBase = Omit<
 export type DynamicFlagProps =
   | (DynamicFlagPropsBase & { strict?: false; code: string })
   | (DynamicFlagPropsBase & { strict: true; code: CountryCode })
+
+const flagComponents = AllFlags as unknown as Record<string, Component<DynamicFlagPropsBase>>
 
 export const DynamicFlag: Component<DynamicFlagProps> = props => {
   const merged = mergeProps(
@@ -238,7 +240,7 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
       }
     >
       {(() => {
-        const FlagComponent = (AllFlags as any)[componentName()!] as Component<any>
+        const FlagComponent = flagComponents[componentName()!]
         if (!FlagComponent) {
           console.error(`Flag component not found for code: ${local.code}`)
           return <div>Flag not found: {local.code}</div>

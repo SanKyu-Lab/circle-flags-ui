@@ -1,16 +1,41 @@
 {
   "name": "@sankyu/react-circle-flags",
   "version": "1.6.7",
-  "description": "400+ circular SVG React flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
+  "description": "400+ circular SVG React flags — tree-shakeable, TypeScript-ready, and SSR-compatible.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./meta": {
+      "import": {
+        "types": "./dist/meta.d.ts",
+        "default": "./dist/meta.mjs"
+      },
+      "require": {
+        "types": "./dist/meta.d.cts",
+        "default": "./dist/meta.cjs"
+      }
+    },
+    "./flags/*": {
+      "import": {
+        "types": "./dist/flags/*.d.ts",
+        "default": "./dist/flags/*.mjs"
+      },
+      "require": {
+        "types": "./dist/flags/*.d.cts",
+        "default": "./dist/flags/*.cjs"
+      }
     }
   },
   "files": [
@@ -68,12 +93,12 @@
     "@testing-library/react": "^16.3.2",
     "@types/mocha": "^10.0.10",
     "@types/react": "^19.2.17",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/coverage-v8": "^4.1.10",
     "jsdom": "^29.1.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   }
 }

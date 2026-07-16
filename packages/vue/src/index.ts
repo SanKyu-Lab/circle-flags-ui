@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, onMounted, ref, watch } from 'vue'
-import type { PropType, VNode } from 'vue'
+import type { Component, PropType, VNode } from 'vue'
 import {
   codeToEmoji,
   codeToComponentName,
@@ -305,7 +305,7 @@ const _DynamicFlag = defineComponent({
         return h('div', `Flag not found: ${props.code}`)
       }
 
-      return h(FlagComponent as any, {
+      return h(FlagComponent as Component, {
         ...attrsAny,
         width: props.width,
         height: props.height,

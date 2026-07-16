@@ -45,10 +45,10 @@ Perfect for applications that need fast, crisp country flags without external im
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
-- ⚡ **Zero dependencies** - Only requires Svelte 5 as peer dependency
+- ⚡ **Lightweight shared core** - Only Svelte 5 is required as a peer dependency
 - 🎨 **Inline SVG** - No external requests, works offline
 - 🔧 **Fully customizable** - All standard SVG props supported
-- 📱 **SSR compatible** - Works with **SvelteKit** and other SSR setups
+- 📱 **Vite 8 compatible** - Verified against the latest client-side Svelte toolchain
 - 🪶 **Lightweight** - Each flag is ~1KB
 
 ## 📦 Installation

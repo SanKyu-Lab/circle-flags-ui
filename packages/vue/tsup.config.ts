@@ -24,7 +24,7 @@ export default defineConfig(options => {
   return [
     {
       ...baseConfig,
-      entry: ['src/index.ts'],
+      entry: ['src/index.ts', 'src/meta.ts'],
       clean: !isWatch,
       dts: true,
       onSuccess: createOnSuccess('Main Entry'),

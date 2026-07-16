@@ -29,7 +29,7 @@ export default defineConfig(options => {
   return [
     {
       ...baseConfig,
-      entry: ['src/index.tsx'],
+      entry: ['src/index.tsx', 'src/meta.ts'],
       clean: !isWatch,
       dts: true,
       onSuccess: createOnSuccess('Main Entry'),

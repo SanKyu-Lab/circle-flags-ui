@@ -50,10 +50,10 @@ Perfect for applications that need fast, crisp country flags without external im
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
-- ⚡ **Zero dependencies** - Only requires Vue 3 as peer dependency
+- ⚡ **Lightweight shared core** - Only Vue 3 is required as a peer dependency
 - 🎨 **Inline SVG** - No external requests, works offline
 - 🔧 **Fully customizable** - All standard SVG props supported
-- 📱 **SSR compatible** - Works with `Nuxt.js`, `Quasar`, etc.
+- 📱 **SSR verified** - First-response SVG rendering is tested with Nuxt 4
 - 🪶 **Lightweight** - Each flag is ~1KB
 
 ## 📦 Installation
@@ -246,7 +246,7 @@ const invalid: FlagCode = 'xyz' // ✗ Type error
 
 `@sankyu/vue-circle-flags` is designed to be tree-shakable.
 
-Importing individual flags ensures that only the used flags are included in your bundle.
+Use per-flag subpaths when you need deterministic bundle isolation.
 
 > [!TIP]
 > For more information, you may refer to the [Bundle Size & Tree-shaking Guide](https://react-circle-flags.js.org/docs/guides/getting-started/bundle-size/).
@@ -254,7 +254,8 @@ Importing individual flags ensures that only the used flags are included in your
 ```vue
 <script setup lang="ts">
 // ✓ Good - only FlagUs and FlagCn are bundled
-import { FlagUs, FlagCn } from '@sankyu/vue-circle-flags'
+import { FlagUs } from '@sankyu/vue-circle-flags/flags/us'
+import { FlagCn } from '@sankyu/vue-circle-flags/flags/cn'
 </script>
 ```
 

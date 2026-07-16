@@ -1,4 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import {
   CircleFlag,
@@ -17,6 +19,18 @@ type FetchMock = ReturnType<typeof vi.fn>
 const getFetchMock = () => globalThis.fetch as unknown as FetchMock
 
 describe('Main exports', () => {
+  test('published entries preserve the Next.js client boundary', async () => {
+    const entries = await Promise.all(
+      ['index.mjs', 'index.cjs'].map(fileName =>
+        readFile(join(process.cwd(), 'dist', fileName), 'utf8')
+      )
+    )
+
+    for (const entry of entries) {
+      expect(entry).toMatch(/^['"]use client['"];/)
+    }
+  })
+
   test('should export CircleFlag component', () => {
     expect(CircleFlag).toBeDefined()
     expect(typeof CircleFlag).toBe('function')

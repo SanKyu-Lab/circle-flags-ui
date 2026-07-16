@@ -1,5 +1,6 @@
-import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { writeFlagDeclarations } from './write-flag-declarations.mjs'
 
 const replaceVarWithConst = filePath => {
   const content = readFileSync(filePath, 'utf-8')
@@ -14,6 +15,8 @@ export const postbuildVue = () => {
       if (!file.endsWith('.cjs') && !file.endsWith('.mjs')) continue
       replaceVarWithConst(join(flagsDir, file))
     }
+
+    writeFlagDeclarations(flagsDir)
   }
 
   const distDir = join(process.cwd(), 'dist')
@@ -21,7 +24,4 @@ export const postbuildVue = () => {
     const filePath = join(distDir, file)
     if (existsSync(filePath)) replaceVarWithConst(filePath)
   }
-
-  const dctsPath = join(process.cwd(), 'dist/index.d.cts')
-  if (existsSync(dctsPath)) unlinkSync(dctsPath)
 }

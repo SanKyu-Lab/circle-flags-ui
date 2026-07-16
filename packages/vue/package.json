@@ -1,16 +1,41 @@
 {
   "name": "@sankyu/vue-circle-flags",
   "version": "0.1.6",
-  "description": "400+ circular SVG Vue 3 flags — tree-shakeable, TypeScript-ready, SSR-compatible, zero deps.",
+  "description": "400+ circular SVG Vue 3 flags — tree-shakeable, TypeScript-ready, and SSR-compatible.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./meta": {
+      "import": {
+        "types": "./dist/meta.d.ts",
+        "default": "./dist/meta.mjs"
+      },
+      "require": {
+        "types": "./dist/meta.d.cts",
+        "default": "./dist/meta.cjs"
+      }
+    },
+    "./flags/*": {
+      "import": {
+        "types": "./dist/flags/*.d.ts",
+        "default": "./dist/flags/*.mjs"
+      },
+      "require": {
+        "types": "./dist/flags/*.d.cts",
+        "default": "./dist/flags/*.cjs"
+      }
     }
   },
   "files": [
@@ -61,12 +86,12 @@
     "@sankyu/circle-flags-core": "^1.6.6"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/coverage-v8": "^4.1.10",
     "@vue/test-utils": "^2.4.11",
     "jsdom": "^29.1.1",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9",
-    "vue": "^3.5.39"
+    "vitest": "^4.1.10",
+    "vue": "^3.5.40"
   }
 }

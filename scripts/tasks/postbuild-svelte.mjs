@@ -1,11 +1,4 @@
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  rmdirSync,
-  unlinkSync,
-  writeFileSync,
-} from 'node:fs'
+import { existsSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { resolveBuiltAt, resolveCircleFlagsCommit, resolveRepoCommit } from '../tsup/shared.mjs'
 
@@ -97,7 +90,7 @@ export const postbuildSvelte = () => {
   // They are not part of the published package but clutter the workspace.
   const svelteKitPackageDir = join(process.cwd(), '.svelte-kit', '__package__')
   if (existsSync(svelteKitPackageDir)) {
-    rmdirSync(svelteKitPackageDir, { recursive: true })
+    rmSync(svelteKitPackageDir, { recursive: true, force: true })
     console.log('✅ Removed .svelte-kit/__package__ intermediate directory')
   }
 }
