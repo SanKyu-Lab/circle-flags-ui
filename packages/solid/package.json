@@ -86,7 +86,7 @@
     "@sankyu/circle-flags-core": "^1.6.6"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/jest-dom": "^7.0.0",
     "@vitest/coverage-v8": "^4.1.10",
     "esbuild-plugin-solid": "^0.6.0",
     "jsdom": "^29.1.1",
