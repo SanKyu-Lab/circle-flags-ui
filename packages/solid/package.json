@@ -92,7 +92,7 @@
     "jsdom": "^29.1.1",
     "solid-js": "^1.9.14",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite-plugin-solid": "^2.11.13",
     "vitest": "^4.1.10"
   }
