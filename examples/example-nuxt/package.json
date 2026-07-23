@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@sankyu/vue-circle-flags": "0.1.6",
-    "nuxt": "^4.4.8",
+    "nuxt": "^4.5.0",
     "vue": "^3.5.40",
     "vue-router": "^5.0.4"
   },
