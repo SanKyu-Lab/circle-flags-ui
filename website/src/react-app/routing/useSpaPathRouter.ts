@@ -7,9 +7,9 @@ const parseRoute = (pathname: string): Route => {
   return 'home'
 }
 
-export function useSpaPathRouter() {
+export function useSpaPathRouter(initialRoute: Route = 'home') {
   const getInitialRoute = () =>
-    typeof window === 'undefined' ? 'home' : parseRoute(window.location.pathname)
+    typeof window === 'undefined' ? initialRoute : parseRoute(window.location.pathname)
 
   const [route, setRoute] = useState<Route>(getInitialRoute)
 

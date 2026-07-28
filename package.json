@@ -35,7 +35,7 @@
     "format:check": "prettier --check .",
     "test": "turbo run test --filter='./packages/*'",
     "test:package": "turbo run test --filter='./packages/*'",
-    "test:website": "pnpm -F './website/' run test",
+    "test:website": "pnpm -F website run test",
     "verify:examples:ssr": "pnpm -r --workspace-concurrency=1 -F './examples/*' --if-present run verify:ssr",
     "test:examples": "pnpm run build && pnpm run build:examples && pnpm run verify:examples:ssr",
     "test:core": "turbo run test --filter=@sankyu/circle-flags-core",

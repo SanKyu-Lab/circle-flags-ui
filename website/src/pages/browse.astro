@@ -7,12 +7,12 @@ import HeadMeta from '../components/HeadMeta.astro'
   <head>
     <HeadMeta
       title="Browse Flags - Circle Flags UI"
-      description="Browse and explore 400+ circular SVG country flags for React and Vue with real-time search, filters by region, continent, type, and currency."
+      description="Browse and explore 400+ circular SVG country flags for React, Vue, Solid, and Svelte with real-time search and metadata filters."
     />
   </head>
   <body>
     <div id="root">
-      <AppEntry client:only="react" />
+      <AppEntry initialRoute="browse" client:load />
     </div>
   </body>
 </html>

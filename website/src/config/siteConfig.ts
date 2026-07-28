@@ -4,19 +4,19 @@
  */
 
 export const siteConfig = {
-  title: '@sankyu/react-circle-flags',
+  title: 'Circle Flags UI',
   description:
-    '400+ circular SVG flag components for React with TypeScript, tree-shaking, and SSR support.',
+    '400+ circular SVG flag components for React, Vue, Solid, and Svelte with TypeScript, tree-shaking, and SSR support.',
   author: 'SanKyu Lab',
   themeColor: '#0a0a0a',
   keywords:
-    'React,flags,SVG,circular flags,country flags,TypeScript,tree-shaking,SSR,Astro,Next.js',
+    'React,Vue,Solid,Svelte,flags,SVG,circular flags,country flags,TypeScript,tree-shaking,SSR,Astro',
 
   // GitHub repository
   github: {
     owner: 'SanKyu-Lab',
-    repo: 'react-circle-flags',
-    url: 'https://github.com/SanKyu-Lab/react-circle-flags',
+    repo: 'circle-flags-ui',
+    url: 'https://github.com/SanKyu-Lab/circle-flags-ui',
   },
 
   // NPM package
@@ -31,7 +31,7 @@ export const siteConfig = {
 
   // Social image (Socialify)
   socialImage:
-    'https://socialify.git.ci/SanKyu-Lab/react-circle-flags/image?custom_description=%F0%9F%93%A6NPM+Package%3A+%40sankyu%2Freact-circle-flags&custom_language=TypeScript&description=1&font=Bitter&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSanKyu-Lab%2Freact-circle-flags%2Frefs%2Fheads%2Fmain%2Fwebsite%2Fpublic%2Ffavicon.svg&name=1&owner=1&pulls=1&stargazers=1&theme=Light',
+    'https://socialify.git.ci/SanKyu-Lab/circle-flags-ui/image?custom_description=Circular+SVG+flags+for+React%2C+Vue%2C+Solid%2C+and+Svelte&custom_language=TypeScript&description=1&font=Bitter&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light',
 
   // Favicon
   favicon: '/favicon.svg',

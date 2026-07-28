@@ -6,11 +6,16 @@ import HomePage from './components/pages/HomePage'
 import { useSpaPathRouter } from './routing/useSpaPathRouter'
 import { toRouteHref, withBasePath } from './routing/paths'
 import { getFlagCount } from './utils/flagData'
+import type { Route } from './routing/paths'
 
 const BrowserPage = lazy(() => import('./components/pages/BrowserPage'))
 
-export default function App() {
-  const { route, currentPath, navigate } = useSpaPathRouter()
+interface AppProps {
+  initialRoute?: Route
+}
+
+export default function App({ initialRoute = 'home' }: AppProps) {
+  const { route, currentPath, navigate } = useSpaPathRouter(initialRoute)
   const flagCount = useMemo(() => getFlagCount(), [])
 
   const handleFlagNavigate = (code: string) => {

@@ -2,12 +2,12 @@
 import { defineConfig, fontProviders } from 'astro/config'
 import react from '@astrojs/react'
 import starlight from '@astrojs/starlight'
+import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import { siteConfig } from './src/config/siteConfig'
 import starlightLlmsTxt from 'starlight-llms-txt'
 import starlightTypeDoc from 'starlight-typedoc'
-import starlightAutoSidebar from 'starlight-auto-sidebar'
 import starlightLinksValidator from 'starlight-links-validator'
 
 const require = createRequire(import.meta.url)
@@ -32,7 +32,6 @@ const corePkgEntry = fileURLToPath(new URL('../packages/core/src/index.ts', impo
 const corePkgSrcDir = fileURLToPath(new URL('../packages/core/src/', import.meta.url))
 
 const starlightPlugins = [
-  starlightAutoSidebar(),
   ...(!isAstroCheck && supportsLinkValidator
     ? [
         starlightLinksValidator({
@@ -50,7 +49,7 @@ const starlightPlugins = [
           output: 'reference/api',
           // @ts-ignore
           publicPath: '/docs',
-          sidebar: { label: 'API Reference', collapsed: false },
+          sidebar: { label: 'React API Reference', collapsed: false },
           typeDoc: {
             excludePrivate: true,
             excludeProtected: true,
@@ -62,7 +61,7 @@ const starlightPlugins = [
             hideBreadcrumbs: true,
             fileExtension: '.md',
             useCodeBlocks: true,
-            expandObjects: true,
+            expandObjects: false,
             indexFormat: 'table',
             exclude: ['**/*.test.ts', '**/*.test.tsx', '**/node_modules/**', '**/dist/**'],
           },
@@ -71,13 +70,12 @@ const starlightPlugins = [
         }),
       ]),
   starlightLlmsTxt({
-    projectName:
-      'circle-flags-ui Docs (@sankyu/react-circle-flags, @sankyu/vue-circle-flags, @sankyu/solid-circle-flags)',
+    projectName: 'circle-flags-ui Docs (React, Vue, Solid, and Svelte circular flag components)',
     description:
       'Documentation for circle-flags-ui: 400+ circular SVG flags across React (stable), Vue 3 (beta), Solid.js (beta), and Svelte 5 (beta), with TypeScript types, tree-shaking, and SSR verification for Next.js and Nuxt.',
     details: `Vibe-coding assistant guidance:
 
-- Start from \`guides/getting-started/installation\`, then choose one framework path (React, Vue 3, or Solid.js) and keep code examples framework-consistent.
+- Start from \`docs/guides/getting-started/installation\`, then choose one framework path (React, Vue 3, Solid.js, or Svelte 5) and keep code examples framework-consistent.
 - Prefer named flag imports for smallest bundles. Use \`DynamicFlag\` only when codes are runtime values.
 - For runtime strings, normalize with \`trim().toLowerCase()\`, then use \`isFlagCode()\` or \`coerceFlagCode()\`.
 - \`FlagUtils.formatCountryCode()\` returns uppercase display text; size presets come from \`FlagSizes\` / \`FlagUtils.sizes\` and use \`xs | sm | md | lg | xl | xxl | xxxl\`.
@@ -105,18 +103,29 @@ Use \`/llms-small.txt\` for fast context loading, \`/llms-full.txt\` for complet
         paths: ['**/migration/**'],
       },
       {
-        label: 'API Reference',
-        description: 'Typed API surface for components, utility functions, and exported types',
+        label: 'React API Reference',
+        description:
+          'Typed React package API; framework-specific usage for Vue, Solid, and Svelte is covered in the guides',
         paths: ['**/reference/**'],
       },
     ],
     promote: [
-      'guides/getting-started',
-      'guides/getting-started/installation',
-      'guides/getting-started/usage',
-      'reference/api',
+      'docs/guides/getting-started',
+      'docs/guides/getting-started/installation',
+      'docs/guides/getting-started/usage',
+      'reference/api/readme',
     ],
-    exclude: ['migration/**'],
+    exclude: [
+      'docs/deprecated/**',
+      'docs/migration/**',
+      'reference/api/functioncircleflag',
+      'reference/api/functioncoerceflagcode',
+      'reference/api/functionisflagcode',
+      'reference/api/interfacecircleflagprops',
+      'reference/api/typealiascountrycode',
+      'reference/api/typealiasflagcode',
+      'reference/api/variableflag_registry',
+    ],
     optionalLinks: [
       {
         label: 'GitHub Repository',
@@ -137,6 +146,11 @@ Use \`/llms-small.txt\` for fast context loading, \`/llms-full.txt\` for complet
         label: 'NPM (Solid Package)',
         url: 'https://www.npmjs.com/package/@sankyu/solid-circle-flags',
         description: 'Solid.js beta package information',
+      },
+      {
+        label: 'NPM (Svelte Package)',
+        url: 'https://www.npmjs.com/package/@sankyu/svelte-circle-flags',
+        description: 'Svelte 5 beta package information',
       },
       {
         label: 'LLMs Small Context',
@@ -186,7 +200,7 @@ export default defineConfig({
       plugins: starlightPlugins,
       logo: {
         src: './src/assets/favicon.svg',
-        alt: 'React Circle Flags',
+        alt: 'Circle Flags UI',
       },
       favicon: siteConfig.favicon,
       social: [
@@ -232,14 +246,14 @@ export default defineConfig({
           ],
         },
         {
-          label: 'API Reference',
+          label: 'React API Reference',
           items: [{ autogenerate: { directory: 'reference/api' } }],
         },
         {
           label: 'Examples',
           items: [
             {
-              label: 'Example React App',
+              label: 'Interactive Flag Gallery',
               link: '/',
               attrs: { target: '_blank' },
             },
@@ -286,6 +300,7 @@ export default defineConfig({
     format: 'directory',
   },
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: [
         {
