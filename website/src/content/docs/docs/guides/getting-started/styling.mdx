@@ -94,7 +94,7 @@ Named-import flag components currently use `className` for CSS classes.
     import styled from 'styled-components'
     import { FlagUs } from '@sankyu/react-circle-flags'
 
-    const StyledFlag = styled(FlagUs)`
+    const StyledFlagIcon = styled(FlagUs)`
       width: 3rem;
       height: 3rem;
       border-radius: 50%;
@@ -107,7 +107,7 @@ Named-import flag components currently use `className` for CSS classes.
     `
 
     export default function StyledFlag() {
-      return <StyledFlag />
+      return <StyledFlagIcon />
     }
     ```
 
@@ -163,6 +163,24 @@ Named-import flag components currently use `className` for CSS classes.
       )
     }
     ```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import FlagJp from '@sankyu/svelte-circle-flags/flags/jp'
+</script>
+
+<FlagJp
+  width={64}
+  height={64}
+  class="my-flag"
+  style="opacity: 0.8"
+  onclick={() => console.log('Flag clicked!')}
+  aria-label="Japan flag"
+/>
+```
 
   </TabItem>
 </Tabs>

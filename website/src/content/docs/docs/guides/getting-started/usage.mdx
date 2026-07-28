@@ -98,9 +98,9 @@ export function Header() {
 
 ```svelte
 <script lang="ts">
-  import { FlagUs } from '@sankyu/svelte-circle-flags/flags/us'
-  import { FlagCn } from '@sankyu/svelte-circle-flags/flags/cn'
-  import { FlagGb } from '@sankyu/svelte-circle-flags/flags/gb'
+  import FlagUs from '@sankyu/svelte-circle-flags/flags/us'
+  import FlagCn from '@sankyu/svelte-circle-flags/flags/cn'
+  import FlagGb from '@sankyu/svelte-circle-flags/flags/gb'
 </script>
 
 <div>
@@ -180,6 +180,19 @@ import { DynamicFlag } from '@sankyu/solid-circle-flags'
 export function CountryFlag(props: { code: string }) {
   return <DynamicFlag code={props.code} width={36} height={36} />
 }
+```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { DynamicFlag } from '@sankyu/svelte-circle-flags'
+
+  let { code }: { code: string } = $props()
+</script>
+
+<DynamicFlag {code} width={36} height={36} />
 ```
 
   </TabItem>

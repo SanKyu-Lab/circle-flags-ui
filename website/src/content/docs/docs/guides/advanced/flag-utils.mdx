@@ -35,6 +35,15 @@ import { FlagUtils } from '@sankyu/solid-circle-flags'
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { FlagUtils } from '@sankyu/svelte-circle-flags'
+</script>
+```
+
+  </TabItem>
 </Tabs>
 
 ## API Reference
@@ -151,6 +160,23 @@ const isValid = computed(() => FlagUtils.isValidCountryCode(code.value))
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { FlagUtils } from '@sankyu/svelte-circle-flags'
+
+  let code = $state('')
+  const isValid = $derived(FlagUtils.isValidCountryCode(code))
+</script>
+
+<input bind:value={code} placeholder="Enter country code (e.g., us, cn, gb)" />
+{#if !isValid && code}
+  <p class="text-red-500">Invalid country code</p>
+{/if}
+```
+
+  </TabItem>
 </Tabs>
 
 ### Responsive flag sizes
@@ -223,6 +249,36 @@ onUnmounted(() => {
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { onMount } from 'svelte'
+  import { FlagUtils, FlagUs } from '@sankyu/svelte-circle-flags'
+
+  let size = $state(FlagUtils.sizes.md)
+
+  onMount(() => {
+    const updateSize = () => {
+      const width = window.innerWidth
+      size =
+        width < 640
+          ? FlagUtils.sizes.sm
+          : width < 1024
+            ? FlagUtils.sizes.md
+            : FlagUtils.sizes.lg
+    }
+
+    updateSize()
+    window.addEventListener('resize', updateSize)
+    return () => window.removeEventListener('resize', updateSize)
+  })
+</script>
+
+<FlagUs width={size} height={size} />
+```
+
+  </TabItem>
 </Tabs>
 
 ### Getting component names dynamically
@@ -271,6 +327,23 @@ const isValid = computed(() => FlagUtils.isValidCountryCode(props.code))
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { FlagUtils } from '@sankyu/svelte-circle-flags'
+
+  let { code }: { code: string } = $props()
+  const componentName = $derived(FlagUtils.getComponentName(code))
+  const isValid = $derived(FlagUtils.isValidCountryCode(code))
+</script>
+
+<p>Country Code: {code.toUpperCase()}</p>
+<p>Component: {componentName}</p>
+<p>Status: {isValid ? 'Valid' : 'Invalid'}</p>
+```
+
+  </TabItem>
 </Tabs>
 
 ## Type Safety
@@ -294,12 +367,12 @@ const small: number = FlagUtils.sizes.sm // 24
   <LinkCard
     title="Type Utilities"
     description="Learn about type-safe flag code utilities"
-    href="./type-utilities/"
+    href="/docs/guides/advanced/type-utilities/"
   />
   <LinkCard
     title="Dynamic Flags"
     description="Render flags from runtime ISO codes"
-    href="../getting-started/dynamic-flags/"
+    href="/docs/guides/getting-started/dynamic-flags/"
   />
   <LinkCard
     title="API Reference"

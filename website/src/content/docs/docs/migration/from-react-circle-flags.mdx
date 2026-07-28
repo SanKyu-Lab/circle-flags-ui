@@ -41,7 +41,8 @@ export function Header() {
 
 ### Notes
 
-- `react-circle-flags` uses string sizes like `height="35"`. This library uses numbers: `height={35}`.
+- Both numeric and string SVG dimensions are supported. In JSX, numeric values such as
+  `height={35}` are usually the clearest choice.
 - All flags accept standard SVG props (`className`, `style`, event handlers, etc.).
 
 ## Runtime country codes
@@ -56,7 +57,7 @@ import { FlagCn, FlagGb, FlagUs } from '@sankyu/react-circle-flags'
 const FLAGS = { cn: FlagCn, gb: FlagGb, us: FlagUs } as const
 
 export function CountryFlag({ code }: { code: string }) {
-  const normalized = code.toLowerCase()
+  const normalized = code.trim().toLowerCase()
   const Flag = FLAGS[normalized as keyof typeof FLAGS]
   return Flag ? <Flag width={32} height={32} /> : <span>{code.toUpperCase()}</span>
 }

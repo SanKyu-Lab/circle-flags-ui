@@ -25,9 +25,8 @@ If you control your build, prefer installing from npm and bundling locally (best
     <script type="importmap">
       {
         "imports": {
-          "react": "https://esm.sh/react@19",
-          "react-dom/client": "https://esm.sh/react-dom@19/client",
-          "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime"
+          "react": "https://esm.sh/react@19.2.7",
+          "react-dom/client": "https://esm.sh/react-dom@19.2.7/client"
         }
       }
     </script>
@@ -36,14 +35,15 @@ If you control your build, prefer installing from npm and bundling locally (best
     <div id="root"></div>
 
     <script type="module">
+      import { createElement } from 'react'
       import { createRoot } from 'react-dom/client'
-      import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagUs'
+      import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.6.7?exports=FlagUs'
 
       function App() {
-        return <FlagUs width={64} height={64} title="US" />
+        return createElement(FlagUs, { width: 64, height: 64, title: 'US' })
       }
 
-      createRoot(document.getElementById('root')).render(<App />)
+      createRoot(document.getElementById('root')).render(createElement(App))
     </script>
   </body>
 </html>
@@ -57,7 +57,7 @@ Most ESM CDNs support an `exports` query to avoid pulling in unused exports.
 import {
   FlagCn,
   FlagUs,
-} from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagCn,FlagUs'
+} from 'https://esm.sh/@sankyu/react-circle-flags@1.6.7?exports=FlagCn,FlagUs'
 ```
 
 ## Runtime codes (finite set)
@@ -69,14 +69,17 @@ import {
   FlagCn,
   FlagGb,
   FlagUs,
-} from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagCn,FlagGb,FlagUs'
+} from 'https://esm.sh/@sankyu/react-circle-flags@1.6.7?exports=FlagCn,FlagGb,FlagUs'
+import { createElement } from 'https://esm.sh/react@19.2.7'
 
 const FLAGS = { cn: FlagCn, gb: FlagGb, us: FlagUs }
 
 export function CountryFlag({ code }) {
-  const normalized = String(code).toLowerCase()
+  const normalized = String(code).trim().toLowerCase()
   const Flag = FLAGS[normalized]
-  return Flag ? <Flag width={36} height={36} /> : <span>{String(code).toUpperCase()}</span>
+  return Flag
+    ? createElement(Flag, { width: 36, height: 36 })
+    : createElement('span', null, String(code).toUpperCase())
 }
 ```
 
@@ -88,7 +91,7 @@ Pin versions in production:
 
 ```diff
 - import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags?exports=FlagUs'
-+ import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.6.2?exports=FlagUs'
++ import { FlagUs } from 'https://esm.sh/@sankyu/react-circle-flags@1.6.7?exports=FlagUs'
 ```
 
 ## CDN options

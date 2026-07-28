@@ -66,6 +66,21 @@ All flag components are fully typed with TypeScript, providing autocomplete and 
     ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+    All flag components accept standard Svelte SVG attributes:
+
+    ```svelte
+    <script lang="ts">
+      import FlagUs from '@sankyu/svelte-circle-flags/flags/us'
+      import type { SVGAttributes } from 'svelte/elements'
+
+      let { flagProps = {} }: { flagProps?: SVGAttributes<SVGSVGElement> } = $props()
+    </script>
+
+    <FlagUs {...flagProps} />
+    ```
+
+  </TabItem>
 </Tabs>
 
 :::note[Type Inference]
@@ -169,6 +184,23 @@ TypeScript will automatically infer all available props when you use flag compon
     ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+    ```svelte
+    <script lang="ts">
+      import FlagUs from '@sankyu/svelte-circle-flags/flags/us'
+      import type { ComponentProps } from 'svelte'
+
+      let props: ComponentProps<typeof FlagUs> = {
+        width: 48,
+        height: 48,
+        title: 'United States',
+      }
+    </script>
+
+    <FlagUs {...props} />
+    ```
+
+  </TabItem>
 </Tabs>
 
 ## Type exports
@@ -218,7 +250,7 @@ The library exports helpful types for advanced use cases:
     const props: FlagComponentProps = {
       width: 64,
       height: 64,
-      class: 'my-flag',
+      className: 'my-flag',
     }
 
     const fromApi: string = 'US'
@@ -248,6 +280,35 @@ The library exports helpful types for advanced use cases:
 
     const fromApi: string = 'US'
     const safeCode = coerceFlagCode(fromApi)
+    const isNormalizedValid = isFlagCode('us')
+    ```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+    ```typescript
+    import { coerceFlagCode, isFlagCode } from '@sankyu/svelte-circle-flags'
+    import type {
+      CountryCode,
+      DynamicFlagProps,
+      FlagCode,
+      FlagComponentProps,
+    } from '@sankyu/svelte-circle-flags'
+
+    const validCode: FlagCode = 'us'
+    const alsoValid: CountryCode = validCode
+
+    const props: FlagComponentProps = {
+      width: 64,
+      height: 64,
+      className: 'my-flag',
+    }
+
+    const strictProps: DynamicFlagProps = {
+      strict: true,
+      code: validCode,
+    }
+
+    const safeCode = coerceFlagCode('US')
     const isNormalizedValid = isFlagCode('us')
     ```
 
@@ -282,6 +343,15 @@ The library exports helpful types for advanced use cases:
   <TabItem label="Solid.js" icon="seti:javascript">
     ```typescript
     import { FlagUtils } from '@sankyu/solid-circle-flags'
+
+    FlagUtils.getComponentName('us') // 'FlagUs'
+    FlagUtils.formatCountryCode('us') // 'US'
+    ```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+    ```typescript
+    import { FlagUtils } from '@sankyu/svelte-circle-flags'
 
     FlagUtils.getComponentName('us') // 'FlagUs'
     FlagUtils.formatCountryCode('us') // 'US'
@@ -336,6 +406,18 @@ The `FlagUtils` object provides convenient utility functions for working with fl
     FlagUtils.getComponentName('us')      // "FlagUs"
     FlagUtils.getSizeName(48)             // "lg"
     FlagUtils.sizes.lg                    // 48
+    ```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+    ```typescript
+    import { FlagUtils } from '@sankyu/svelte-circle-flags'
+
+    FlagUtils.isValidCountryCode('us') // true
+    FlagUtils.formatCountryCode('us') // "US"
+    FlagUtils.getComponentName('us') // "FlagUs"
+    FlagUtils.getSizeName(48) // "lg"
+    FlagUtils.sizes.lg // 48
     ```
 
   </TabItem>
@@ -401,6 +483,21 @@ The `FlagUtils` object provides convenient utility functions for working with fl
         </div>
       )
     }
+    ```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+    ```svelte
+    <script lang="ts">
+      import { DynamicFlag } from '@sankyu/svelte-circle-flags'
+      import type { FlagCode } from '@sankyu/svelte-circle-flags'
+
+      let selectedCountry = $state<FlagCode>('us')
+    </script>
+
+    <DynamicFlag strict code={selectedCountry} width={32} height={32} />
+    <button onclick={() => (selectedCountry = 'us')}>USA</button>
+    <button onclick={() => (selectedCountry = 'cn')}>China</button>
     ```
 
   </TabItem>

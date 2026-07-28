@@ -51,6 +51,16 @@ import { type FlagCode } from '@sankyu/solid-circle-flags'
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { coerceFlagCode, isFlagCode } from '@sankyu/svelte-circle-flags'
+  import type { FlagCode } from '@sankyu/svelte-circle-flags'
+</script>
+```
+
+  </TabItem>
 </Tabs>
 
 ## API Reference
@@ -59,7 +69,7 @@ import { type FlagCode } from '@sankyu/solid-circle-flags'
 
 A union type of all valid country/subdivision codes.
 
-```ts
+```text
 type FlagCode = 'ad' | 'ae' | 'af' | ... | 'zw' | 'gb-eng' | 'gb-nir' | ...
 ```
 
@@ -147,6 +157,25 @@ const isValid = computed(() => isFlagCode(normalized.value))
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { DynamicFlag, isFlagCode } from '@sankyu/svelte-circle-flags'
+
+  let { code }: { code: string } = $props()
+  const normalized = $derived(code.trim().toLowerCase())
+  const validCode = $derived(isFlagCode(normalized) ? normalized : null)
+</script>
+
+{#if validCode}
+  <DynamicFlag strict code={validCode} width={32} height={32} />
+{:else}
+  <span class="text-red-500">{code.toUpperCase()} (invalid)</span>
+{/if}
+```
+
+  </TabItem>
 </Tabs>
 
 ### Safe coercion with `coerceFlagCode`
@@ -189,6 +218,20 @@ const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { coerceFlagCode, DynamicFlag } from '@sankyu/svelte-circle-flags'
+
+  let { codeFromApi }: { codeFromApi: string } = $props()
+  const safeCode = $derived(coerceFlagCode(codeFromApi))
+</script>
+
+<DynamicFlag strict code={safeCode} width={32} height={32} />
+```
+
+  </TabItem>
 </Tabs>
 
 ### Custom fallback
@@ -214,6 +257,21 @@ export function CountryFlag({
   const safeCode = coerceFlagCode(code, fallbackCode)
   return <DynamicFlag code={safeCode} strict width={32} height={32} />
 }
+```
+
+  </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { coerceFlagCode, DynamicFlag } from '@sankyu/svelte-circle-flags'
+  import type { FlagCode } from '@sankyu/svelte-circle-flags'
+
+  let { code, fallbackCode = 'un' }: { code: string; fallbackCode?: FlagCode } = $props()
+  const safeCode = $derived(coerceFlagCode(code, fallbackCode))
+</script>
+
+<DynamicFlag strict code={safeCode} width={32} height={32} />
 ```
 
   </TabItem>
@@ -298,6 +356,37 @@ const handleSubmit = () => {
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { isFlagCode } from '@sankyu/svelte-circle-flags'
+  import type { FlagCode } from '@sankyu/svelte-circle-flags'
+
+  let code = $state('')
+  let error = $state('')
+
+  const handleSubmit = () => {
+    const normalized = code.trim().toLowerCase()
+    if (!isFlagCode(normalized)) {
+      error = 'Invalid country code'
+      return
+    }
+
+    const validCode: FlagCode = normalized
+    console.log('Valid code:', validCode)
+    error = ''
+  }
+</script>
+
+<form onsubmit={(event) => { event.preventDefault(); handleSubmit() }}>
+  <input bind:value={code} placeholder="Enter country code" />
+  {#if error}<p class="text-red-500">{error}</p>{/if}
+  <button type="submit">Submit</button>
+</form>
+```
+
+  </TabItem>
 </Tabs>
 
 ## Strict Mode with DynamicFlag
@@ -339,6 +428,20 @@ const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
 ```
 
   </TabItem>
+  <TabItem label="Svelte 5">
+
+```svelte
+<script lang="ts">
+  import { coerceFlagCode, DynamicFlag } from '@sankyu/svelte-circle-flags'
+
+  let { codeFromApi }: { codeFromApi: string } = $props()
+  const safeCode = $derived(coerceFlagCode(codeFromApi))
+</script>
+
+<DynamicFlag strict code={safeCode} width={32} height={32} />
+```
+
+  </TabItem>
 </Tabs>
 
 ## Comparison
@@ -355,12 +458,12 @@ const safeCode = computed(() => coerceFlagCode(props.codeFromApi))
   <LinkCard
     title="FlagUtils Toolkit"
     description="Common utility functions for flag codes"
-    href="./flag-utils/"
+    href="/docs/guides/advanced/flag-utils/"
   />
   <LinkCard
     title="Dynamic Flags"
     description="Render flags from runtime ISO codes"
-    href="../getting-started/dynamic-flags/"
+    href="/docs/guides/getting-started/dynamic-flags/"
   />
   <LinkCard
     title="API Reference"
