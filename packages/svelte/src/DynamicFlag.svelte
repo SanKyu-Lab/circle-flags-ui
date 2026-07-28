@@ -1,17 +1,8 @@
 <script lang="ts">
   import type { Component } from 'svelte'
-  import type { SVGAttributes } from 'svelte/elements'
   import { coerceFlagCode, FLAG_REGISTRY } from '@sankyu/circle-flags-core'
   import * as AllFlags from './flags'
-
-  interface Props extends Omit<SVGAttributes<SVGSVGElement>, 'width' | 'height' | 'title'> {
-    code: string
-    strict?: boolean
-    width?: number | string
-    height?: number | string
-    className?: string
-    title?: string
-  }
+  import type { DynamicFlagProps } from './types'
 
   let {
     code,
@@ -22,7 +13,7 @@
     className: classNameProp = undefined,
     title: titleProp,
     ...rest
-  }: Props = $props()
+  }: DynamicFlagProps = $props()
 
   const finalClass = $derived(classNameProp ?? classProp)
 

@@ -9,6 +9,7 @@ import {
 
 export { default as CircleFlag } from './CircleFlag.svelte'
 export { default as DynamicFlag } from './DynamicFlag.svelte'
+export type { CircleFlagProps, DynamicFlagProps, FlagComponentProps } from './types'
 
 export { FlagSizes, getSizeName }
 export type { FlagSizeName }
@@ -36,5 +37,3 @@ export type CountryCode = FlagCode
 export * from './flags'
 
 export { FLAG_REGISTRY, coerceFlagCode, isFlagCode, type FlagCode } from '@sankyu/circle-flags-core'
-
-export type { FlagComponentProps } from '@sankyu/circle-flags-core'

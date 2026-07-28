@@ -1,5 +1,6 @@
 <script lang="ts">
   import { codeToEmoji, sanitizeSvg } from '@sankyu/circle-flags-core'
+  import type { CircleFlagProps } from './types'
 
   /**
    * @deprecated `CircleFlag` is deprecated and not recommended for new code.
@@ -10,19 +11,6 @@
    *
    * Read more: https://react-circle-flags.js.org/docs/deprecated/circleflag
    */
-  interface Props {
-    countryCode?: string
-    /** @deprecated Use 'countryCode' instead */
-    code?: string
-    cdnUrl?: string
-    width?: number | string
-    height?: number | string
-    class?: string
-    className?: string
-    title?: string
-    [key: string]: unknown
-  }
-
   let {
     countryCode,
     code,
@@ -33,7 +21,7 @@
     className: classNameProp = undefined,
     title: titleProp,
     ...rest
-  }: Props = $props()
+  }: CircleFlagProps = $props()
 
   const finalCode = $derived((countryCode ?? code ?? '').trim())
   const normalizedCode = $derived(finalCode.toLowerCase())
