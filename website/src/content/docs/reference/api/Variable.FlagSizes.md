@@ -6,15 +6,7 @@ title: "FlagSizes"
 ---
 
 ```ts
-const FlagSizes: {
-  lg: 48;
-  md: 32;
-  sm: 24;
-  xl: 64;
-  xs: 16;
-  xxl: 96;
-  xxxl: 128;
-};
+const FlagSizes: object;
 ```
 
 Defined in: [core/src/utils.ts:43](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/core/src/utils.ts#L43)

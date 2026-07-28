@@ -9,4 +9,6 @@ title: "FlagCode"
 type FlagCode = keyof typeof FLAG_REGISTRY;
 ```
 
-Defined in: core/src/generated/registry.ts:460
+Defined in: core/src/generated/registry.ts:463
+
+Union of every normalized flag code accepted by strict APIs.

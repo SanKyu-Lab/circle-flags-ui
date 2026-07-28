@@ -5,6 +5,7 @@ import * as AllFlags from '../generated/flags'
 
 import type { FlagComponentProps } from './flag-props'
 
+/** Semantic alias for the complete normalized `FlagCode` union. */
 export type CountryCode = FlagCode
 
 type DynamicFlagPropsBase = FlagComponentProps & {
@@ -12,10 +13,21 @@ type DynamicFlagPropsBase = FlagComponentProps & {
   title?: string
 }
 
+/**
+ * Props for `DynamicFlag`.
+ *
+ * When `strict` is `true`, `code` must already be a valid `CountryCode`. Otherwise any string is
+ * accepted and unknown values render the `xx` placeholder.
+ */
 export type DynamicFlagProps =
   | (DynamicFlagPropsBase & { strict?: false; code: string })
   | (DynamicFlagPropsBase & { strict: true; code: CountryCode })
 
+/**
+ * Renders a generated flag component from a runtime country or subdivision code.
+ *
+ * Unknown values render the `xx` placeholder without making a network request.
+ */
 export const DynamicFlag = ({
   code,
   strict: _strict,

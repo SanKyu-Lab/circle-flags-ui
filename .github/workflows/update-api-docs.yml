@@ -12,10 +12,9 @@ on:
       # Only trigger when API source files change
       - 'packages/react/src/**/*.ts'
       - 'packages/react/src/**/*.tsx'
-      - 'packages/vue/src/**/*.ts'
-      - 'packages/solid/src/**/*.ts'
-      - 'packages/svelte/src/**/*.ts'
       - 'packages/core/src/**/*.ts'
+      - 'scripts/gen-flags/**'
+      - 'circle-flags'
       # Exclude test files
       - '!**/*.test.ts'
       - '!**/*.test.tsx'

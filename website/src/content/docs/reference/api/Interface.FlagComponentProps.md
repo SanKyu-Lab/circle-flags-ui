@@ -5,7 +5,9 @@ prev: false
 title: "FlagComponentProps"
 ---
 
-Defined in: [react/src/flag-props.ts:4](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/flag-props.ts#L4)
+Defined in: [react/src/flag-props.ts:5](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/flag-props.ts#L5)
+
+Standard SVG properties accepted by generated React flag components.
 
 ## Extends
 

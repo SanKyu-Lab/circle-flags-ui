@@ -9,6 +9,7 @@ import {
 export { FlagSizes, getSizeName }
 export type { FlagSizeName }
 
+/** Framework-neutral helpers for validating, formatting, and sizing flag codes. */
 export const FlagUtils: {
   isValidCountryCode: (code: string) => boolean
   formatCountryCode: (code: string) => string

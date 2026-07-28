@@ -6,16 +6,12 @@ title: "FlagUtils"
 ---
 
 ```ts
-const FlagUtils: {
-  formatCountryCode: (code) => string;
-  getComponentName: (code) => string;
-  getSizeName: (pixels) => FlagSizeName | null;
-  isValidCountryCode: (code) => boolean;
-  sizes: typeof FlagSizes;
-};
+const FlagUtils: object;
 ```
 
-Defined in: [react/src/flag-utils.ts:12](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/flag-utils.ts#L12)
+Defined in: [react/src/flag-utils.ts:13](https://github.com/SanKyu-Lab/circle-flags-ui/blob/main/packages/react/src/flag-utils.ts#L13)
+
+Framework-neutral helpers for validating, formatting, and sizing flag codes.
 
 ## Type Declaration
 
@@ -65,7 +61,7 @@ getSizeName: (pixels) => FlagSizeName | null;
 
 #### Returns
 
-`FlagSizeName` \| `null`
+[`FlagSizeName`](/reference/api/typealiasflagsizename/) \| `null`
 
 ### isValidCountryCode
 

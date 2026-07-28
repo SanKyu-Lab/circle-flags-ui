@@ -299,9 +299,11 @@ ${flags
     registry[flag.code] = flag.componentName
   }
 
-  const coreRegistryContent = `export const FLAG_REGISTRY = ${JSON.stringify(registry, null, 2)} as const
+  const coreRegistryContent = `/** Map normalized flag codes to their generated component names. */
+export const FLAG_REGISTRY = ${JSON.stringify(registry, null, 2)} as const
 
-${Object.keys(aliases).length > 0 ? `export const FLAG_ALIASES = ${JSON.stringify(aliases, null, 2)} as const\n` : ''}
+${Object.keys(aliases).length > 0 ? `/** Map alias codes to their canonical flag codes. */\nexport const FLAG_ALIASES = ${JSON.stringify(aliases, null, 2)} as const\n` : ''}
+/** Union of every normalized flag code accepted by strict APIs. */
 export type FlagCode = keyof typeof FLAG_REGISTRY
 `
 

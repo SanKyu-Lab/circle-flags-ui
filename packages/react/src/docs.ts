@@ -4,7 +4,10 @@
  * @packageDocumentation
  */
 
-// Core component props interfaces
+// Components and public metadata
+export { buildMeta, CircleFlag, DynamicFlag, FLAG_REGISTRY } from './index'
+
+// Component props and public types
 export type {
   BuildMeta,
   CircleFlagProps,
@@ -12,10 +15,11 @@ export type {
   DynamicFlagProps,
   FlagCode,
   FlagComponentProps,
+  FlagSizeName,
 } from './index'
 
-// Flag size constants
-export { FlagSizes } from './index'
+// Flag size constants and lookup
+export { FlagSizes, getSizeName } from './index'
 
 // Type narrowing helpers
 export { coerceFlagCode, isFlagCode } from './index'
