@@ -11,6 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "prelint": "pnpm -C .. run build:react",
     "lint": "astro check && SKIP_TYPEDOC=true astro build && pnpm run verify",
     "test": "pnpm run build && pnpm run verify",
     "verify": "node scripts/verify-docs.mjs",
