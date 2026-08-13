@@ -65,19 +65,19 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.2.0",
     "commander": "^15.0.0",
     "conventional-changelog-conventionalcommits": "^10.2.1",
-    "conventional-commits-parser": "^7.1.0",
+    "conventional-commits-parser": "^7.1.2",
     "country-region-data": "^4.1.0",
     "lefthook": "^2.1.10",
-    "oxlint": "^1.75.0",
+    "oxlint": "^1.77.0",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
-    "publint": "^0.3.21",
+    "publint": "^0.3.23",
     "semver": "^7.8.5",
     "simple-git": "^3.36.0",
-    "turbo": "^2.10.6",
+    "turbo": "^2.10.9",
     "typescript": "^6.0.3"
   }
 }
