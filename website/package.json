@@ -44,7 +44,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "autoprefixer": "^10.5.5",
+    "autoprefixer": "^10.6.1",
     "postcss": "^8.5.28",
     "starlight-links-validator": "^0.26.0",
     "tailwindcss": "^4.3.3",
