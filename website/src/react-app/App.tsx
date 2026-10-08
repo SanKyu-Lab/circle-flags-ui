@@ -28,11 +28,17 @@ export default function App({ initialRoute = 'home' }: AppProps) {
   const flagCount = useMemo(() => getFlagCount(), [])
 
   return (
-    <div className="relative min-h-dvh bg-paper text-ink" data-theme="light">
+    <div className="relative min-h-dvh bg-paper text-ink">
       <NavigationBar items={navItems} activeHref={currentPath} onNavigate={navigate} />
 
       <main className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-        {route === 'home' && <HomePage flagCount={flagCount} onBrowse={() => navigate('browse')} />}
+        {route === 'home' && (
+          <HomePage
+            flagCount={flagCount}
+            onBrowse={() => navigate('browse')}
+            onFlagSelect={code => navigate('browse', `?countryCode=${encodeURIComponent(code)}`)}
+          />
+        )}
         {route === 'browse' && (
           <Suspense fallback={<p className="py-16 text-body text-ink-3">Loading flags…</p>}>
             <BrowserPage flagCount={flagCount} />

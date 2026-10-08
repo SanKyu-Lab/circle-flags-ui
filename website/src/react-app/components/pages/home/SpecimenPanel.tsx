@@ -8,6 +8,7 @@ import { FlagCn } from '@sankyu/react-circle-flags/flags/cn'
 import { FlagDe } from '@sankyu/react-circle-flags/flags/de'
 import { FlagGb } from '@sankyu/react-circle-flags/flags/gb'
 import { FlagIn } from '@sankyu/react-circle-flags/flags/in'
+import { FlagKe } from '@sankyu/react-circle-flags/flags/ke'
 import { FlagKr } from '@sankyu/react-circle-flags/flags/kr'
 import { FlagSc } from '@sankyu/react-circle-flags/flags/sc'
 import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
@@ -35,6 +36,7 @@ const specimenFlags: readonly SpecimenFlag[] = [
   { code: 'cn', componentName: 'FlagCn', Component: FlagCn },
   { code: 'kr', componentName: 'FlagKr', Component: FlagKr },
   { code: 'ca', componentName: 'FlagCa', Component: FlagCa },
+  { code: 'ke', componentName: 'FlagKe', Component: FlagKe },
 ]
 
 const ladderSizes = (['xs', 'sm', 'md', 'lg', 'xl'] as const).map(name => ({
@@ -93,7 +95,7 @@ export default function SpecimenPanel() {
         <div
           role="group"
           aria-labelledby="specimen-flag-label"
-          className="mt-3 flex flex-wrap gap-2"
+          className="mt-3 grid grid-cols-6 gap-2.5 sm:grid-cols-12 sm:gap-3"
         >
           {specimenFlags.map(item => {
             const isActive = item.code === flag.code
@@ -104,11 +106,13 @@ export default function SpecimenPanel() {
                 aria-pressed={isActive}
                 aria-label={regionNames.of(item.code.toUpperCase())}
                 onClick={() => setFlag(item)}
-                className={`rounded-full outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-card ${
-                  isActive ? 'ring-2 ring-accent ring-offset-2 ring-offset-card' : ''
+                className={`aspect-square w-full rounded-full outline-none transition-[box-shadow,opacity] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-card ${
+                  isActive
+                    ? 'ring-2 ring-accent ring-offset-2 ring-offset-card'
+                    : 'opacity-80 hover:opacity-100'
                 }`}
               >
-                <item.Component width={FlagSizes.md} height={FlagSizes.md} aria-hidden />
+                <item.Component className="block h-full w-full" aria-hidden />
               </button>
             )
           })}

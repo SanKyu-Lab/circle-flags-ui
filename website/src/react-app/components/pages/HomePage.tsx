@@ -7,15 +7,16 @@ import SpecSection from './home/SpecSection'
 interface HomePageProps {
   flagCount: number
   onBrowse: () => void
+  onFlagSelect: (code: string) => void
 }
 
-export default function HomePage({ flagCount, onBrowse }: HomePageProps) {
+export default function HomePage({ flagCount, onBrowse, onFlagSelect }: HomePageProps) {
   return (
     <>
       <HeroSection flagCount={flagCount} onBrowse={onBrowse} />
       <SpecSection />
       <FrameworksSection />
-      <CoverageSection flagCount={flagCount} onBrowse={onBrowse} />
+      <CoverageSection flagCount={flagCount} onBrowse={onBrowse} onFlagSelect={onFlagSelect} />
       <AppFooter />
     </>
   )

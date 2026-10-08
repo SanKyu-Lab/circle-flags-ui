@@ -6,9 +6,14 @@ import FlagMosaic from './FlagMosaic'
 interface CoverageSectionProps {
   flagCount: number
   onBrowse: () => void
+  onFlagSelect: (code: string) => void
 }
 
-export default function CoverageSection({ flagCount, onBrowse }: CoverageSectionProps) {
+export default function CoverageSection({
+  flagCount,
+  onBrowse,
+  onFlagSelect,
+}: CoverageSectionProps) {
   return (
     <section aria-labelledby="coverage-title" className="border-t border-rule pt-20 sm:pt-28">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -18,7 +23,7 @@ export default function CoverageSection({ flagCount, onBrowse }: CoverageSection
           </h2>
           <p className="mt-4 text-body text-ink-2">
             Countries, subdivisions, organizations, and historical flags share the same shape, so
-            they line up at every size.
+            they line up at every size. Select a flag to open it in the browser.
           </p>
         </div>
         <LinkButton
@@ -36,7 +41,7 @@ export default function CoverageSection({ flagCount, onBrowse }: CoverageSection
       </div>
 
       <div className="mt-12">
-        <FlagMosaic />
+        <FlagMosaic onSelect={onFlagSelect} />
       </div>
     </section>
   )

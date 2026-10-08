@@ -1,6 +1,6 @@
 ---
 name: circle-flags-ui-design
-description: Presentation rules for the Circle Flags UI React site (landing page and flag browser, rendered by website/src/react-app). Readers are frontend developers who evaluate and copy a flag component library. The goal is a light "specimen sheet" look where the flags carry all saturated color and the interface stays neutral, ruled, and precise.
+description: Presentation rules for the Circle Flags UI React site (landing page and flag browser, rendered by website/src/react-app), in light and dark themes. Readers are frontend developers who evaluate and copy a flag component library. The goal is a "specimen sheet" look where the flags carry all saturated color and the interface stays neutral, ruled, and precise.
 version: 2026-10-08
 ---
 
@@ -11,7 +11,8 @@ version: 2026-10-08
 - [MUST] Applies to pages rendered by `website/src/react-app` (landing page type and catalog page type) and to their shared navigation and footer.
 - [MUST] Does not apply to the Starlight documentation pages under `/docs` and `/reference`. Starlight keeps its own theme.
 - [MUST] Priority for conflicts: factual copy and user requirements, then accessibility, then the reader task (see, choose, copy), then the rules in this file, then decoration.
-- [SHOULD] One light theme. The root element carries `data-theme="light"`. Decision: the flags read as printed specimens on paper; source: redesign request on 2026-10-08.
+- [SHOULD] Two themes, light and dark. `<html>` carries `data-theme="light"` or `data-theme="dark"`. The first visit follows `prefers-color-scheme`; the header toggle stores an explicit choice. Decision: user request on 2026-10-08.
+- [MUST] Both themes use the same token names. Components never branch on the theme; only token values change.
 
 ## 2. Brand and Readers
 
@@ -26,9 +27,11 @@ version: 2026-10-08
 
 - [SHOULD] First viewport: a 12-column split at `lg` (≥1024px). Columns 1–5 hold the `h1`, the lede, the primary and secondary action, and the install command. Columns 6–12 hold the interactive specimen panel. Below `lg` the text stacks above the panel.
 - [SHOULD] The first viewport shows a working component, not an illustration. The specimen panel renders real flag components that the reader can switch.
-- [SHOULD] Each later section is a "ruled section": a 1px `rule` top border, then a 12-column grid at `lg`. Columns 1–4 hold the section `h2` and one short paragraph. Columns 5–12 hold the content. Below `lg` the two parts stack.
+- [SHOULD] Later sections use one of two layouts. A "ruled section" (`RuledSection`) has a 1px `rule` top border and a 12-column grid at `lg`: columns 1–4 hold the `h2` and one short paragraph, columns 5–12 hold the content. A "feature explorer" has the `h2` in columns 1–5 and the paragraph in columns 7–12 on one row, then a vertical tab list in columns 1–5 and a sticky demo panel in columns 6–12. Below `lg` both layouts stack.
+- [SHOULD] A feature explorer tab shows its index (`01`), a mono label, and a `text-heading` title. Only the selected tab shows its body text. The selected tab has a 2px `accent` left border and a `card` fill.
+- [SHOULD] A demo panel is one `card` with three stacked parts: a `sunken` stage (minimum height 18rem) that renders real components, an optional control row, and a code panel. The code always matches the rendered state.
 - [SHOULD] Content inside ruled sections uses ruled rows (definition lists or tables), not card grids.
-- [SHOULD] The page ends with a full-width flag mosaic section, then the footer.
+- [SHOULD] The page ends with a full-width flag mosaic section, then the footer. Each mosaic flag is a link to the catalog page with that flag selected. At `lg` the mosaic shows every flag; below `lg` it is cut to a fixed height and fades out.
 
 ### Catalog page type
 
@@ -52,7 +55,7 @@ version: 2026-10-08
 - [SHOULD] `accent` is a deep indigo (hue 272). It stays distinct from the flag blues because it has a higher chroma and a violet shift.
 - [MUST] Body text on `paper` or `card` uses `ink` or `ink-2`. `ink-3` is only for labels and metadata of 12px or more.
 - [SHOULD] `accent` marks only: links on hover, the selected item, the pressed state of a toggle, and focus rings. Do not use `accent` as a fill for large areas or for decoration.
-- [SHOULD] Code panels use the `code*` colors and the Shiki theme `github-dark-default`. A code panel is the only dark surface on the page.
+- [SHOULD] Code panels use the `code*` colors and the Shiki theme `github-dark-default`. In the light theme a code panel is the only dark surface. In the dark theme `code` is darker than `paper`.
 - [SHOULD] Status text (Stable, Beta) is plain text: `ink` for Stable, `ink-3` for Beta. No colored badges.
 
 ### Space and layout
@@ -69,8 +72,8 @@ version: 2026-10-08
 
 ### Flags and images
 
-- [SHOULD] Flag components render at sizes from `FlagSizes` (16, 24, 32, 48, 64, 96, 128). Do not render a flag at another size.
-- [SHOULD] Flags have no drop shadow, ring, or border by default. The selected flag in a picker shows a 2px `accent` ring with a 2px `card` offset.
+- [SHOULD] Flag components render at sizes from `FlagSizes` (16, 24, 32, 48, 64, 96, 128). Exception: flags in a picker grid fill their square grid cell (`h-full w-full`), so the row of choices spans the full panel width.
+- [SHOULD] Flags have no drop shadow, ring, or border by default. The selected flag in a picker shows a 2px `accent` ring with a 2px `card` offset; unselected picker flags show at 80% opacity. A mosaic flag shows a 2px `accent` ring on hover.
 - [SHOULD] Framework logos from `website/public/framework-icons/*.svg` appear at 16px or 20px, inline with the framework name. No logo tiles.
 
 ### Controls and states
@@ -89,32 +92,33 @@ version: 2026-10-08
 
 ## 5. Available Primitives
 
-All tokens live in the `@theme` block of `website/src/react-app/index.css`. Tailwind generates utilities from them (`bg-paper`, `text-ink-2`, `border-rule`, `text-title`).
+All tokens live in the `@theme` block of `website/src/react-app/index.css`; the dark values live in `:root[data-theme='dark']` in the same file. Tailwind generates utilities from them (`bg-paper`, `text-ink-2`, `border-rule`, `text-title`).
 
-| Role             | Name                                                                                              | Usage condition                                                   | Status      |
-| ---------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
-| Page background  | `paper`                                                                                           | Page body, header                                                 | Implemented |
-| Panel surface    | `card`                                                                                            | Specimen panel, tiles, detail panel                               | Implemented |
-| Well surface     | `sunken`                                                                                          | Area behind a large flag, hover fill of rows                      | Implemented |
-| Primary text     | `ink`                                                                                             | Headings, primary values                                          | Implemented |
-| Secondary text   | `ink-2`                                                                                           | Paragraphs, lede                                                  | Implemented |
-| Metadata text    | `ink-3`                                                                                           | Mono labels, counts, Beta status                                  | Implemented |
-| Hairline         | `rule`                                                                                            | Section borders, row separators, panel borders                    | Implemented |
-| Strong hairline  | `rule-strong`                                                                                     | Secondary button border, hover border                             | Implemented |
-| Accent           | `accent`, `accent-soft`                                                                           | Selection, focus, link hover; `accent-soft` fills a selected tile | Implemented |
-| Code panel       | `code`, `code-surface`, `code-ink`, `code-muted`, `code-rule`                                     | Dark code panels only                                             | Implemented |
-| Display title    | `text-display`                                                                                    | The single `h1` of the landing page                               | Implemented |
-| Section title    | `text-title`                                                                                      | `h2` of ruled sections, `h1` of the catalog page                  | Implemented |
-| Row heading      | `text-heading`                                                                                    | `h3` in ruled rows and the detail panel                           | Implemented |
-| Lede             | `text-lede`                                                                                       | First paragraph under `h1`                                        | Implemented |
-| Body             | `text-body`                                                                                       | Paragraphs and row descriptions                                   | Implemented |
-| Label            | `text-label` with `font-mono uppercase`                                                           | Section labels, field labels, size captions                       | Implemented |
-| Floating shadow  | `shadow-float`                                                                                    | Catalog detail panel only                                         | Implemented |
-| Specimen motion  | `animate-specimen-in`                                                                             | Swap of the specimen flag                                         | Implemented |
-| Action link      | `LinkButton` (`variant`: `solid`, `ghost`) in `components/ui/LinkButton.tsx`                      | Primary and secondary actions                                     | Implemented |
-| Copy control     | `CopyButton` (`text`, `label`, `tone`: `paper`, `code`) in `components/ui/CopyButton.tsx`         | Any copyable command or snippet                                   | Implemented |
-| Ruled section    | `RuledSection` (`id`, `title`, `intro`, `children`) in `components/ui/RuledSection.tsx`           | Landing sections after the first viewport                         | Implemented |
-| Highlighted code | `HighlightedCode` (`code`, `lang`: `tsx`, `vue`, `svelte`) in `components/ui/HighlightedCode.tsx` | Code inside dark code panels                                      | Implemented |
+| Role             | Name                                                                                                 | Usage condition                                                   | Status      |
+| ---------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
+| Page background  | `paper`                                                                                              | Page body, header                                                 | Implemented |
+| Panel surface    | `card`                                                                                               | Specimen panel, tiles, detail panel                               | Implemented |
+| Well surface     | `sunken`                                                                                             | Area behind a large flag, hover fill of rows                      | Implemented |
+| Primary text     | `ink`                                                                                                | Headings, primary values                                          | Implemented |
+| Secondary text   | `ink-2`                                                                                              | Paragraphs, lede                                                  | Implemented |
+| Metadata text    | `ink-3`                                                                                              | Mono labels, counts, Beta status                                  | Implemented |
+| Hairline         | `rule`                                                                                               | Section borders, row separators, panel borders                    | Implemented |
+| Strong hairline  | `rule-strong`                                                                                        | Secondary button border, hover border                             | Implemented |
+| Accent           | `accent`, `accent-soft`                                                                              | Selection, focus, link hover; `accent-soft` fills a selected tile | Implemented |
+| Code panel       | `code`, `code-surface`, `code-ink`, `code-muted`, `code-rule`                                        | Dark code panels only                                             | Implemented |
+| Display title    | `text-display`                                                                                       | The single `h1` of the landing page                               | Implemented |
+| Section title    | `text-title`                                                                                         | `h2` of ruled sections, `h1` of the catalog page                  | Implemented |
+| Row heading      | `text-heading`                                                                                       | `h3` in ruled rows and the detail panel                           | Implemented |
+| Lede             | `text-lede`                                                                                          | First paragraph under `h1`                                        | Implemented |
+| Body             | `text-body`                                                                                          | Paragraphs and row descriptions                                   | Implemented |
+| Label            | `text-label` with `font-mono uppercase`                                                              | Section labels, field labels, size captions                       | Implemented |
+| Floating shadow  | `shadow-float`                                                                                       | Catalog detail panel only                                         | Implemented |
+| Specimen motion  | `animate-specimen-in`                                                                                | Swap of the specimen flag                                         | Implemented |
+| Action link      | `LinkButton` (`variant`: `solid`, `ghost`) in `components/ui/LinkButton.tsx`                         | Primary and secondary actions                                     | Implemented |
+| Copy control     | `CopyButton` (`text`, `label`, `tone`: `paper`, `code`) in `components/ui/CopyButton.tsx`            | Any copyable command or snippet                                   | Implemented |
+| Ruled section    | `RuledSection` (`id`, `title`, `intro`, `children`) in `components/ui/RuledSection.tsx`              | Landing sections after the first viewport                         | Implemented |
+| Highlighted code | `HighlightedCode` (`code`, `lang`: `tsx`, `vue`, `svelte`) in `components/ui/HighlightedCode.tsx`    | Code inside dark code panels                                      | Implemented |
+| Theme toggle     | `ThemeToggle` in `components/layout/ThemeToggle.tsx`, state from `useTheme()` in `utils/useTheme.ts` | Header only                                                       | Implemented |
 
 Example:
 
@@ -153,7 +157,7 @@ Extension boundary:
 
 - Style entry: `website/src/react-app/index.css`, imported once by `AppEntry.tsx`. It holds `@import 'tailwindcss'`, the `@theme` tokens, `@layer base` element styles, and keyframes.
 - Fonts: `fonts` in `website/astro.config.mjs`, emitted by `<Font>` in `website/src/components/HeadMeta.astro`.
-- Theme: the root wrapper in `App.tsx` sets `data-theme="light"`. There is no theme switch.
+- Theme: an inline script in `website/src/components/HeadMeta.astro` sets `data-theme` on `<html>` before first paint from `localStorage.theme` or `prefers-color-scheme`. `useTheme()` reads and toggles it. `theme-color` has one value per color scheme (`siteConfig.themeColor`, `siteConfig.themeColorDark`).
 - Components: `website/src/react-app/components/ui/` for primitives, `components/layout/` for header and footer, `components/pages/` for page compositions. Framework names, logos, and status labels come from `utils/frameworks.ts`.
 - Flag components: named imports from `@sankyu/react-circle-flags/flags/<code>` for fixed flags; `flagComponentMap` in `components/flag-browser/flagComponent.ts` for full-registry rendering, loaded lazily.
 
@@ -163,6 +167,9 @@ Extension boundary:
 | ---------------- | ----------------- |
 | Specimen panel   | `SpecimenPanel`   |
 | Ruled section    | `RuledSection`    |
+| Feature explorer | `SpecSection`     |
+| Demo panel       | `DemoFrame`       |
+| Theme toggle     | `ThemeToggle`     |
 | Flag mosaic      | `FlagMosaic`      |
 | Copy control     | `CopyButton`      |
 | Action link      | `LinkButton`      |
