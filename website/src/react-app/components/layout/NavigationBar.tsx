@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { hrefToRoute, isInternalRoute, toRouteHref, withBasePath } from '../../routing/paths'
 import type { Route } from '../../routing/paths'
+import ThemeToggle from './ThemeToggle'
 
 export interface NavItem {
   label: string
@@ -70,22 +71,26 @@ export default function NavigationBar({ items, activeHref, onNavigate }: Navigat
 
         <div className="hidden items-center gap-7 md:flex">
           {items.map(item => renderLink(item, 'h-9'))}
+          <ThemeToggle />
         </div>
 
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-rule-strong text-ink outline-none focus-visible:ring-2 focus-visible:ring-accent md:hidden"
-          aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
-          aria-expanded={isOpen}
-          aria-controls="mobile-navigation"
-          onClick={() => setIsOpen(value => !value)}
-        >
-          {isOpen ? (
-            <X className="h-5 w-5" aria-hidden />
-          ) : (
-            <Menu className="h-5 w-5" aria-hidden />
-          )}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-rule-strong text-ink outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setIsOpen(value => !value)}
+          >
+            {isOpen ? (
+              <X className="h-5 w-5" aria-hidden />
+            ) : (
+              <Menu className="h-5 w-5" aria-hidden />
+            )}
+          </button>
+        </div>
       </nav>
 
       {isOpen ? (

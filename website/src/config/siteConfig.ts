@@ -9,6 +9,7 @@ export const siteConfig = {
     '400+ circular SVG flag components for React, Vue, Solid, and Svelte with TypeScript, tree-shaking, and SSR support.',
   author: 'SanKyu Lab',
   themeColor: '#f9fafc',
+  themeColorDark: '#11141b',
   keywords:
     'React,Vue,Solid,Svelte,flags,SVG,circular flags,country flags,TypeScript,tree-shaking,SSR,Astro',
 

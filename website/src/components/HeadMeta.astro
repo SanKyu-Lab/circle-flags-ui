@@ -53,7 +53,17 @@ const {
 
 <meta name="keywords" content={keywords} />
 <meta name="author" content={author} />
-<meta name="theme-color" content={themeColor} />
+<meta name="theme-color" content={themeColor} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={siteConfig.themeColorDark} media="(prefers-color-scheme: dark)" />
+
+<script is:inline>
+  {
+    const stored = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    document.documentElement.dataset.theme =
+      stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light'
+  }
+</script>
 
 <!-- Search Engine Optimization -->
 <meta name="google-site-verification" content="WfVkoSU7qmJ6Z-RovU3Je-4tlrbH9e5_32g4ZgvUiJ4" />

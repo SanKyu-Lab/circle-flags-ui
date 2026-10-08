@@ -65,6 +65,36 @@
   }
 }
 
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-paper: oklch(0.165 0.014 266);
+  --color-card: oklch(0.2 0.016 266);
+  --color-sunken: oklch(0.235 0.018 266);
+
+  --color-ink: oklch(0.96 0.006 266);
+  --color-ink-2: oklch(0.81 0.012 266);
+  --color-ink-3: oklch(0.69 0.014 266);
+
+  --color-rule: oklch(0.285 0.016 266);
+  --color-rule-strong: oklch(0.39 0.018 266);
+
+  --color-accent: oklch(0.74 0.14 272);
+  --color-accent-soft: oklch(0.74 0.14 272 / 0.14);
+
+  --color-code: oklch(0.13 0.014 266);
+  --color-code-surface: oklch(0.22 0.018 266);
+  --color-code-ink: oklch(0.93 0.008 266);
+  --color-code-muted: oklch(0.7 0.016 266);
+  --color-code-rule: oklch(0.25 0.016 266);
+
+  --shadow-float: 0 20px 48px oklch(0 0 0 / 0.5), 0 2px 6px oklch(0 0 0 / 0.3);
+}
+
 @layer base {
   html {
     background: var(--color-paper);
