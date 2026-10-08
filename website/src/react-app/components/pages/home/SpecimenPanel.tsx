@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { ComponentType, SVGProps } from 'react'
 import { FlagSizes } from '@sankyu/react-circle-flags'
-import { FlagAu } from '@sankyu/react-circle-flags/flags/au'
 import { FlagBr } from '@sankyu/react-circle-flags/flags/br'
 import { FlagCa } from '@sankyu/react-circle-flags/flags/ca'
 import { FlagCh } from '@sankyu/react-circle-flags/flags/ch'
@@ -9,8 +8,8 @@ import { FlagCn } from '@sankyu/react-circle-flags/flags/cn'
 import { FlagDe } from '@sankyu/react-circle-flags/flags/de'
 import { FlagGb } from '@sankyu/react-circle-flags/flags/gb'
 import { FlagIn } from '@sankyu/react-circle-flags/flags/in'
-import { FlagJp } from '@sankyu/react-circle-flags/flags/jp'
 import { FlagKr } from '@sankyu/react-circle-flags/flags/kr'
+import { FlagSc } from '@sankyu/react-circle-flags/flags/sc'
 import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
 import { FlagZa } from '@sankyu/react-circle-flags/flags/za'
 import CopyButton from '../../ui/CopyButton'
@@ -25,8 +24,8 @@ interface SpecimenFlag {
 }
 
 const specimenFlags: readonly SpecimenFlag[] = [
-  { code: 'jp', componentName: 'FlagJp', Component: FlagJp },
   { code: 'br', componentName: 'FlagBr', Component: FlagBr },
+  { code: 'sc', componentName: 'FlagSc', Component: FlagSc },
   { code: 'us', componentName: 'FlagUs', Component: FlagUs },
   { code: 'gb', componentName: 'FlagGb', Component: FlagGb },
   { code: 'de', componentName: 'FlagDe', Component: FlagDe },
@@ -35,7 +34,6 @@ const specimenFlags: readonly SpecimenFlag[] = [
   { code: 'in', componentName: 'FlagIn', Component: FlagIn },
   { code: 'cn', componentName: 'FlagCn', Component: FlagCn },
   { code: 'kr', componentName: 'FlagKr', Component: FlagKr },
-  { code: 'au', componentName: 'FlagAu', Component: FlagAu },
   { code: 'ca', componentName: 'FlagCa', Component: FlagCa },
 ]
 

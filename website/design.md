@@ -48,9 +48,11 @@ version: 2026-10-08
 
 ### Color
 
+- [SHOULD] All neutral tokens (`paper`, `card`, `sunken`, `ink*`, `rule*`, `code*`) share one cool hue (264–268) with chroma of 0.02 or less. Do not mix warm and cool neutrals. Decision: a single-temperature gray lets the flag colors stand out; source: palette revision on 2026-10-08.
+- [SHOULD] `accent` is a deep indigo (hue 272). It stays distinct from the flag blues because it has a higher chroma and a violet shift.
 - [MUST] Body text on `paper` or `card` uses `ink` or `ink-2`. `ink-3` is only for labels and metadata of 12px or more.
 - [SHOULD] `accent` marks only: links on hover, the selected item, the pressed state of a toggle, and focus rings. Do not use `accent` as a fill for large areas or for decoration.
-- [SHOULD] Code panels use the `code*` colors. A code panel is the only dark surface on the page.
+- [SHOULD] Code panels use the `code*` colors and the Shiki theme `github-dark-default`. A code panel is the only dark surface on the page.
 - [SHOULD] Status text (Stable, Beta) is plain text: `ink` for Stable, `ink-3` for Beta. No colored badges.
 
 ### Space and layout

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import auroraX from '@shikijs/themes/aurora-x'
+import githubDarkDefault from '@shikijs/themes/github-dark-default'
 import { createHighlighterCore, type ThemedToken } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
 const highlighterPromise = createHighlighterCore({
-  themes: [auroraX],
+  themes: [githubDarkDefault],
   langs: [],
   engine: createJavaScriptRegexEngine(),
 })
@@ -45,7 +45,7 @@ export function useShikiTokens(code: string, lang: HighlightLanguage) {
     let cancelled = false
     const run = async () => {
       const highlighter = await ensureLanguage(lang)
-      const { tokens } = highlighter.codeToTokens(code, { lang, theme: auroraX })
+      const { tokens } = highlighter.codeToTokens(code, { lang, theme: githubDarkDefault })
       if (!cancelled) setResult({ code, lines: tokens })
     }
     run().catch((error: Error) => {
