@@ -1,51 +1,23 @@
-import { useState } from 'react'
-import { ArrowRight, Check, Copy, ExternalLink } from 'lucide-react'
-import { FlagBr } from '@sankyu/react-circle-flags/flags/br'
-import { FlagJp } from '@sankyu/react-circle-flags/flags/jp'
-import { FlagUs } from '@sankyu/react-circle-flags/flags/us'
-import FlagShowcase from '../../flag-showcase/FlagShowcase'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import LinkButton from '../../ui/LinkButton'
 import { toRouteHref, withBasePath } from '../../../routing/paths'
+import SpecimenPanel from './SpecimenPanel'
 
 interface HeroSectionProps {
-  onBrowseClick: () => void
-  onFlagClick?: (code: string) => void
+  flagCount: number
+  onBrowse: () => void
 }
 
-const installCommand = 'pnpm add @sankyu/react-circle-flags'
-
-export default function HeroSection({ onBrowseClick, onFlagClick }: HeroSectionProps) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(installCommand)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1400)
-    } catch {
-      setCopied(false)
-    }
-  }
-
+export default function HeroSection({ flagCount, onBrowse }: HeroSectionProps) {
   return (
-    <section className="grid min-h-[calc(100dvh-4rem)] items-center gap-12 py-16 lg:grid-cols-12 lg:gap-16 lg:py-20">
-      <div className="lg:col-span-7">
-        <h1 className="max-w-3xl text-[clamp(2.75rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.055em] text-(--ink)">
-          Flags that fit
-          <span
-            className="mx-3 inline-flex translate-y-1 items-center -space-x-2 align-baseline sm:mx-4"
-            aria-hidden="true"
-          >
-            <FlagUs className="h-10 w-10 ring-4 ring-(--bg) sm:h-14 sm:w-14" />
-            <FlagJp className="h-10 w-10 ring-4 ring-(--bg) sm:h-14 sm:w-14" />
-            <FlagBr className="h-10 w-10 ring-4 ring-(--bg) sm:h-14 sm:w-14" />
-          </span>
-          every interface.
-        </h1>
+    <section className="grid items-center gap-12 py-14 lg:min-h-[calc(100dvh-4rem)] lg:grid-cols-12 lg:gap-8 lg:py-16">
+      <div className="lg:col-span-5 lg:pr-6">
+        <h1 className="max-w-xl text-display text-ink">Circular flags as typed components.</h1>
 
-        <p className="mt-7 max-w-xl text-lg leading-8 text-(--muted-light)">
-          Typed SVG components for React, Vue, Solid, and Svelte, verified with Vite 8, Next.js, and
-          Nuxt.
+        <p className="mt-6 max-w-lg text-lede text-ink-2">
+          <span className="tabular-nums">{flagCount}</span> SVG flags for React, Vue, Solid, and
+          Svelte. Import one flag per file, render it on the server, and style it like any other SVG
+          element.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -54,39 +26,34 @@ export default function HeroSection({ onBrowseClick, onFlagClick }: HeroSectionP
             variant="solid"
             onClick={event => {
               event.preventDefault()
-              onBrowseClick()
+              onBrowse()
             }}
           >
             Browse flags
             <ArrowRight className="h-4 w-4" aria-hidden />
           </LinkButton>
-          <LinkButton href={withBasePath('docs/guides/getting-started/')} target="_blank">
+          <LinkButton href={withBasePath('docs/guides/getting-started/')}>
             Read the docs
-            <ExternalLink className="h-4 w-4" aria-hidden />
+            <ArrowUpRight className="h-4 w-4" aria-hidden />
           </LinkButton>
         </div>
 
-        <div className="mt-8 flex max-w-lg items-center gap-3 rounded-xl border border-(--border-strong) bg-(--surface) p-2 pl-4">
-          <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-sm text-(--ink-secondary)">
-            {installCommand}
-          </code>
-          <button
-            type="button"
-            onClick={handleCopy}
-            aria-label="Copy install command"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-(--muted-light) outline-none transition-colors hover:bg-(--surface-2) hover:text-(--ink) focus-visible:ring-2 focus-visible:ring-(--accent)"
-          >
-            {copied ? (
-              <Check className="h-4 w-4" aria-hidden />
-            ) : (
-              <Copy className="h-4 w-4" aria-hidden />
-            )}
-          </button>
-        </div>
+        <dl className="mt-12 grid max-w-md grid-cols-3 border-t border-rule pt-5">
+          {[
+            { term: 'Flags', value: String(flagCount) },
+            { term: 'Frameworks', value: '4' },
+            { term: 'License', value: 'MIT' },
+          ].map(item => (
+            <div key={item.term}>
+              <dt className="text-label font-mono uppercase text-ink-3">{item.term}</dt>
+              <dd className="mt-1 text-heading text-ink tabular-nums">{item.value}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
 
-      <div className="lg:col-span-5">
-        <FlagShowcase onFlagClick={onFlagClick} />
+      <div className="min-w-0 lg:col-span-7">
+        <SpecimenPanel />
       </div>
     </section>
   )

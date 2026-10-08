@@ -1,43 +1,31 @@
-import { ExternalLink } from 'lucide-react'
 import { withBasePath } from '../../routing/paths'
+
+const footerLinks = [
+  { label: 'Documentation', href: withBasePath('docs/guides/getting-started/') },
+  { label: 'llms.txt', href: withBasePath('llms.txt') },
+  { label: 'npm', href: 'https://www.npmjs.com/package/@sankyu/react-circle-flags' },
+  { label: 'GitHub', href: 'https://github.com/SanKyu-Lab/circle-flags-ui' },
+] as const
 
 export default function AppFooter() {
   return (
-    <footer className="mt-24 border-t border-(--border-weak) py-8 text-sm text-(--muted-light)">
+    <footer className="border-t border-rule py-10">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <img
-            src={withBasePath('favicon.svg')}
-            alt=""
-            className="h-8 w-8"
-            width="32"
-            height="32"
-          />
-          <div>
-            <p className="font-semibold text-(--ink)">Circle Flags UI</p>
-            <p>Maintained by Sankyu Lab.</p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-          <a
-            href={withBasePath('docs/guides/getting-started/')}
-            className="inline-flex items-center gap-1.5 text-(--ink) hover:text-(--accent)"
-          >
-            Documentation
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-          </a>
-          <a
-            href="https://github.com/SanKyu-Lab/circle-flags-ui"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 text-(--ink) hover:text-(--accent)"
-          >
-            GitHub
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-          </a>
-          <span>© {new Date().getFullYear()} Sankyu Lab</span>
-        </div>
+        <p className="text-body text-ink-3">
+          Circle Flags UI · MIT License · © {new Date().getFullYear()} Sankyu Lab
+        </p>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          {footerLinks.map(link => (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                className="inline-block rounded-sm py-1.5 text-body text-ink-2 outline-none hover:text-accent focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </footer>
   )

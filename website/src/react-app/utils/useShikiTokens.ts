@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import auroraX from '@shikijs/themes/aurora-x'
-import { createHighlighterCore } from 'shiki/core'
+import { createHighlighterCore, type ThemedToken } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
 const highlighterPromise = createHighlighterCore({
@@ -15,7 +15,7 @@ const languageLoaders = {
   svelte: async () => (await import('@shikijs/langs/svelte')).default,
 } as const
 
-type HighlightLanguage = keyof typeof languageLoaders
+export type HighlightLanguage = keyof typeof languageLoaders
 
 const languageLoadPromises = new Map<HighlightLanguage, Promise<void>>()
 
@@ -33,37 +33,29 @@ const ensureLanguage = async (language: HighlightLanguage) => {
   return highlighter
 }
 
-export function useShikiHtml(code: string, lang: string) {
-  const [html, setHtml] = useState<string | null>(null)
+interface HighlightResult {
+  code: string
+  lines: ThemedToken[][]
+}
+
+export function useShikiTokens(code: string, lang: HighlightLanguage) {
+  const [result, setResult] = useState<HighlightResult | null>(null)
 
   useEffect(() => {
     let cancelled = false
     const run = async () => {
-      try {
-        const language = lang in languageLoaders ? (lang as HighlightLanguage) : 'text'
-        const highlighter =
-          language === 'text' ? await highlighterPromise : await ensureLanguage(language)
-        const highlighted = highlighter.codeToHtml(code, { lang: language, theme: auroraX })
-        const normalized = highlighted.replace(
-          /background-color:\s*[^;"]+;?/g,
-          'background-color: transparent;'
-        )
-        if (!cancelled) {
-          setHtml(normalized)
-        }
-      } catch (error) {
-        console.error('Failed to highlight with Shiki', error)
-        if (!cancelled) {
-          setHtml(null)
-        }
-      }
+      const highlighter = await ensureLanguage(lang)
+      const { tokens } = highlighter.codeToTokens(code, { lang, theme: auroraX })
+      if (!cancelled) setResult({ code, lines: tokens })
     }
-    run()
+    run().catch((error: Error) => {
+      console.error(`Failed to highlight ${lang} code with Shiki`, error)
+    })
 
     return () => {
       cancelled = true
     }
   }, [code, lang])
 
-  return html
+  return result?.code === code ? result.lines : null
 }

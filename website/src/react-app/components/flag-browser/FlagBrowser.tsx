@@ -36,9 +36,11 @@ export default function FlagBrowser() {
   const selectedCurrency = query.currency ?? ALL_OPTION
   const searchTerm = query.filter ?? ''
   const languageTerm = query.language ?? ''
-  const countryCodes = query.countryCode
-    ? query.countryCode.split(',').map(code => code.trim().toLowerCase())
-    : []
+  const countryCodes = useMemo(
+    () =>
+      query.countryCode ? query.countryCode.split(',').map(code => code.trim().toLowerCase()) : [],
+    [query.countryCode]
+  )
 
   const allFlags = useMemo(() => getAllFlags(), [])
   const regionOptions = useMemo(() => {
@@ -179,11 +181,14 @@ export default function FlagBrowser() {
         onReset={handleReset}
       />
 
-      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+      <div
+        className={`grid grid-cols-[repeat(auto-fill,minmax(5.5rem,1fr))] gap-2 pb-16 ${selectedFlag ? 'sm:pb-96' : ''}`}
+      >
         <FlagResultsGrid
           flags={filteredFlags}
           selectedFlagCode={selectedFlag?.code}
           onSelect={handleSelect}
+          onReset={handleReset}
         />
       </div>
 

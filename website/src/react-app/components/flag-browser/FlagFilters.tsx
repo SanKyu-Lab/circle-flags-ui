@@ -1,4 +1,5 @@
-import { Search, X } from 'lucide-react'
+import { useId } from 'react'
+import { ChevronDown, Search, X } from 'lucide-react'
 import type { FlagInfo } from '../../utils/flagData'
 
 export type FilterType = FlagInfo['type'] | 'all'
@@ -32,6 +33,56 @@ interface FlagFiltersProps {
   onReset: () => void
 }
 
+const fieldClass =
+  'h-10 w-full rounded-md border border-rule-strong bg-card px-3 text-body text-ink outline-none placeholder:text-ink-3 focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/30'
+const labelClass = 'mb-1.5 block text-label font-mono uppercase text-ink-3'
+const textButtonClass =
+  'rounded-md px-2 py-1 text-body font-medium text-ink underline decoration-rule-strong underline-offset-4 outline-none hover:text-accent hover:decoration-accent focus-visible:ring-2 focus-visible:ring-accent'
+
+interface SelectFieldProps<Value extends string> {
+  label: string
+  value: Value
+  options: Array<{ value: Value; label: string }>
+  onChange: (value: Value) => void
+}
+
+function SelectField<Value extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: SelectFieldProps<Value>) {
+  const id = useId()
+  return (
+    <div>
+      <label htmlFor={id} className={labelClass}>
+        {label}
+      </label>
+      <div className="relative">
+        <select
+          id={id}
+          value={value}
+          onChange={event => {
+            const next = options.find(option => option.value === event.target.value)
+            if (next) onChange(next.value)
+          }}
+          className={`${fieldClass} appearance-none pr-9`}
+        >
+          {options.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown
+          className="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-ink-3"
+          aria-hidden
+        />
+      </div>
+    </div>
+  )
+}
+
 export default function FlagFilters({
   searchTerm,
   onSearchChange,
@@ -55,8 +106,8 @@ export default function FlagFilters({
   totalCount,
   onReset,
 }: FlagFiltersProps) {
-  const selectClass =
-    'w-full rounded-xl border border-(--border-strong) bg-(--overlay-mid) px-3 py-2 text-sm text-(--ink) focus:outline-none focus:border-(--accent) transition appearance-none'
+  const searchId = useId()
+  const languageId = useId()
   const hasActiveFilters =
     selectedRegion !== 'all' ||
     selectedContinent !== 'all' ||
@@ -67,145 +118,96 @@ export default function FlagFilters({
     countryCodes.length > 0
 
   return (
-    <div className="sticky top-0 z-10 bg-(--bg)/95 backdrop-blur-sm border-b border-(--border-weak) pb-6 -mx-6 px-6">
-      <div className="space-y-4">
-        <div className="flex items-center gap-3 rounded-2xl border border-(--border-strong) bg-(--overlay-mid) px-4 py-3">
-          <Search className="w-4 h-4 text-(--muted)" aria-hidden />
+    <div className="z-10 -mx-5 border-y border-rule bg-paper px-5 py-5 sm:-mx-8 sm:px-8 md:sticky md:top-16">
+      <div className="relative">
+        <label htmlFor={searchId} className="sr-only">
+          Search flags
+        </label>
+        <Search
+          className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-3"
+          aria-hidden
+        />
+        <input
+          id={searchId}
+          type="search"
+          placeholder="Search name, ISO code, currency, or language"
+          value={searchTerm}
+          onChange={event => onSearchChange(event.target.value)}
+          className={`${fieldClass} h-11 pr-11 pl-9`}
+        />
+        {searchTerm ? (
+          <button
+            type="button"
+            aria-label="Clear search"
+            onClick={() => onSearchChange('')}
+            className="absolute top-1/2 right-1.5 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-ink-3 outline-none hover:bg-sunken hover:text-ink focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <X className="h-4 w-4" aria-hidden />
+          </button>
+        ) : null}
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-5">
+        <SelectField
+          label="Region"
+          value={selectedRegion}
+          options={regionOptions}
+          onChange={onRegionChange}
+        />
+        <SelectField
+          label="Continent"
+          value={selectedContinent}
+          options={continentOptions}
+          onChange={onContinentChange}
+        />
+        <SelectField
+          label="Type"
+          value={selectedType}
+          options={typeOptions}
+          onChange={onTypeChange}
+        />
+        <SelectField
+          label="Currency"
+          value={selectedCurrency}
+          options={currencyOptions}
+          onChange={onCurrencyChange}
+        />
+        <div className="col-span-2 md:col-span-1">
+          <label htmlFor={languageId} className={labelClass}>
+            Language
+          </label>
           <input
+            id={languageId}
             type="text"
-            placeholder="Search name, ISO, currency, or language..."
-            value={searchTerm}
-            onChange={event => onSearchChange(event.target.value)}
-            className="flex-1 bg-transparent text-sm text-(--ink) placeholder-(--muted)/70 focus:outline-none"
+            value={languageTerm}
+            onChange={event => onLanguageChange(event.target.value)}
+            placeholder="en, fr, es"
+            className={fieldClass}
           />
-          {searchTerm && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="text-(--muted) hover:text-(--ink) transition"
-            >
-              <X className="w-4 h-4" aria-hidden />
+        </div>
+      </div>
+
+      <div className="mt-4 flex min-h-8 flex-wrap items-center gap-x-5 gap-y-2">
+        <p className="text-label font-mono uppercase text-ink-3" aria-live="polite">
+          Showing <span className="text-ink tabular-nums">{filteredCount}</span> of{' '}
+          <span className="tabular-nums">{totalCount}</span>
+        </p>
+        {countryCodes.length > 0 ? (
+          <p className="flex items-center gap-1 text-body text-ink-2">
+            Code{' '}
+            <code className="text-ink">
+              {countryCodes.map(code => code.toUpperCase()).join(', ')}
+            </code>
+            <button type="button" onClick={onCountryCodeClear} className={textButtonClass}>
+              Clear
             </button>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div>
-            <label className="block text-xs uppercase tracking-[0.2em] text-(--muted) mb-2">
-              Region
-            </label>
-            <select
-              value={selectedRegion}
-              onChange={event => onRegionChange(event.target.value)}
-              className={selectClass}
-            >
-              {regionOptions.map(region => (
-                <option key={region.value} value={region.value}>
-                  {region.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-[0.2em] text-(--muted) mb-2">
-              Continent
-            </label>
-            <select
-              value={selectedContinent}
-              onChange={event => onContinentChange(event.target.value)}
-              className={selectClass}
-            >
-              {continentOptions.map(continent => (
-                <option key={continent.value} value={continent.value}>
-                  {continent.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-[0.2em] text-(--muted) mb-2">
-              Type
-            </label>
-            <select
-              value={selectedType}
-              onChange={event => onTypeChange(event.target.value as FilterType)}
-              className={selectClass}
-            >
-              {typeOptions.map(type => (
-                <option key={type.value} value={type.value}>
-                  {type.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs uppercase tracking-[0.2em] text-(--muted) mb-2">
-              Currency
-            </label>
-            <select
-              value={selectedCurrency}
-              onChange={event => onCurrencyChange(event.target.value)}
-              className={selectClass}
-            >
-              {currencyOptions.map(currency => (
-                <option key={currency.value} value={currency.value}>
-                  {currency.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3 items-center">
-          {countryCodes.length > 0 && (
-            <div className="flex items-center gap-2 rounded-2xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-2">
-              <span className="text-xs text-(--muted)">
-                Country code:
-                <span className="ml-2 text-(--ink) font-semibold">
-                  {countryCodes.map(code => code.toUpperCase()).join(', ')}
-                </span>
-              </span>
-              <button
-                type="button"
-                onClick={onCountryCodeClear}
-                className="rounded-full border border-(--border-weak) px-2 py-1 text-[11px] text-(--ink) hover:border-(--accent) transition"
-              >
-                Clear
-              </button>
-            </div>
-          )}
-          <div className="flex items-center gap-2 rounded-2xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-2">
-            <span className="text-xs text-(--muted)">
-              Showing <span className="text-(--accent) font-semibold">{filteredCount}</span> /{' '}
-              {totalCount}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 rounded-2xl border border-(--border-weak) bg-(--overlay-soft) px-4 py-2">
-            <label className="text-xs uppercase tracking-[0.2em] text-(--muted)">Language</label>
-            <input
-              type="text"
-              value={languageTerm}
-              onChange={event => onLanguageChange(event.target.value)}
-              placeholder="e.g. en, fr, es"
-              className="bg-transparent text-sm text-(--ink) placeholder-(--muted)/70 focus:outline-none"
-            />
-          </div>
-
-          {hasActiveFilters && (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={onReset}
-                className="rounded-full border border-(--border-strong) px-3 py-1 text-xs text-(--ink) hover:border-(--accent) transition"
-              >
-                Reset filters
-              </button>
-              <span className="text-[11px] text-(--muted)">Active filters applied</span>
-            </div>
-          )}
-        </div>
+          </p>
+        ) : null}
+        {hasActiveFilters ? (
+          <button type="button" onClick={onReset} className={textButtonClass}>
+            Reset filters
+          </button>
+        ) : null}
       </div>
     </div>
   )

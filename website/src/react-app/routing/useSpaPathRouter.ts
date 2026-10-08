@@ -27,6 +27,7 @@ export function useSpaPathRouter(initialRoute: Route = 'home') {
     const targetPath = `${toRouteHref(next)}${search}`
     if (window.location.pathname + window.location.search !== targetPath) {
       window.history.pushState({ route: next }, '', targetPath)
+      window.scrollTo({ top: 0 })
     }
     setRoute(next)
   }, [])

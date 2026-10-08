@@ -175,7 +175,7 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'DM Sans',
       cssVariable: '--font-sans',
-      weights: [400, 500, 700],
+      weights: [400, 500, 600],
       styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['system-ui', '-apple-system', 'sans-serif'],

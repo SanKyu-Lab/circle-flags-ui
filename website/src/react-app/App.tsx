@@ -1,7 +1,5 @@
 import { lazy, Suspense, useMemo } from 'react'
-import { ExternalLink } from 'lucide-react'
-import AppBackground from './components/layout/AppBackground'
-import NavigationBar from './components/layout/NavigationBar'
+import NavigationBar, { type NavItem } from './components/layout/NavigationBar'
 import HomePage from './components/pages/HomePage'
 import { useSpaPathRouter } from './routing/useSpaPathRouter'
 import { toRouteHref, withBasePath } from './routing/paths'
@@ -14,65 +12,29 @@ interface AppProps {
   initialRoute?: Route
 }
 
+const navItems: readonly NavItem[] = [
+  { label: 'Home', href: toRouteHref('home') },
+  { label: 'Browse', href: toRouteHref('browse') },
+  { label: 'Docs', href: withBasePath('docs/guides/getting-started/') },
+  {
+    label: 'GitHub',
+    href: 'https://github.com/SanKyu-Lab/circle-flags-ui',
+    external: true,
+  },
+]
+
 export default function App({ initialRoute = 'home' }: AppProps) {
   const { route, currentPath, navigate } = useSpaPathRouter(initialRoute)
   const flagCount = useMemo(() => getFlagCount(), [])
 
-  const handleFlagNavigate = (code: string) => {
-    navigate('browse', `?countryCode=${encodeURIComponent(code)}`)
-  }
-
-  const navItems = useMemo(
-    () => [
-      { label: 'Home', href: toRouteHref('home'), ariaLabel: 'Home page' },
-      { label: 'Browse', href: toRouteHref('browse'), ariaLabel: 'Browse flags' },
-      {
-        label: 'Docs',
-        href: withBasePath('docs/guides/getting-started/'),
-        ariaLabel: 'Documentation',
-        target: '_blank',
-        rel: 'noreferrer',
-        icon: <ExternalLink className="h-3.5 w-3.5" aria-hidden />,
-      },
-      {
-        label: 'GitHub',
-        href: 'https://github.com/SanKyu-Lab/circle-flags-ui',
-        ariaLabel: 'GitHub repository',
-        target: '_blank',
-        rel: 'noreferrer',
-        icon: <ExternalLink className="h-3.5 w-3.5" aria-hidden />,
-      },
-    ],
-    []
-  )
-
   return (
-    <div
-      className="relative min-h-[100dvh] overflow-x-hidden bg-(--bg) text-(--ink)"
-      data-theme="dark"
-    >
-      <AppBackground />
+    <div className="relative min-h-dvh bg-paper text-ink" data-theme="light">
+      <NavigationBar items={navItems} activeHref={currentPath} onNavigate={navigate} />
 
-      <NavigationBar
-        items={navItems}
-        activeHref={currentPath}
-        onRouteChangeWithSearch={navigate}
-        onRouteChange={navigate}
-      />
-
-      <main className="relative mx-auto w-full max-w-7xl px-5 sm:px-8">
-        {route === 'home' && (
-          <HomePage
-            flagCount={flagCount}
-            onBrowseClick={() => window.open(toRouteHref('browse'), '_blank')}
-            onFlagClick={handleFlagNavigate}
-            onFilterNavigate={code =>
-              window.open(withBasePath(`browse?filter=${encodeURIComponent(code)}`), '_blank')
-            }
-          />
-        )}
+      <main className="mx-auto w-full max-w-7xl px-5 sm:px-8">
+        {route === 'home' && <HomePage flagCount={flagCount} onBrowse={() => navigate('browse')} />}
         {route === 'browse' && (
-          <Suspense fallback={<div className="py-16 text-sm text-(--muted)">Loading flags...</div>}>
+          <Suspense fallback={<p className="py-16 text-body text-ink-3">Loading flags…</p>}>
             <BrowserPage flagCount={flagCount} />
           </Suspense>
         )}

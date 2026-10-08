@@ -1,26 +1,21 @@
 import AppFooter from '../layout/AppFooter'
-import GallerySection from './home/GallerySection'
+import CoverageSection from './home/CoverageSection'
+import FrameworksSection from './home/FrameworksSection'
 import HeroSection from './home/HeroSection'
-import QuickStartSection from './home/QuickStartSection'
+import SpecSection from './home/SpecSection'
 
 interface HomePageProps {
   flagCount: number
-  onBrowseClick: () => void
-  onFilterNavigate?: (code: string) => void
-  onFlagClick?: (code: string) => void
+  onBrowse: () => void
 }
 
-export default function HomePage({
-  flagCount,
-  onBrowseClick,
-  onFilterNavigate,
-  onFlagClick,
-}: HomePageProps) {
+export default function HomePage({ flagCount, onBrowse }: HomePageProps) {
   return (
     <>
-      <HeroSection onBrowseClick={onBrowseClick} onFlagClick={onFlagClick} />
-      <GallerySection flagCount={flagCount} onFilterNavigate={onFilterNavigate} />
-      <QuickStartSection />
+      <HeroSection flagCount={flagCount} onBrowse={onBrowse} />
+      <SpecSection />
+      <FrameworksSection />
+      <CoverageSection flagCount={flagCount} onBrowse={onBrowse} />
       <AppFooter />
     </>
   )
