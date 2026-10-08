@@ -1,0 +1,124 @@
+---
+import Search from '@astrojs/starlight/components/Search.astro'
+import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro'
+import { Icon } from '@astrojs/starlight/components'
+import { siteConfig } from '../../config/siteConfig'
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`
+const withBase = (path: string) => `${base}${path}`
+
+const links = [
+  { label: 'Home', href: withBase('') },
+  { label: 'Browse', href: withBase('browse/') },
+  { label: 'Docs', href: withBase('docs/guides/getting-started/'), current: true },
+  { label: 'GitHub', href: siteConfig.github.url, external: true },
+]
+---
+
+<div class="docs-header">
+  <a href={withBase('')} class="brand">
+    <img src={withBase('favicon.svg')} alt="" width="28" height="28" />
+    <span>Circle Flags UI</span>
+  </a>
+
+  <nav aria-label="Site" class="site-nav">
+    {links.map(link => (
+      <a
+        href={link.href}
+        aria-current={link.current ? 'true' : undefined}
+        target={link.external ? '_blank' : undefined}
+        rel={link.external ? 'noopener noreferrer' : undefined}
+      >
+        {link.label}
+        {link.external && <Icon name="external" size="0.875rem" />}
+      </a>
+    ))}
+  </nav>
+
+  <div class="search print:hidden">
+    <Search />
+  </div>
+
+  <div class="theme print:hidden">
+    <ThemeSelect />
+  </div>
+</div>
+
+<style>
+  .docs-header {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    height: 100%;
+    font-family: var(--__sl-font);
+  }
+
+  .brand,
+  .site-nav a {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .brand {
+    gap: 0.625rem;
+    flex-shrink: 0;
+    color: var(--cf-ink);
+    font-weight: 600;
+  }
+
+  .brand img {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .site-nav {
+    display: none;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .site-nav a {
+    gap: 0.375rem;
+    height: 2.25rem;
+    color: var(--cf-ink-3);
+    font-weight: 500;
+    transition: color 150ms ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a[aria-current] {
+    color: var(--cf-ink);
+  }
+
+  .brand:focus-visible,
+  .site-nav a:focus-visible {
+    box-shadow: 0 0 0 2px var(--cf-accent);
+  }
+
+  .search {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .theme {
+    display: none;
+  }
+
+  @media (min-width: 50rem) {
+    .site-nav,
+    .theme {
+      display: flex;
+    }
+
+    .search {
+      max-width: 22rem;
+      margin-inline-start: auto;
+    }
+  }
+</style>

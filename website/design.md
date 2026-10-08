@@ -1,6 +1,6 @@
 ---
 name: circle-flags-ui-design
-description: Presentation rules for the Circle Flags UI React site (landing page and flag browser, rendered by website/src/react-app), in light and dark themes. Readers are frontend developers who evaluate and copy a flag component library. The goal is a "specimen sheet" look where the flags carry all saturated color and the interface stays neutral, ruled, and precise.
+description: Presentation rules for the Circle Flags UI website in light and dark themes, covering the React pages (landing page and flag browser, rendered by website/src/react-app) and the Starlight documentation pages. Readers are frontend developers who evaluate and copy a flag component library. The goal is a "specimen sheet" look where the flags carry all saturated color and the interface stays neutral, ruled, and precise.
 version: 2026-10-08
 ---
 
@@ -8,8 +8,8 @@ version: 2026-10-08
 
 ## 1. Scope and Priority
 
-- [MUST] Applies to pages rendered by `website/src/react-app` (landing page type and catalog page type) and to their shared navigation and footer.
-- [MUST] Does not apply to the Starlight documentation pages under `/docs` and `/reference`. Starlight keeps its own theme.
+- [MUST] Applies to pages rendered by `website/src/react-app` (landing page type and catalog page type), to their shared navigation and footer, and to the Starlight documentation pages under `/docs` and `/reference` (documentation page type).
+- [MUST] The React pages and the documentation pages read colors from the same tokens. Do not define a color for one part of the site that the other part cannot use.
 - [MUST] Priority for conflicts: factual copy and user requirements, then accessibility, then the reader task (see, choose, copy), then the rules in this file, then decoration.
 - [SHOULD] Two themes, light and dark. `<html>` carries `data-theme="light"` or `data-theme="dark"`. The first visit follows `prefers-color-scheme`; the header toggle stores an explicit choice. Decision: user request on 2026-10-08.
 - [MUST] Both themes use the same token names. Components never branch on the theme; only token values change.
@@ -38,6 +38,16 @@ version: 2026-10-08
 - [SHOULD] First viewport: page `h1` and one line of count text, then a sticky filter bar, then a dense grid of flag tiles.
 - [SHOULD] The sticky filter bar sticks directly below the header (`top-16`). It never slides under the header.
 - [SHOULD] The detail of a selected item opens as a floating panel fixed to the bottom center of the viewport, 672px wide at `sm` and wider. Below `sm` it spans the viewport width with a 12px inset and scrolls inside a 75dvh limit. It is the only surface that uses `shadow-float`.
+
+### Documentation page type
+
+- [SHOULD] Layout follows Starlight: left sidebar, content column, right table of contents. The header matches the React header: logo and name on the left, then the site links (Home, Browse, Docs, GitHub) in `ink-3` with the current one in `ink`, then search and the theme select on the right. Below 50rem only the logo, search, and the menu button show.
+- [SHOULD] The page `h1` uses the `text-title` values. Each content `h2` starts a ruled block: a 1px `rule` top border and 1.5rem top padding.
+- [SHOULD] Sidebar group labels use the label style (mono, uppercase, 12px, `ink-3`). The current sidebar link has a `sunken` fill and a 2px `accent` left edge, the same marker as a selected feature explorer tab.
+- [SHOULD] Content links are `ink` with a `rule-strong` underline offset 4px; on hover both turn `accent`.
+- [SHOULD] Asides are `sunken` wells with a 2px colored left edge. The edge and title keep the Starlight semantic color of the aside variant.
+- [SHOULD] Link cards and pagination links are `card` surfaces with a 1px `rule` border and `rounded-xl`; hover changes the border to `rule-strong`. They have no shadow.
+- [SHOULD] Code blocks use the dark code panel colors and `github-dark-default` in both themes, with `rounded-xl` and no shadow.
 
 ## 4. Visual Rules
 
@@ -88,11 +98,13 @@ version: 2026-10-08
 ### Motion
 
 - [SHOULD] Motion only confirms a change: switching the specimen flag plays `animate-specimen-in` (opacity and 0.96→1 scale, 180ms, ease-out). The mosaic does not animate.
+- [SHOULD] Page changes animate. The outgoing page fades out and moves up 6px in 140ms; the incoming page fades in from 10px below in 240ms after a 60ms delay. The header carries `view-transition-name: site-header` on every page, so it morphs in place instead of fading. This applies to full page loads between same-origin pages and to route changes inside the React app.
+- [SHOULD] After a route change inside the React app, focus moves to the new page `h1` (`tabIndex={-1}`).
 - [MUST] Under `prefers-reduced-motion: reduce`, animations and transitions are disabled.
 
 ## 5. Available Primitives
 
-All tokens live in the `@theme` block of `website/src/react-app/index.css`; the dark values live in `:root[data-theme='dark']` in the same file. Tailwind generates utilities from them (`bg-paper`, `text-ink-2`, `border-rule`, `text-title`).
+Color values live in `website/src/styles/tokens.css` (`--cf-*`, light and dark sets). `website/src/react-app/index.css` exposes them to Tailwind with `@theme inline` and defines the type and motion tokens in `@theme`. Tailwind generates utilities from them (`bg-paper`, `text-ink-2`, `border-rule`, `text-title`). Documentation pages use the `--cf-*` properties directly.
 
 | Role             | Name                                                                                                 | Usage condition                                                   | Status      |
 | ---------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
@@ -131,7 +143,8 @@ Example:
 Extension boundary:
 
 - [MUST] Pages use only the token names above. Do not guess unlisted names such as `bg-surface` or `text-muted`.
-- [SHOULD] Page-specific CSS is not allowed. Use Tailwind utilities that combine the tokens. Keyframes and base element styles live only in `index.css`.
+- [SHOULD] Page-specific CSS is not allowed on React pages. Use Tailwind utilities that combine the tokens. Keyframes and base element styles live only in `index.css`; page transition keyframes live only in `transitions.css`.
+- [SHOULD] Documentation styling lives only in `docs.css` and the `expressiveCode` config. It overrides Starlight through `--sl-*` variables first and through documented Starlight class names (`.sl-markdown-content`, `.sidebar-content`, `.starlight-aside`, `.sl-link-card`, `.pagination-links`) second.
 - [SHOULD] Pages do not change the borders, radii, or type roles of `LinkButton`, `CopyButton`, or `RuledSection` through `className`. `className` may only set layout (margin, width, grid placement).
 
 ## 6. Copy and Number Formats
@@ -155,9 +168,13 @@ Extension boundary:
 
 ## 8. Implementation and Integration
 
-- Style entry: `website/src/react-app/index.css`, imported once by `AppEntry.tsx`. It holds `@import 'tailwindcss'`, the `@theme` tokens, `@layer base` element styles, and keyframes.
-- Fonts: `fonts` in `website/astro.config.mjs`, emitted by `<Font>` in `website/src/components/HeadMeta.astro`.
-- Theme: an inline script in `website/src/components/HeadMeta.astro` sets `data-theme` on `<html>` before first paint from `localStorage.theme` or `prefers-color-scheme`. `useTheme()` reads and toggles it. `theme-color` has one value per color scheme (`siteConfig.themeColor`, `siteConfig.themeColorDark`).
+- Tokens: color values live in `website/src/styles/tokens.css` as `--cf-*` custom properties, with a light set on `:root` and a dark set on `:root[data-theme='dark']`. `website/src/react-app/index.css` maps them to Tailwind names with `@theme inline`. `website/src/styles/docs.css` maps them to Starlight `--sl-color-*` variables.
+- Style entry (React pages): `website/src/react-app/index.css`, imported once by `AppEntry.tsx`. It imports Tailwind, `tokens.css`, and `transitions.css`, and holds the type tokens, `@layer base` element styles, and keyframes.
+- Style entry (documentation pages): `customCss` in the Starlight config of `website/astro.config.mjs` loads `tokens.css`, `transitions.css`, and `docs.css`. `expressiveCode` in the same config sets the code block theme and colors.
+- Page transitions: `website/src/styles/transitions.css` (cross-document opt-in and keyframes). Route changes inside the React app call `document.startViewTransition` in `routing/useSpaPathRouter.ts`.
+- Fonts: `fonts` in `website/astro.config.mjs`, emitted by `<Font>` in `website/src/components/HeadMeta.astro` (React pages) and `website/src/components/starlight/DocsHead.astro` (documentation pages).
+- Theme: both parts store the choice in `localStorage['starlight-theme']`. On React pages an inline script in `HeadMeta.astro` sets `data-theme` on `<html>` before first paint; `useTheme()` reads and toggles it. On documentation pages Starlight's theme provider does the same. `theme-color` has one value per color scheme (`siteConfig.themeColor`, `siteConfig.themeColorDark`).
+- Documentation header: `website/src/components/starlight/DocsHeader.astro`, registered as the Starlight `Header` override. It reuses Starlight `Search` and `ThemeSelect`.
 - Components: `website/src/react-app/components/ui/` for primitives, `components/layout/` for header and footer, `components/pages/` for page compositions. Framework names, logos, and status labels come from `utils/frameworks.ts`.
 - Flag components: named imports from `@sankyu/react-circle-flags/flags/<code>` for fixed flags; `flagComponentMap` in `components/flag-browser/flagComponent.ts` for full-registry rendering, loaded lazily.
 

@@ -198,6 +198,36 @@ export default defineConfig({
       title: siteConfig.title,
       description: siteConfig.description,
       plugins: starlightPlugins,
+      customCss: [
+        './src/styles/tokens.css',
+        './src/styles/transitions.css',
+        './src/styles/docs.css',
+      ],
+      components: {
+        Head: './src/components/starlight/DocsHead.astro',
+        Header: './src/components/starlight/DocsHeader.astro',
+      },
+      expressiveCode: {
+        themes: ['github-dark-default'],
+        useStarlightDarkModeSwitch: false,
+        useStarlightUiThemeColors: false,
+        styleOverrides: {
+          borderRadius: '0.75rem',
+          borderColor: 'var(--cf-code-rule)',
+          codeBackground: 'var(--cf-code)',
+          codeFontFamily: 'var(--font-mono)',
+          uiFontFamily: 'var(--font-sans)',
+          frames: {
+            frameBoxShadowCssValue: 'none',
+            editorTabBarBackground: 'var(--cf-code-surface)',
+            editorActiveTabBackground: 'var(--cf-code)',
+            editorTabBarBorderBottomColor: 'var(--cf-code-rule)',
+            terminalTitlebarBackground: 'var(--cf-code-surface)',
+            terminalTitlebarBorderBottomColor: 'var(--cf-code-rule)',
+            terminalBackground: 'var(--cf-code)',
+          },
+        },
+      },
       logo: {
         src: './src/assets/favicon.svg',
         alt: 'Circle Flags UI',

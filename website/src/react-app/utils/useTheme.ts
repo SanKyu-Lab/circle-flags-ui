@@ -2,7 +2,8 @@ import { useCallback, useSyncExternalStore } from 'react'
 
 export type Theme = 'light' | 'dark'
 
-const STORAGE_KEY = 'theme'
+// Shared with the Starlight docs so both parts of the site keep the same theme choice.
+const STORAGE_KEY = 'starlight-theme'
 const darkQuery = '(prefers-color-scheme: dark)'
 
 const readTheme = (): Theme =>

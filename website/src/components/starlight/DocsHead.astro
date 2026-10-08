@@ -1,0 +1,8 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro'
+import { Font } from 'astro:assets'
+---
+
+<Default />
+<Font cssVariable="--font-sans" preload />
+<Font cssVariable="--font-mono" preload={[{ weight: '400' }]} />
