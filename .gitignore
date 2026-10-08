@@ -66,6 +66,7 @@ docs/
 !README.zh.md
 !CONTRIBUTING.md
 !CHANGELOG.md
+!website/design.md
 !packages/*/CHANGELOG.md
 !packages/*/.npmrc
 !packages/*/.prettierrc.json
