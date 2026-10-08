@@ -12,7 +12,9 @@ export default function HeroSection({ flagCount, onBrowse }: HeroSectionProps) {
   return (
     <section className="grid items-center gap-12 py-14 lg:min-h-[calc(100dvh-4rem)] lg:grid-cols-12 lg:gap-8 lg:py-16">
       <div className="lg:col-span-5 lg:pr-6">
-        <h1 className="max-w-xl text-display text-ink">Circular flags as typed components.</h1>
+        <h1 tabIndex={-1} className="max-w-xl text-display text-ink outline-none">
+          Circular flags as typed components.
+        </h1>
 
         <p className="mt-6 max-w-lg text-lede text-ink-2">
           <span className="tabular-nums">{flagCount}</span> SVG flags for React, Vue, Solid, and

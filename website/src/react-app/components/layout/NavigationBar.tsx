@@ -49,7 +49,7 @@ export default function NavigationBar({ items, activeHref, onNavigate }: Navigat
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-rule bg-paper">
+    <header className="sticky top-0 z-30 border-b border-rule bg-paper [view-transition-name:site-header]">
       <nav
         aria-label="Primary"
         className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8"

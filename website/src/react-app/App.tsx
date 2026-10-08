@@ -32,18 +32,18 @@ export default function App({ initialRoute = 'home' }: AppProps) {
       <NavigationBar items={navItems} activeHref={currentPath} onNavigate={navigate} />
 
       <main className="mx-auto w-full max-w-7xl px-5 sm:px-8">
-        {route === 'home' && (
-          <HomePage
-            flagCount={flagCount}
-            onBrowse={() => navigate('browse')}
-            onFlagSelect={code => navigate('browse', `?countryCode=${encodeURIComponent(code)}`)}
-          />
-        )}
-        {route === 'browse' && (
-          <Suspense fallback={<p className="py-16 text-body text-ink-3">Loading flags…</p>}>
-            <BrowserPage flagCount={flagCount} />
-          </Suspense>
-        )}
+        {/* One boundary for both routes: route changes run in a transition, so React keeps the
+            current page visible while the lazy browse page loads. */}
+        <Suspense fallback={<p className="py-16 text-body text-ink-3">Loading flags…</p>}>
+          {route === 'home' && (
+            <HomePage
+              flagCount={flagCount}
+              onBrowse={() => navigate('browse')}
+              onFlagSelect={code => navigate('browse', `?countryCode=${encodeURIComponent(code)}`)}
+            />
+          )}
+          {route === 'browse' && <BrowserPage flagCount={flagCount} />}
+        </Suspense>
       </main>
     </div>
   )
