@@ -8,15 +8,19 @@ import {
 } from '../../scripts/tsup/shared.mjs'
 
 const isProduction = process.env.NODE_ENV === 'production'
-const external = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
+const external = ['react', 'react-dom']
 
 const define = createBuildDefines({ prefix: 'REACT_CIRCLE_FLAGS' })
 
 const flagModules = createFlagModulesPlugin({ flagsDir: resolve('generated/flags') })
 
-const applyReactJsx = (options: { jsx?: string; jsxImportSource?: string }) => {
-  options.jsx = 'automatic'
-  options.jsxImportSource = 'react'
+// `react/jsx-runtime` exists from React 16.14 and is not in the `exports` of React 16 and 17,
+// so strict ESM resolvers such as webpack 5 cannot load it from `.mjs` files. The build compiles
+// JSX to `createElement` (tsconfig.build.json), which works in every React version the peer range
+// accepts, and esbuild imports the factory from `react` through the injected module.
+const applyReactJsx = (options: { tsconfig?: string; inject?: string[] }) => {
+  options.tsconfig = resolve('tsconfig.build.json')
+  options.inject = [resolve('../../scripts/tsup/react-jsx-factory.mjs')]
 }
 
 // @ts-expect-error ...

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { codeToEmoji, sanitizeSvg } from '@sankyu/circle-flags-core'
 
@@ -38,88 +38,81 @@ export const CircleFlag = ({
   height = 48,
   title,
   className,
+  style,
   ...props
 }: CircleFlagProps): ReactElement => {
   const finalCountryCode = countryCode ?? code ?? ''
-  const [svgContent, setSvgContent] = useState<string | null>(null)
-  const [error, setError] = useState<boolean>(false)
-  const titleId = useId()
-
-  const normalizedCode = finalCountryCode.toLowerCase()
   const upperCode = finalCountryCode.toUpperCase()
-  const emoji = codeToEmoji(finalCountryCode)
-  const defaultTitle = title ?? `${emoji} ${upperCode}`
+  const defaultTitle = title ?? `${codeToEmoji(finalCountryCode)} ${upperCode}`
+  const url = finalCountryCode
+    ? `${cdnUrl.replace(/\/$/, '')}/${finalCountryCode.toLowerCase()}.svg`
+    : ''
+
+  // Results are keyed by URL: after `countryCode` or `cdnUrl` changes, the loading state shows
+  // until the response for the new URL arrives, and a late response for an old URL is ignored.
+  const [result, setResult] = useState<{ url: string; svg: string | null } | null>(null)
 
   useEffect(() => {
-    if (!finalCountryCode) {
-      setError(true)
-      return
-    }
+    if (!url) return
 
     const controller = new AbortController()
 
-    const fetchSvg = async () => {
-      try {
-        const url = `${cdnUrl.replace(/\/$/, '')}/${normalizedCode}.svg`
-        const response = await fetch(url, { signal: controller.signal })
-
+    fetch(url, { signal: controller.signal })
+      .then(async response => {
         if (!response.ok) {
           throw new Error(`Failed to load flag: ${response.statusText}`)
         }
-
-        const sanitizedSvg = sanitizeSvg(await response.text())
-        if (!sanitizedSvg) {
+        const svg = sanitizeSvg(await response.text())
+        if (!svg) {
           throw new Error('Flag response is not a well-formed SVG')
         }
-        setSvgContent(sanitizedSvg)
-        setError(false)
-      } catch (err) {
-        if (err instanceof Error && err.name === 'AbortError') {
-          return
-        }
+        if (!controller.signal.aborted) setResult({ url, svg })
+      })
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return
         console.warn(`Failed to load flag for country code: ${finalCountryCode}`, err)
-        setError(true)
-      }
-    }
-
-    void fetchSvg()
+        setResult({ url, svg: null })
+      })
 
     return () => {
       controller.abort()
     }
-  }, [finalCountryCode, cdnUrl, normalizedCode])
+  }, [url, finalCountryCode])
 
-  if (!svgContent && !error) {
+  const current = result?.url === url ? result : null
+
+  if (url && !current) {
     return (
       <svg
         viewBox="0 0 512 512"
         width={width}
         height={height}
         className={className}
+        style={style}
         role="img"
         aria-label={defaultTitle}
         {...props}
       >
-        <title id={titleId}>{defaultTitle}</title>
+        <title>{defaultTitle}</title>
         <circle cx="256" cy="256" r="256" fill="#f5f5f5" />
         <circle cx="256" cy="256" r="200" fill="#e0e0e0" className="animate-pulse" />
       </svg>
     )
   }
 
-  if (error || !svgContent) {
+  if (!current?.svg) {
     return (
       <svg
         viewBox="0 0 512 512"
         width={width}
         height={height}
         className={className}
+        style={style}
         role="img"
         aria-label={defaultTitle}
-        aria-labelledby={titleId}
         {...props}
       >
-        <title id={titleId}>{defaultTitle}</title>
+        <title>{defaultTitle}</title>
         <circle cx="256" cy="256" r="256" fill="#f0f0f0" />
         <circle cx="256" cy="256" r="200" fill="#e0e0e0" />
         <text x="256" y="280" textAnchor="middle" fontSize="80" fontWeight="bold" fill="#666">
@@ -129,12 +122,12 @@ export const CircleFlag = ({
     )
   }
 
-  const svgWithSize = svgContent.replace(/<svg([^>]*)>/, '<svg$1 width="100%" height="100%">')
+  const svgWithSize = current.svg.replace(/<svg([^>]*)>/, '<svg$1 width="100%" height="100%">')
 
   return (
     <div
       className={className}
-      style={{ width, height, display: 'inline-block' }}
+      style={{ width, height, display: 'inline-block', ...style }}
       dangerouslySetInnerHTML={{ __html: svgWithSize }}
       role="img"
       aria-label={defaultTitle}
