@@ -1,6 +1,6 @@
 <script lang="ts">
   import { codeToEmoji, sanitizeSvg } from '@sankyu/circle-flags-core'
-  import type { CircleFlagProps } from './types'
+  import type { CircleFlagProps } from './types.js'
 
   /**
    * @deprecated `CircleFlag` is deprecated and not recommended for new code.
@@ -29,7 +29,9 @@
   const emoji = $derived(codeToEmoji(finalCode))
   const defaultTitle = $derived(`${emoji} ${upperCode}`)
   const title = $derived(titleProp ?? defaultTitle)
-  const finalClass = $derived(classNameProp ?? classProp)
+  const finalClass = $derived(
+    classProp && classNameProp ? `${classProp} ${classNameProp}` : (classProp ?? classNameProp)
+  )
 
   let svgContent = $state<string | null>(null)
   let error = $state(false)

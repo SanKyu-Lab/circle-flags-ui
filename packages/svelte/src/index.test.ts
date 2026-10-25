@@ -102,6 +102,22 @@ describe('@sankyu/svelte-circle-flags', () => {
     expect(container.querySelector('title')?.textContent).toBe('XX')
   })
 
+  it('merges class and className on flags, DynamicFlag and LazyFlag', async () => {
+    const named = render(FlagUs, { props: { class: 'a', className: 'b' } })
+    expect(named.container.querySelector('svg')?.getAttribute('class')).toBe('a b')
+
+    const dynamic = render(DynamicFlag, { props: { code: 'jp', class: 'a', className: 'b' } })
+    expect(dynamic.container.querySelector('svg')?.getAttribute('class')).toBe('a b')
+
+    const single = render(FlagUs, { props: { className: 'only' } })
+    expect(single.container.querySelector('svg')?.getAttribute('class')).toBe('only')
+
+    const lazy = render(LazyFlag, { props: { code: 'jp', class: 'a', className: 'b' } })
+    await waitFor(() => {
+      expect(lazy.container.querySelector('svg')?.getAttribute('class')).toBe('a b')
+    })
+  })
+
   it('renders DynamicFlag fallback for invalid code', () => {
     const { container } = render(DynamicFlag, { props: { code: 'not-a-code' } })
     const svg = container.querySelector('svg')

@@ -1,5 +1,6 @@
 import pkg from '../package.json' with { type: 'json' }
 
+/** Metadata captured when the Svelte package is built. */
 export interface BuildMeta {
   version: string
   commitHash: string
@@ -7,32 +8,11 @@ export interface BuildMeta {
   builtTimestamp: number
 }
 
-declare const __SVELTE_CIRCLE_FLAGS_COMMIT__: string
-declare const __SVELTE_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT__: string
-declare const __SVELTE_CIRCLE_FLAGS_BUILT_AT__: string
-
-const parseBuiltAt = (source: string) => {
-  const parsed = Number.parseInt(source, 10)
-  return Number.isFinite(parsed) ? parsed : Date.now()
-}
-
-const commit =
-  typeof __SVELTE_CIRCLE_FLAGS_COMMIT__ !== 'undefined' ? __SVELTE_CIRCLE_FLAGS_COMMIT__ : 'dev'
-
-const circleFlagsCommit =
-  typeof __SVELTE_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT__ !== 'undefined'
-    ? __SVELTE_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT__
-    : 'unknown'
-
-const builtAt = parseBuiltAt(
-  typeof __SVELTE_CIRCLE_FLAGS_BUILT_AT__ !== 'undefined'
-    ? __SVELTE_CIRCLE_FLAGS_BUILT_AT__
-    : `${Date.now()}`
-)
-
+// Values for development and tests. The package build replaces dist/meta.js with the values
+// captured at build time (scripts/tasks/postbuild-svelte.mjs).
 export const buildMeta: BuildMeta = {
   version: pkg.version,
-  commitHash: commit,
-  circleFlagsCommitHash: circleFlagsCommit,
-  builtTimestamp: builtAt,
+  commitHash: 'dev',
+  circleFlagsCommitHash: 'unknown',
+  builtTimestamp: Date.now(),
 }

@@ -10,7 +10,7 @@ import {
 export { default as CircleFlag } from './CircleFlag.svelte'
 export { default as DynamicFlag } from './DynamicFlag.svelte'
 export { default as LazyFlag } from './LazyFlag.svelte'
-export type { CircleFlagProps, DynamicFlagProps, FlagComponentProps } from './types'
+export type { CircleFlagProps, DynamicFlagProps, FlagComponentProps } from './types.js'
 
 export { FlagSizes, getSizeName }
 export type { FlagSizeName }
@@ -30,11 +30,11 @@ export const FlagUtils = {
   getSizeName,
 } as const
 
-export { buildMeta } from './meta'
-export type { BuildMeta } from './meta'
+export { buildMeta } from './meta.js'
+export type { BuildMeta } from './meta.js'
 
 export type CountryCode = FlagCode
 
-export * from './flags'
+export * from './flags/index.js'
 
 export { FLAG_REGISTRY, coerceFlagCode, isFlagCode, type FlagCode } from '@sankyu/circle-flags-core'
