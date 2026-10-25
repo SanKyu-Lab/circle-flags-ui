@@ -28,7 +28,7 @@ export function Locale() {
     id: 'vue',
     label: 'Vue',
     packageName: '@sankyu/vue-circle-flags',
-    status: 'Beta',
+    status: 'Stable',
     icon: 'framework-icons/vue.svg',
     lang: 'vue',
     usage: (code, name) => `<script setup lang="ts">
@@ -43,7 +43,7 @@ import { ${name} } from '@sankyu/vue-circle-flags/flags/${code}'
     id: 'solid',
     label: 'Solid',
     packageName: '@sankyu/solid-circle-flags',
-    status: 'Beta',
+    status: 'Stable',
     icon: 'framework-icons/solid.svg',
     lang: 'tsx',
     usage: (code, name) => `import { ${name} } from '@sankyu/solid-circle-flags/flags/${code}'
@@ -56,7 +56,7 @@ export function Locale() {
     id: 'svelte',
     label: 'Svelte',
     packageName: '@sankyu/svelte-circle-flags',
-    status: 'Beta',
+    status: 'Stable',
     icon: 'framework-icons/svelte.svg',
     lang: 'svelte',
     usage: (code, name) => `<script lang="ts">

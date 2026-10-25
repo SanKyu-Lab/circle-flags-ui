@@ -119,7 +119,7 @@ export default function FlagDetailPanel({
 
           {framework.id === 'solid' ? (
             <p className="mt-3 text-body text-ink-3">
-              Solid named-import flags take <code>className</code> for CSS classes.
+              Solid named-import flags take <code>class</code> or <code>className</code>.
             </p>
           ) : null}
 

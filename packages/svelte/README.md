@@ -26,11 +26,6 @@
 
 ---
 
-> [!NOTE]
-> 🚧 **Beta Release**
->
-> This package is currently in beta. APIs may change in future releases. Please report any issues you encounter!
-
 ## 📖 Overview
 
 This library provides **400+ circular SVG flag components** for **Svelte 5** with **Full-TypeScript support** & **Tree-shaking Optimization**.
@@ -218,7 +213,7 @@ You can access the library's build meta information from the `buildMeta` export:
 <script>
   import { buildMeta } from '@sankyu/svelte-circle-flags'
 
-  console.log(buildMeta.version) // e.g., "0.0.1-beta.1"
+  console.log(buildMeta.version) // e.g., "1.0.0"
   console.log(buildMeta.builtTimestamp) // e.g., 1760000000000
   console.log(buildMeta.commitHash) // e.g., <example-sha256-hash>
   console.log(buildMeta.circleFlagsCommitHash) // e.g., <example-sha256-hash>

@@ -1,6 +1,6 @@
 {
   "name": "@sankyu/svelte-circle-flags",
-  "version": "0.0.2-beta.1",
+  "version": "1.0.0",
   "description": "400+ circular SVG Svelte 5 flags — tree-shakeable, TypeScript-ready, and Vite 8-compatible.",
   "type": "module",
   "main": "./dist/index.js",
@@ -63,7 +63,7 @@
     "svelte": "^5.0.0"
   },
   "dependencies": {
-    "@sankyu/circle-flags-core": "^1.6.6"
+    "@sankyu/circle-flags-core": "^1.7.1"
   },
   "devDependencies": {
     "@sveltejs/package": "^3.0.0",

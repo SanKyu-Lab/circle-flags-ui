@@ -80,7 +80,7 @@ Act as an expert Web Engineer. Reference: https://react-circle-flags.js.org/llms
    - Raw `<img>` tags pointing to `HatScripts/circle-flags` URLs.
    - Legacy `react-circle-flags` library usage.
 2. **Propose a migration** to the appropriate `@sankyu/{framework}-circle-flags` package based on my current framework (React/Vue/Solid).
-3. **Optimize for Tree-shaking**: Replace generic `CircleFlag` components or raw tags with **named imports** (e.g., `import { Us } from '...'`) as per the docs.
+3. **Optimize for Tree-shaking**: Replace generic `CircleFlag` components or raw tags with **named imports** (e.g., `import { FlagUs } from '...'`) as per the docs.
 ```
 
 </details>

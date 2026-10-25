@@ -62,9 +62,9 @@ framework-native, typed component packages from one generated source of truth.
 | Framework | Package                                                                                    | Maturity | Verified integration           | Documentation                                |
 | --------- | ------------------------------------------------------------------------------------------ | -------- | ------------------------------ | -------------------------------------------- |
 | React     | [`@sankyu/react-circle-flags`](https://www.npmjs.com/package/@sankyu/react-circle-flags)   | Stable   | Vite 8, Next.js App Router SSR | [React README](./packages/react/README.md)   |
-| Vue 3     | [`@sankyu/vue-circle-flags`](https://www.npmjs.com/package/@sankyu/vue-circle-flags)       | Beta     | Vite 8, Nuxt SSR               | [Vue README](./packages/vue/README.md)       |
-| Solid.js  | [`@sankyu/solid-circle-flags`](https://www.npmjs.com/package/@sankyu/solid-circle-flags)   | Beta     | Vite 8 client build            | [Solid README](./packages/solid/README.md)   |
-| Svelte 5  | [`@sankyu/svelte-circle-flags`](https://www.npmjs.com/package/@sankyu/svelte-circle-flags) | Beta     | Vite 8 client build            | [Svelte README](./packages/svelte/README.md) |
+| Vue 3     | [`@sankyu/vue-circle-flags`](https://www.npmjs.com/package/@sankyu/vue-circle-flags)       | Stable   | Vite 8, Nuxt SSR               | [Vue README](./packages/vue/README.md)       |
+| Solid.js  | [`@sankyu/solid-circle-flags`](https://www.npmjs.com/package/@sankyu/solid-circle-flags)   | Stable   | Vite 8 client build            | [Solid README](./packages/solid/README.md)   |
+| Svelte 5  | [`@sankyu/svelte-circle-flags`](https://www.npmjs.com/package/@sankyu/svelte-circle-flags) | Stable   | Vite 8 client build            | [Svelte README](./packages/svelte/README.md) |
 
 ## Verified compatibility matrix
 
