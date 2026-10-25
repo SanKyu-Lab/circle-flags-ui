@@ -72,7 +72,7 @@ const starlightPlugins = [
   starlightLlmsTxt({
     projectName: 'circle-flags-ui Docs (React, Vue, Solid, and Svelte circular flag components)',
     description:
-      'Documentation for circle-flags-ui: 400+ circular SVG flags across React (stable), Vue 3 (beta), Solid.js (beta), and Svelte 5 (beta), with TypeScript types, tree-shaking, and SSR verification for Next.js and Nuxt.',
+      'Documentation for circle-flags-ui: 400+ circular SVG flags across React, Vue 3, Solid.js, and Svelte 5 (all stable), with TypeScript types, tree-shaking, and SSR verification for Next.js and Nuxt.',
     details: `Vibe-coding assistant guidance:
 
 - Start from \`docs/guides/getting-started/installation\`, then choose one framework path (React, Vue 3, Solid.js, or Svelte 5) and keep code examples framework-consistent.
@@ -140,17 +140,17 @@ Use \`/llms-small.txt\` for fast context loading, \`/llms-full.txt\` for complet
       {
         label: 'NPM (Vue Package)',
         url: 'https://www.npmjs.com/package/@sankyu/vue-circle-flags',
-        description: 'Vue 3 beta package information',
+        description: 'Stable Vue 3 package information and release history',
       },
       {
         label: 'NPM (Solid Package)',
         url: 'https://www.npmjs.com/package/@sankyu/solid-circle-flags',
-        description: 'Solid.js beta package information',
+        description: 'Stable Solid.js package information and release history',
       },
       {
         label: 'NPM (Svelte Package)',
         url: 'https://www.npmjs.com/package/@sankyu/svelte-circle-flags',
-        description: 'Svelte 5 beta package information',
+        description: 'Stable Svelte 5 package information and release history',
       },
       {
         label: 'LLMs Small Context',

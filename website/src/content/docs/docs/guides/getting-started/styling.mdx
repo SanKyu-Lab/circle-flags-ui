@@ -9,8 +9,8 @@ import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 Named import flags and `DynamicFlag` accept standard SVG props, making them easy to style with any CSS approach.
 
-:::note[Solid (beta)]
-Named-import flag components currently use `className` for CSS classes.
+:::note[Solid]
+Named-import flag components accept both `class` and `className`. When you pass both, the values are joined.
 :::
 
 ## Styling methods
@@ -146,7 +146,7 @@ Named-import flag components currently use `className` for CSS classes.
 
   </TabItem>
   <TabItem label="Solid.js" icon="seti:javascript">
-    Solid (beta): use `className` for named-import flags.
+    Solid: named-import flags accept `class` or `className`.
 
     ```tsx
     import { FlagUs } from '@sankyu/solid-circle-flags'

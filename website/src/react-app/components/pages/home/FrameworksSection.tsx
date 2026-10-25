@@ -11,7 +11,7 @@ export default function FrameworksSection() {
       title="Same API in four frameworks."
       intro={
         <>
-          React is stable. Vue, Solid, and Svelte are in beta and follow the same names and props.{' '}
+          All four packages are stable and share the same names and props.{' '}
           <a
             href={withBasePath('docs/guides/getting-started/installation/')}
             className="inline-flex items-center gap-1 rounded-sm font-medium text-ink underline decoration-rule-strong underline-offset-4 outline-none hover:text-accent hover:decoration-accent focus-visible:ring-2 focus-visible:ring-accent"
