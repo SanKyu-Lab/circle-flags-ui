@@ -85,6 +85,12 @@ ranges.
 The SSR verifier starts each production server, fetches the initial document, checks for the
 framework marker and real `<svg>` markup, then shuts the process down cleanly.
 
+The [real-world tests](./tests/real-world) install the packed packages into separate consumer
+projects: Vite 8, esbuild, webpack 5 and Rspack builds, Node `import` and `require`, TypeScript 5.0
+to 7.0 with `bundler`, `node16` and `node10` resolution, the lowest framework versions the peer
+ranges accept (React 16.8, Vue 3.5.0, Solid 1.9.0, Svelte 5.0.0), and the example apps in Chromium
+with a hydration check. CI runs them on pull requests that touch the packages and every week.
+
 ## Installation
 
 ```bash
@@ -195,6 +201,11 @@ pnpm run test
 
 # Build every compatibility app and verify production SSR output
 pnpm run test:examples
+
+# Install the packed packages into real consumer projects (see tests/real-world)
+pnpm --dir tests/real-world install --ignore-workspace --no-lockfile
+pnpm --dir tests/real-world exec playwright install chromium
+pnpm run test:real-world
 ```
 
 ## Build and release guarantees

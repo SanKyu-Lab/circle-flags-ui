@@ -39,6 +39,7 @@
     "verify:examples:ssr": "pnpm -r --workspace-concurrency=1 -F './examples/*' --if-present run verify:ssr",
     "verify:tree-shaking": "node scripts/verify-tree-shaking.mjs",
     "test:examples": "pnpm run build && pnpm run build:examples && pnpm run verify:examples:ssr",
+    "test:real-world": "pnpm run build && node tests/real-world/run.mjs --pack",
     "test:core": "turbo run test --filter=@sankyu/circle-flags-core",
     "test:react": "turbo run test --filter=@sankyu/react-circle-flags",
     "test:vue": "turbo run test --filter=@sankyu/vue-circle-flags",

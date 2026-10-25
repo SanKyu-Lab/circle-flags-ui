@@ -1,0 +1,27 @@
+{
+  "name": "real-world-bundlers",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@sankyu/react-circle-flags": "*",
+    "@sankyu/solid-circle-flags": "*",
+    "@sankyu/svelte-circle-flags": "*",
+    "@sankyu/vue-circle-flags": "*",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "solid-js": "^1.9.17",
+    "svelte": "^5.57.2",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@rspack/core": "^2.2.9",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "esbuild": "^0.28.2",
+    "svelte-loader": "^3.2.4",
+    "vite": "^8.3.5",
+    "vite-plugin-solid": "^2.11.14",
+    "webpack": "^5.112.2"
+  }
+}
