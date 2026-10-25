@@ -22,7 +22,7 @@ const program = new Command()
 program.parse()
 const options = program.opts()
 
-const before = options.before ?? process.env.GITHUB_EVENT_BEFORE ?? ''
+const before = options.before ?? ''
 const after = options.after ?? process.env.GITHUB_SHA ?? ''
 const githubOutput = options.githubOutput
 const mode = String(options.mode ?? 'changed')

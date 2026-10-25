@@ -46,23 +46,29 @@ jobs:
       - name: Detect version bumps
         id: changed
         shell: bash
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
         run: |
           set -euo pipefail
           node scripts/release/detect-version-bumps.mjs \
             --mode "${{ github.event_name == 'workflow_dispatch' && 'unpublished' || 'changed' }}" \
+            --before "$BEFORE_SHA" \
             --github-output "${GITHUB_OUTPUT}"
 
       - name: Write summary
         if: always()
         shell: bash
+        env:
+          HAS_PACKAGES: ${{ steps.changed.outputs.has_packages }}
+          PACKAGES_MD: ${{ steps.changed.outputs.packages_md }}
         run: |
           {
             echo "## Packages to release"
             echo ""
-            if [ "${{ steps.changed.outputs.has_packages }}" != "true" ]; then
+            if [ "$HAS_PACKAGES" != "true" ]; then
               echo "- (none)"
             else
-              echo "${{ steps.changed.outputs.packages_md }}"
+              printf '%s\n' "$PACKAGES_MD"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -317,15 +323,18 @@ jobs:
     steps:
       - name: Write summary
         shell: bash
+        env:
+          HAS_PACKAGES: ${{ needs.detect.outputs.has_packages }}
+          PACKAGES_MD: ${{ needs.detect.outputs.packages_md }}
         run: |
           {
             echo "## Release summary"
             echo ""
-            if [ "${{ needs.detect.outputs.has_packages }}" != "true" ]; then
+            if [ "$HAS_PACKAGES" != "true" ]; then
               echo "- (no packages to publish)"
               exit 0
             fi
             echo "### Packages"
             echo ""
-            echo "${{ needs.detect.outputs.packages_md }}"
+            printf '%s\n' "$PACKAGES_MD"
           } >> "$GITHUB_STEP_SUMMARY"
