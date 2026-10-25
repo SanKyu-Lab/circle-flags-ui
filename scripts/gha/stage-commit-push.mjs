@@ -38,5 +38,7 @@ if (!staged.trim()) {
 }
 
 await git.commit(options.message)
+// Other workflows push to the same branch after this job checked out its commit.
+await git.pull(['--rebase'])
 await git.push()
 writeOutput('committed', 'true')
