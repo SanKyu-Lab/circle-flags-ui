@@ -1,7 +1,9 @@
+import { resolve } from 'node:path'
 import { defineConfig } from 'tsup'
 import {
   createBaseTsupConfig,
   createBuildDefines,
+  createFlagModulesPlugin,
   createOnSuccess,
 } from '../../scripts/tsup/shared.mjs'
 
@@ -9,6 +11,8 @@ const isProduction = process.env.NODE_ENV === 'production'
 const external = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
 
 const define = createBuildDefines({ prefix: 'REACT_CIRCLE_FLAGS' })
+
+const flagModules = createFlagModulesPlugin({ flagsDir: resolve('generated/flags') })
 
 const applyReactJsx = (options: { jsx?: string; jsxImportSource?: string }) => {
   options.jsx = 'automatic'
@@ -32,17 +36,19 @@ export default defineConfig(options => {
       entry: ['src/index.tsx', 'src/meta.ts'],
       clean: !isWatch,
       dts: true,
+      esbuildPlugins: [flagModules],
       onSuccess: createOnSuccess('Main Entry'),
     },
     {
       ...baseConfig,
-      entry: ['generated/flags/*.tsx'],
+      entry: ['generated/flags/*.tsx', 'generated/flags/index.ts'],
       outDir: 'dist/flags',
       splitting: false,
       clean: false,
       dts: false, // Generate per-flag .d.ts via custom script to avoid broken rollup chunks
       minify: true, // Always minify to a single line
       esbuildOptions: applyReactJsx,
+      esbuildPlugins: [flagModules],
       onSuccess: createOnSuccess('Flags Entry'),
     },
   ]
