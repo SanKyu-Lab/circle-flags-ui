@@ -42,6 +42,7 @@ switch (options.checkId) {
 
   case 'build':
     run('pnpm', ['run', 'test:examples'], { NODE_ENV: 'production' })
+    run('pnpm', ['run', 'verify:tree-shaking'])
     for (const pkg of ['react', 'vue', 'solid', 'svelte']) {
       run('ls', ['-la', `packages/${pkg}/dist/`])
     }
