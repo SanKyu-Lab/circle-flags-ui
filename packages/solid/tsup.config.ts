@@ -14,7 +14,15 @@ const external = ['solid-js']
 
 const define = createBuildDefines({ prefix: 'SOLID_CIRCLE_FLAGS' })
 
-const flagModules = createFlagModulesPlugin({ flagsDir: resolve('generated/flags') })
+const flagsDir = resolve('generated/flags')
+const flagEntries = ['generated/flags/*.tsx', 'generated/flags/index.ts']
+
+// `dist` serves the browser and default conditions, `dist/server` serves node, worker and deno.
+// Both are hydratable so either one can hydrate markup rendered by the other.
+const compiledTargets = [
+  { label: 'DOM', outDir: 'dist', generate: 'dom', platform: 'browser' },
+  { label: 'SSR', outDir: 'dist/server', generate: 'ssr', platform: 'node' },
+] as const
 
 // @ts-expect-error tsup options signature typing mismatch
 export default defineConfig(options => {
@@ -26,27 +34,69 @@ export default defineConfig(options => {
     isProduction,
   })
 
+  const compiled = compiledTargets.flatMap(target => {
+    const plugins = () => [
+      createFlagModulesPlugin({ flagsDir }),
+      solidPlugin({ solid: { generate: target.generate, hydratable: true } }),
+    ]
+    const isDom = target.generate === 'dom'
+
+    return [
+      {
+        ...baseConfig,
+        entry: isDom ? ['src/index.tsx', 'src/meta.ts'] : ['src/index.tsx'],
+        outDir: target.outDir,
+        platform: target.platform,
+        clean: isDom && !isWatch,
+        dts: isDom,
+        format: ['esm', 'cjs'],
+        esbuildPlugins: plugins(),
+        onSuccess: createOnSuccess(`${target.label} Entry`),
+      },
+      {
+        ...baseConfig,
+        entry: flagEntries,
+        outDir: `${target.outDir}/flags`,
+        platform: target.platform,
+        splitting: false,
+        clean: false,
+        dts: false,
+        minify: true, // Always minify to a single line
+        format: ['esm', 'cjs'],
+        esbuildPlugins: plugins(),
+        onSuccess: createOnSuccess(`${target.label} Flags`),
+      },
+    ]
+  })
+
+  // The `solid` condition gets JSX as written, so vite-plugin-solid and SolidStart compile it
+  // for their own target (dom or ssr, hydratable or not).
+  const sourceOptions = {
+    ...baseConfig,
+    format: ['esm'],
+    dts: false,
+    clean: false,
+    outExtension: () => ({ js: '.jsx' }),
+    esbuildOptions: (esbuildOptions: { jsx?: string }) => {
+      esbuildOptions.jsx = 'preserve'
+    },
+    esbuildPlugins: [createFlagModulesPlugin({ flagsDir, extension: '.jsx' })],
+  }
+
   return [
+    ...compiled,
     {
-      ...baseConfig,
-      entry: ['src/index.tsx', 'src/meta.ts'],
-      clean: !isWatch,
-      dts: true,
-      format: ['esm', 'cjs'],
-      esbuildPlugins: [flagModules, solidPlugin()],
-      onSuccess: createOnSuccess('Main Entry'),
+      ...sourceOptions,
+      entry: ['src/index.tsx'],
+      outDir: 'dist/source',
+      onSuccess: createOnSuccess('Source Entry'),
     },
     {
-      ...baseConfig,
-      entry: ['generated/flags/*.tsx', 'generated/flags/index.ts'],
-      outDir: 'dist/flags',
+      ...sourceOptions,
+      entry: flagEntries,
+      outDir: 'dist/source/flags',
       splitting: false,
-      clean: false,
-      dts: false,
-      minify: true, // Always minify to a single line
-      format: ['esm', 'cjs'],
-      esbuildPlugins: [flagModules, solidPlugin()],
-      onSuccess: createOnSuccess('Flags Entry'),
+      onSuccess: createOnSuccess('Source Flags'),
     },
   ]
 })
