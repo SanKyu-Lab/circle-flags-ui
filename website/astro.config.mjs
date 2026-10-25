@@ -72,7 +72,7 @@ const starlightPlugins = [
   starlightLlmsTxt({
     projectName: 'circle-flags-ui Docs (React, Vue, Solid, and Svelte circular flag components)',
     description:
-      'Documentation for circle-flags-ui: 400+ circular SVG flags across React, Vue 3, Solid.js, and Svelte 5 (all stable), with TypeScript types, tree-shaking, and SSR verification for Next.js and Nuxt.',
+      'Documentation for circle-flags-ui: 400+ circular SVG flags across React, Vue 3, Solid.js, and Svelte 5 (all stable), with TypeScript types, tree-shaking, and SSR verification for Next.js, Nuxt, and SolidStart.',
     details: `Vibe-coding assistant guidance:
 
 - Start from \`docs/guides/getting-started/installation\`, then choose one framework path (React, Vue 3, Solid.js, or Svelte 5) and keep code examples framework-consistent.

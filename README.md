@@ -11,7 +11,7 @@
   </p>
 
   <p>
-    Verified with Vite 8 · first-response SSR with Next.js and Nuxt · precise ESM/CJS TypeScript exports
+    Verified with Vite 8 · first-response SSR with Next.js, Nuxt, and SolidStart · precise ESM/CJS TypeScript exports
   </p>
 
 <a href="https://www.npmjs.com/package/@sankyu/react-circle-flags"><img src="https://img.shields.io/npm/v/%40sankyu%2Freact-circle-flags?style=flat-square&label=react&logo=react&logoColor=white&color=61DAFB" alt="React npm" /></a>
@@ -25,7 +25,7 @@
 <a href="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui"><img src="https://codecov.io/gh/SanKyu-Lab/circle-flags-ui/graph/badge.svg" alt="codecov" /></a>
 <img src="https://img.shields.io/badge/flags-430-111827?style=flat-square" alt="430 flags" />
 <img src="https://img.shields.io/badge/Vite-8_verified-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8 verified" />
-<img src="https://img.shields.io/badge/SSR-Next_%2B_Nuxt-111827?style=flat-square" alt="SSR verified with Next.js and Nuxt" />
+<img src="https://img.shields.io/badge/SSR-Next_%2B_Nuxt_%2B_SolidStart-111827?style=flat-square" alt="SSR verified with Next.js, Nuxt, and SolidStart" />
 <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-16a34a?style=flat-square" alt="MIT License" /></a>
 
 <br /><br />
@@ -63,7 +63,7 @@ framework-native, typed component packages from one generated source of truth.
 | --------- | ------------------------------------------------------------------------------------------ | -------- | ------------------------------ | -------------------------------------------- |
 | React     | [`@sankyu/react-circle-flags`](https://www.npmjs.com/package/@sankyu/react-circle-flags)   | Stable   | Vite 8, Next.js App Router SSR | [React README](./packages/react/README.md)   |
 | Vue 3     | [`@sankyu/vue-circle-flags`](https://www.npmjs.com/package/@sankyu/vue-circle-flags)       | Stable   | Vite 8, Nuxt SSR               | [Vue README](./packages/vue/README.md)       |
-| Solid.js  | [`@sankyu/solid-circle-flags`](https://www.npmjs.com/package/@sankyu/solid-circle-flags)   | Stable   | Vite 8 client build            | [Solid README](./packages/solid/README.md)   |
+| Solid.js  | [`@sankyu/solid-circle-flags`](https://www.npmjs.com/package/@sankyu/solid-circle-flags)   | Stable   | Vite 8, SolidStart SSR         | [Solid README](./packages/solid/README.md)   |
 | Svelte 5  | [`@sankyu/svelte-circle-flags`](https://www.npmjs.com/package/@sankyu/svelte-circle-flags) | Stable   | Vite 8 client build            | [Svelte README](./packages/svelte/README.md) |
 
 ## Verified compatibility matrix
@@ -71,18 +71,18 @@ framework-native, typed component packages from one generated source of truth.
 The versions below are the repository's current executable test matrix, not merely peer dependency
 ranges.
 
-| Rendering | Framework stack           | Verification                                                    |
-| --------- | ------------------------- | --------------------------------------------------------------- |
-| CSR       | React 19.2 + Vite 8.1     | TypeScript and production build                                 |
-| SSR       | React 19.2 + Next.js 16.2 | Production server; SVG present in the first HTML response       |
-| CSR       | Vue 3.5 + Vite 8.1        | `vue-tsc` and production build                                  |
-| SSR       | Vue 3.5 + Nuxt 4.4        | Nitro production server; SVG present in the first HTML response |
-| CSR       | Solid.js 1.9 + Vite 8.1   | TypeScript and production build                                 |
-| CSR       | Svelte 5.56 + Vite 8.1    | `svelte-check` and production build                             |
+| Rendering | Framework stack               | Verification                                                               |
+| --------- | ----------------------------- | -------------------------------------------------------------------------- |
+| CSR       | React 19.2 + Vite 8.1         | TypeScript and production build                                            |
+| SSR       | React 19.2 + Next.js 16.2     | Production server; SVG present in the first HTML response                  |
+| CSR       | Vue 3.5 + Vite 8.1            | `vue-tsc` and production build                                             |
+| SSR       | Vue 3.5 + Nuxt 4.4            | Nitro production server; SVG present in the first HTML response            |
+| CSR       | Solid.js 1.9 + Vite 8.1       | TypeScript and production build                                            |
+| SSR       | Solid.js 1.9 + SolidStart 2.1 | Nitro production server; SVG and hydration keys in the first HTML response |
+| CSR       | Svelte 5.56 + Vite 8.1        | `svelte-check` and production build                                        |
 
 The SSR verifier starts each production server, fetches the initial document, checks for the
-framework marker and real `<svg>` markup, then shuts the process down cleanly. SolidStart/raw Node
-SSR is not claimed by the current matrix.
+framework marker and real `<svg>` markup, then shuts the process down cleanly.
 
 ## Installation
 
