@@ -57,12 +57,8 @@ jobs:
           echo "PR #$PR_NUMBER merged successfully"
           echo "Labels: $LABELS"
 
-          # Determine if this is a website or npm-library PR
-          if echo "$LABELS" | grep -q "website"; then
-            TARGET="website"
-          elif echo "$LABELS" | grep -q "npm-library"; then
-            TARGET="npm-library"
-          else
+          # Only npm library updates get a tag
+          if ! echo "$LABELS" | grep -q "npm-library"; then
             echo "Could not determine target from labels, skipping tag creation"
             exit 0
           fi
@@ -70,13 +66,8 @@ jobs:
           # Create tag name with timestamp
           TIMESTAMP=$(date -u '+%Y%m%d-%H%M%S')
 
-          if [ "$TARGET" == "website" ]; then
-            TAG_NAME="deps-website/${TIMESTAMP}"
-            TAG_MESSAGE="Dependabot update for website dependencies"
-          else
-            TAG_NAME="deps-npm/${TIMESTAMP}"
-            TAG_MESSAGE="Dependabot update for npm library dependencies"
-          fi
+          TAG_NAME="deps-npm/${TIMESTAMP}"
+          TAG_MESSAGE="Dependabot update for npm library dependencies"
 
           echo "Creating tag: $TAG_NAME"
 
