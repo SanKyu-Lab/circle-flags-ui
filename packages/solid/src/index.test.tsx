@@ -5,6 +5,7 @@ import { createSignal } from 'solid-js'
 import type { JSX } from 'solid-js'
 import { render } from 'solid-js/web'
 import { FlagUs } from '../generated/flags/us'
+import { FlagAc } from '../generated/flags/ac'
 
 const flush = () => new Promise(resolve => setTimeout(resolve, 0))
 const cdn = (code: string) => `https://hatscripts.github.io/circle-flags/flags/${code}.svg`
@@ -77,6 +78,32 @@ describe('@sankyu/solid-circle-flags', () => {
     const value = container.querySelector('svg')?.getAttribute('class')
     dispose()
     expect(value).toBe('a b')
+  })
+
+  it('alias flags use their own default title', () => {
+    const { container, dispose } = mount(() => (
+      <>
+        <FlagAc />
+        <FlagAc title="Ascension Island" class="flag" />
+        <DynamicFlag code="ac" />
+      </>
+    ))
+    const [plain, custom, dynamic] = Array.from(container.querySelectorAll('svg'))
+    const result = {
+      plain: plain.getAttribute('aria-label'),
+      body: plain.innerHTML.includes('cf-sh-ac-a'),
+      custom: custom.getAttribute('aria-label'),
+      customClass: custom.getAttribute('class'),
+      dynamic: dynamic.getAttribute('aria-label'),
+    }
+    dispose()
+    expect(result).toEqual({
+      plain: 'AC',
+      body: true,
+      custom: 'Ascension Island',
+      customClass: 'flag',
+      dynamic: 'AC',
+    })
   })
 
   it('DynamicFlag forwards class and className to the flag', () => {

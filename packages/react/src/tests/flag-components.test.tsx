@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
-import { FlagUs, FlagCn, FlagJp, FlagGb, FlagDe } from '../../generated/flags'
+import { FlagUs, FlagCn, FlagJp, FlagGb, FlagDe, FlagAc } from '../../generated/flags'
+import { DynamicFlag } from '../dynamic-flag'
 
 // Sample flag components for testing
 const sampleFlags = [
@@ -71,6 +72,26 @@ describe('Flag Components', () => {
       fireEvent.click(flag)
       expect(handleClick).toHaveBeenCalledTimes(1)
     })
+  })
+})
+
+describe('Alias flags', () => {
+  test('use their own code as the default title', () => {
+    render(<FlagAc data-testid="alias-flag" />)
+    const flag = screen.getByTestId('alias-flag')
+    expect(flag).toHaveAttribute('aria-label', 'AC')
+    expect(flag.querySelector('title')?.textContent).toBe('AC')
+    expect(flag.innerHTML).toContain('cf-sh-ac-a')
+  })
+
+  test('accept a custom title', () => {
+    render(<FlagAc data-testid="alias-flag-title" title="Ascension Island" />)
+    expect(screen.getByTestId('alias-flag-title')).toHaveAttribute('aria-label', 'Ascension Island')
+  })
+
+  test('keep the alias title when rendered through DynamicFlag', () => {
+    render(<DynamicFlag code="ac" data-testid="alias-dynamic" />)
+    expect(screen.getByTestId('alias-dynamic')).toHaveAttribute('aria-label', 'AC')
   })
 })
 
