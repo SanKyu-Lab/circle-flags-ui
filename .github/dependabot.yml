@@ -32,37 +32,6 @@ updates:
           - 'minor'
           - 'patch'
 
-  # Website dependencies
-  - package-ecosystem: 'npm'
-    directory: '/website'
-    schedule:
-      interval: 'weekly'
-      day: 'thursday'
-      time: '00:00'
-      timezone: 'Etc/UTC'
-    open-pull-requests-limit: 10
-    labels:
-      - 'dependencies'
-      - 'website'
-      - 'automated'
-    commit-message:
-      prefix: 'chore(deps-website)'
-      prefix-development: 'chore(deps-dev-website)'
-    assignees:
-      - 'alice39s'
-    # Group minor and patch updates together
-    groups:
-      website-production-dependencies:
-        dependency-type: 'production'
-        update-types:
-          - 'minor'
-          - 'patch'
-      website-development-dependencies:
-        dependency-type: 'development'
-        update-types:
-          - 'minor'
-          - 'patch'
-
   # GitHub Actions dependencies
   - package-ecosystem: 'github-actions'
     directory: '/'
