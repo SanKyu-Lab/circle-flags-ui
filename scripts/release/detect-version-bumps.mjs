@@ -5,6 +5,9 @@ import { simpleGit } from 'simple-git'
 
 const DEFAULT_REGISTRY = 'https://registry.npmjs.org'
 
+// The framework packages depend on core, so the release workflow publishes it in an earlier job.
+const CORE_PACKAGE_NAME = '@sankyu/circle-flags-core'
+
 const program = new Command()
   .name('detect-version-bumps')
   .description(
@@ -163,6 +166,8 @@ switch (mode) {
 }
 
 const packagesJson = JSON.stringify(packages)
+const corePackagesJson = JSON.stringify(packages.filter(p => p.name === CORE_PACKAGE_NAME))
+const frameworkPackagesJson = JSON.stringify(packages.filter(p => p.name !== CORE_PACKAGE_NAME))
 const packagesMd = packages.map(p => `- \`${p.name}@${p.version}\` → \`${p.tag}\``).join('\n')
 const hasPackages = packages.length > 0
 
@@ -173,7 +178,8 @@ if (!githubOutput) {
 
 const out = []
 out.push(`has_packages=${hasPackages ? 'true' : 'false'}`)
-out.push(`packages_json=${packagesJson}`)
+out.push(`core_packages_json=${corePackagesJson}`)
+out.push(`framework_packages_json=${frameworkPackagesJson}`)
 out.push('packages_md<<EOF')
 out.push(packagesMd)
 out.push('EOF')
