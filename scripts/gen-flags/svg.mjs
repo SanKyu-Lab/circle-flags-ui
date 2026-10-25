@@ -285,7 +285,7 @@ export const ${componentName}: Component<${componentName}Props> = (props) => {
     props
   )
 
-  const [local, rest] = splitProps(merged, ['width', 'height', 'className', 'title'])
+  const [local, rest] = splitProps(merged, ['width', 'height', 'class', 'className', 'title'])
 
   return (
     <svg
@@ -293,7 +293,7 @@ export const ${componentName}: Component<${componentName}Props> = (props) => {
       viewBox="${viewBox}"
       width={local.width}
       height={local.height}
-      class={local.className}
+      class={[local.class, local.className].filter(Boolean).join(' ') || undefined}
       role="img"
       aria-label={local.title}
       innerHTML={'<title>' + escapeHtml(local.title) + '</title>' + SVG_BODY}
