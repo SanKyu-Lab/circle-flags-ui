@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { DynamicFlag, FlagJp, FlagUs } from '@sankyu/vue-circle-flags'
 
+const switchedCode = ref('jp')
+
 const flags = [
   { label: 'Named import: Japan', component: FlagJp, code: undefined },
   { label: 'Named import: United States', component: FlagUs, code: undefined },
@@ -26,6 +28,16 @@ const flags = [
         />
         <figcaption>{{ flag.label }}</figcaption>
       </figure>
+    </div>
+    <div class="picker">
+      <DynamicFlag :code="switchedCode" :width="48" :height="48" data-testid="switched-flag" />
+      <button
+        type="button"
+        data-testid="flag-switch"
+        @click="switchedCode = switchedCode === 'jp' ? 'br' : 'jp'"
+      >
+        Switch flag after hydration
+      </button>
     </div>
   </main>
 </template>

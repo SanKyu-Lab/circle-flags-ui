@@ -1,4 +1,5 @@
 import { DynamicFlag, FlagJp, FlagUs } from '@sankyu/react-circle-flags'
+import { FlagSwitch } from './flag-switch'
 
 const flags = [
   { label: 'Named import: Japan', component: <FlagJp width={72} height={72} title="Japan" /> },
@@ -29,6 +30,7 @@ export default function Page() {
           </figure>
         ))}
       </div>
+      <FlagSwitch />
     </main>
   )
 }

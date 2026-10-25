@@ -40,8 +40,12 @@ export default function App() {
         </For>
       </div>
       <div class="picker">
-        <DynamicFlag code={selected()} width={48} height={48} />
-        <button type="button" onClick={() => setSelected(code => (code === 'jp' ? 'br' : 'jp'))}>
+        <DynamicFlag code={selected()} width={48} height={48} data-testid="switched-flag" />
+        <button
+          type="button"
+          data-testid="flag-switch"
+          onClick={() => setSelected(code => (code === 'jp' ? 'br' : 'jp'))}
+        >
           Switch flag after hydration
         </button>
       </div>

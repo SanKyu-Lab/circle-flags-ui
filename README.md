@@ -64,7 +64,7 @@ framework-native, typed component packages from one generated source of truth.
 | React     | [`@sankyu/react-circle-flags`](https://www.npmjs.com/package/@sankyu/react-circle-flags)   | Stable   | Vite 8, Next.js App Router SSR | [React README](./packages/react/README.md)   |
 | Vue 3     | [`@sankyu/vue-circle-flags`](https://www.npmjs.com/package/@sankyu/vue-circle-flags)       | Stable   | Vite 8, Nuxt SSR               | [Vue README](./packages/vue/README.md)       |
 | Solid.js  | [`@sankyu/solid-circle-flags`](https://www.npmjs.com/package/@sankyu/solid-circle-flags)   | Stable   | Vite 8, SolidStart SSR         | [Solid README](./packages/solid/README.md)   |
-| Svelte 5  | [`@sankyu/svelte-circle-flags`](https://www.npmjs.com/package/@sankyu/svelte-circle-flags) | Stable   | Vite 8 client build            | [Svelte README](./packages/svelte/README.md) |
+| Svelte 5  | [`@sankyu/svelte-circle-flags`](https://www.npmjs.com/package/@sankyu/svelte-circle-flags) | Stable   | Vite 8, SvelteKit SSR          | [Svelte README](./packages/svelte/README.md) |
 
 ## Verified compatibility matrix
 
@@ -80,6 +80,7 @@ ranges.
 | CSR       | Solid.js 1.9 + Vite 8.1       | TypeScript and production build                                            |
 | SSR       | Solid.js 1.9 + SolidStart 2.1 | Nitro production server; SVG and hydration keys in the first HTML response |
 | CSR       | Svelte 5.56 + Vite 8.1        | `svelte-check` and production build                                        |
+| SSR       | Svelte 5.57 + SvelteKit 3.1   | Node adapter production server; SVG present in the first HTML response     |
 
 The SSR verifier starts each production server, fetches the initial document, checks for the
 framework marker and real `<svg>` markup, then shuts the process down cleanly.
@@ -150,14 +151,16 @@ The compatibility apps are deliberately usable in two ways:
 1. As pnpm workspace projects for repository development.
 2. As standalone npm projects when opened from StackBlitz or copied into a sandbox.
 
-| Example                                       | Purpose                | Open online                                                                                                                                      |
-| --------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`example-react`](./examples/example-react)   | React + Vite 8         | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-react?file=src%2FApp.tsx&terminal=dev)     |
-| [`example-vue`](./examples/example-vue)       | Vue 3 + Vite 8         | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-vue?file=src%2FApp.vue&terminal=dev)       |
-| [`example-solid`](./examples/example-solid)   | Solid.js + Vite 8      | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-solid?file=src%2FApp.tsx&terminal=dev)     |
-| [`example-svelte`](./examples/example-svelte) | Svelte 5 + Vite 8      | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-svelte?file=src%2FApp.svelte&terminal=dev) |
-| [`example-next`](./examples/example-next)     | Next.js production SSR | Local verification                                                                                                                               |
-| [`example-nuxt`](./examples/example-nuxt)     | Nuxt production SSR    | Local verification                                                                                                                               |
+| Example                                               | Purpose                   | Open online                                                                                                                                      |
+| ----------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`example-react`](./examples/example-react)           | React + Vite 8            | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-react?file=src%2FApp.tsx&terminal=dev)     |
+| [`example-vue`](./examples/example-vue)               | Vue 3 + Vite 8            | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-vue?file=src%2FApp.vue&terminal=dev)       |
+| [`example-solid`](./examples/example-solid)           | Solid.js + Vite 8         | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-solid?file=src%2FApp.tsx&terminal=dev)     |
+| [`example-svelte`](./examples/example-svelte)         | Svelte 5 + Vite 8         | [StackBlitz](https://stackblitz.com/fork/github/SanKyu-Lab/circle-flags-ui/tree/main/examples/example-svelte?file=src%2FApp.svelte&terminal=dev) |
+| [`example-next`](./examples/example-next)             | Next.js production SSR    | Local verification                                                                                                                               |
+| [`example-nuxt`](./examples/example-nuxt)             | Nuxt production SSR       | Local verification                                                                                                                               |
+| [`example-solidstart`](./examples/example-solidstart) | SolidStart production SSR | Local verification                                                                                                                               |
+| [`example-sveltekit`](./examples/example-sveltekit)   | SvelteKit production SSR  | Local verification                                                                                                                               |
 
 The four CSR examples intentionally keep their own `package-lock.json`. StackBlitz treats each
 example directory as a standalone npm project, so these locks are part of the sandbox contract even

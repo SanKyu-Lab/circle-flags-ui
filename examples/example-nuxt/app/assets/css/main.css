@@ -70,3 +70,20 @@ figcaption {
   color: #50685f;
   font-size: 0.9rem;
 }
+
+.picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+button {
+  padding: 10px 16px;
+  border: 1px solid #00896b;
+  border-radius: 999px;
+  background: white;
+  color: #00896b;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
