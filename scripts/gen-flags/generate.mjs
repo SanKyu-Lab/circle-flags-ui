@@ -12,6 +12,7 @@ import {
   SVELTE_OUTPUT_DIR,
   VUE_OUTPUT_DIR,
 } from './constants.mjs'
+import { aliasComponents } from './aliases.mjs'
 import {
   svgToReactComponent,
   svgToSolidComponent,
@@ -88,15 +89,13 @@ const writeComponentsFromSvg = async (
 
 const writeAliasComponents = async (
   { reactPath, vuePath, solidPath, sveltePath, coreSvgPath },
-  { componentName, targetCode, targetComponentName }
+  { code, targetCode }
 ) => {
-  const aliasContent = `export { ${targetComponentName} as ${componentName} } from './${targetCode}'\n`
-  await writeFile(reactPath, aliasContent, 'utf-8')
-  await writeFile(vuePath, aliasContent, 'utf-8')
-  await writeFile(solidPath, aliasContent, 'utf-8')
-
-  const svelteAliasContent = `<script module lang="ts">\n  export { default as ${componentName} } from './${targetCode}.svelte'\n</script>\n`
-  await writeFile(sveltePath, svelteAliasContent, 'utf-8')
+  const components = aliasComponents(code, targetCode)
+  await writeFile(reactPath, components.react, 'utf-8')
+  await writeFile(vuePath, components.vue, 'utf-8')
+  await writeFile(solidPath, components.solid, 'utf-8')
+  await writeFile(sveltePath, components.svelte, 'utf-8')
 
   await writeFile(coreSvgPath, `export { svg } from './${targetCode}'\n`, 'utf-8')
 }
@@ -154,7 +153,7 @@ export async function generateFlags() {
               sveltePath: svelteOutputPath,
               coreSvgPath: `${CORE_SVG_GENERATED_DIR}/${code}.ts`,
             },
-            { componentName, targetCode, targetComponentName }
+            { code, targetCode }
           )
 
           flags.push({
@@ -290,13 +289,7 @@ ${flags.map(f => `export { ${f.componentName} } from './${f.code}'`).join('\n')}
 // • Size reduction: ${(((totalOriginalSize - totalOptimizedSize) / totalOriginalSize) * 100).toFixed(1)}%
 //
 
-${flags
-  .map(f =>
-    f.aliasOf
-      ? `export { ${f.componentName} } from './${f.code}.svelte'`
-      : `export { default as ${f.componentName} } from './${f.code}.svelte'`
-  )
-  .join('\n')}
+${flags.map(f => `export { default as ${f.componentName} } from './${f.code}.svelte'`).join('\n')}
 `
 
   await writeFile(`${SVELTE_OUTPUT_DIR}/index.ts`, svelteIndexContent, 'utf-8')
@@ -310,12 +303,7 @@ import type { Component } from 'svelte'
 export type FlagLoader = () => Promise<{ default: Component }>
 
 export const flagLoaders = {
-${flags
-  .map(f => {
-    const target = f.aliasOf ?? f.code
-    return `  ${JSON.stringify(f.code)}: () => import('./${target}.svelte'),`
-  })
-  .join('\n')}
+${flags.map(f => `  ${JSON.stringify(f.code)}: () => import('./${f.code}.svelte'),`).join('\n')}
 } satisfies Record<string, FlagLoader>
 `
 

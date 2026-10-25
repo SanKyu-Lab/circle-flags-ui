@@ -27,12 +27,24 @@ describe('@sankyu/svelte-circle-flags', () => {
     expect(FlagAc).toBeDefined()
   })
 
-  it('renders an alias flag component', () => {
+  it('renders an alias flag with its own default title', () => {
     const { container } = render(FlagAc, { props: { width: 64, height: 64 } })
     const svg = container.querySelector('svg')
     expect(svg).toBeTruthy()
     expect(svg?.getAttribute('viewBox')).toBe('0 0 512 512')
-    expect(svg?.querySelector('title')?.textContent).toBe('SH-AC')
+    expect(svg?.getAttribute('aria-label')).toBe('AC')
+    expect(svg?.querySelector('title')?.textContent).toBe('AC')
+    expect(svg?.innerHTML).toContain('cf-sh-ac-a')
+  })
+
+  it('lets an alias flag take a custom title', () => {
+    const { container } = render(FlagAc, { props: { title: 'Ascension Island' } })
+    expect(container.querySelector('svg')?.getAttribute('aria-label')).toBe('Ascension Island')
+  })
+
+  it('DynamicFlag renders an alias code with the alias title', () => {
+    const { container } = render(DynamicFlag, { props: { code: 'ac' } })
+    expect(container.querySelector('svg')?.getAttribute('aria-label')).toBe('AC')
   })
 
   it('exports registry and utilities', () => {

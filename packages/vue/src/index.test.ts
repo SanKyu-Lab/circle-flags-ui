@@ -4,6 +4,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 
 import { CircleFlag, DynamicFlag, FlagUtils } from './index'
 import { FlagUs } from '../generated/flags/us'
+import { FlagAc } from '../generated/flags/ac'
 
 const cdn = (code: string) => `https://hatscripts.github.io/circle-flags/flags/${code}.svg`
 
@@ -35,6 +36,22 @@ describe('@sankyu/vue-circle-flags', () => {
     const wrapper = mount(FlagUs, { props: { width: 32 } })
     expect(wrapper.find('mask').attributes('id')).toBe('cf-us-a')
     expect(wrapper.html()).toContain('url(#cf-us-a)')
+  })
+
+  it('alias flags use their own default title', () => {
+    const svg = mount(FlagAc).find('svg')
+    expect(svg.attributes('aria-label')).toBe('AC')
+    expect(svg.html()).toContain('cf-sh-ac-a')
+
+    const custom = mount(FlagAc, {
+      props: { title: 'Ascension Island' },
+      attrs: { class: 'flag' },
+    }).find('svg')
+    expect(custom.attributes('aria-label')).toBe('Ascension Island')
+    expect(custom.classes()).toContain('flag')
+
+    const dynamic = mount(DynamicFlag, { props: { code: 'ac' } }).find('svg')
+    expect(dynamic.attributes('aria-label')).toBe('AC')
   })
 
   it('DynamicFlag renders fallback for unknown code', () => {
