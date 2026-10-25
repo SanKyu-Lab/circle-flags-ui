@@ -8,19 +8,34 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./svg": {
-      "types": "./dist/generated/svgs/index.d.ts",
-      "import": "./dist/generated/svgs/index.mjs",
-      "require": "./dist/generated/svgs/index.cjs"
+      "import": {
+        "types": "./dist/generated/svgs/index.d.ts",
+        "default": "./dist/generated/svgs/index.mjs"
+      },
+      "require": {
+        "types": "./dist/generated/svgs/index.d.cts",
+        "default": "./dist/generated/svgs/index.cjs"
+      }
     },
     "./svg/*": {
-      "types": "./dist/generated/svgs/*.d.ts",
-      "import": "./dist/generated/svgs/*.mjs",
-      "require": "./dist/generated/svgs/*.cjs"
+      "import": {
+        "types": "./dist/generated/svgs/*.d.ts",
+        "default": "./dist/generated/svgs/*.mjs"
+      },
+      "require": {
+        "types": "./dist/generated/svgs/*.d.cts",
+        "default": "./dist/generated/svgs/*.cjs"
+      }
     }
   },
   "files": [
@@ -35,7 +50,6 @@
   "scripts": {
     "prebuild": "node ../../scripts/life-cycle.js ensure-generated --pkg core",
     "build": "tsup",
-    "postbuild": "node ../../scripts/tasks/postbuild-core.mjs",
     "dev": "tsup --watch",
     "pretypecheck": "node ../../scripts/life-cycle.js ensure-generated --pkg core",
     "typecheck": "tsc --noEmit",
