@@ -95,76 +95,54 @@ export function escapeHtml(input: string): string {
   })
 }
 
-/**
- * Regex-based SVG sanitizer for environments without DOMParser (SSR/Node).
- * Removes scripts, event handlers and javascript: URLs.
- */
-function sanitizeSvgRegex(raw: string): string {
-  return (
-    raw
-      // Remove <script> blocks including their content
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      // Remove <foreignObject> blocks including their content
-      .replace(/<foreignObject\b[^<]*(?:(?!<\/foreignObject>)<[^<]*)*<\/foreignObject>/gi, '')
-      // Remove event-handler attributes (on*="..." or on*='...' or on*=...)
-      .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
-      // Neutralize javascript: URLs in href / xlink:href attributes
-      .replace(/(\s+(?:xlink:)?href\s*=\s*["'])javascript:[^"']*/gi, '$1')
-  )
-}
+// Elements removed together with their content.
+const UNSAFE_ELEMENTS = 'script, foreignObject'
+// SMIL animations can rewrite a link target after the static attributes were checked.
+const ANIMATION_ELEMENTS = 'set, animate'
+const LINK_ATTRIBUTES = new Set(['href', 'xlink:href'])
+const URL_ATTRIBUTES = new Set(['href', 'xlink:href', 'src'])
+
+// URL parsers drop tabs and newlines anywhere in a URL and C0 controls or spaces around it, so
+// `java\tscript:` and ` javascript:` still run script. Dropping every character up to U+0020
+// before the check covers those forms.
+const isScriptUrl = (value: string): boolean =>
+  [...value]
+    .filter(char => char > ' ')
+    .join('')
+    .toLowerCase()
+    .startsWith('javascript:')
 
 /**
- * Sanitize an SVG string by removing scripts, event handlers and javascript: URLs.
+ * Sanitize an SVG string fetched from a CDN before it is injected as HTML.
  *
- * Uses DOMParser when available for robust parsing, otherwise falls back to a
- * regex-based sanitizer suitable for SSR/Node environments.
+ * Removes `<script>` and `<foreignObject>`, event handler attributes, `javascript:` URLs, and
+ * `<set>` / `<animate>` elements that animate a link target. Parsing uses the browser's
+ * `DOMParser`, so entities are decoded before the checks run.
+ *
+ * Returns an empty string when the input is not well-formed SVG, or when `DOMParser` is not
+ * available (for example in Node without a DOM implementation).
  */
 export function sanitizeSvg(raw: string): string {
-  if (typeof DOMParser === 'undefined') {
-    return sanitizeSvgRegex(raw)
-  }
+  if (typeof DOMParser === 'undefined') return ''
 
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(raw, 'image/svg+xml')
+  const doc = new DOMParser().parseFromString(raw, 'image/svg+xml')
   const svg = doc.documentElement
+  if (doc.querySelector('parsererror') || svg.localName !== 'svg') return ''
 
-  if (!svg || doc.querySelector('parsererror')) {
-    return sanitizeSvgRegex(raw)
-  }
-
-  svg.querySelectorAll('script,foreignObject').forEach(el => el.remove())
-
-  svg.querySelectorAll('*').forEach(el => {
-    Array.from(el.attributes).forEach(attr => {
-      const name = attr.name.toLowerCase()
-      const value = attr.value.trim().toLowerCase()
-
-      if (name.startsWith('on')) {
-        try {
-          el.removeAttribute(attr.name)
-        } catch {
-          try {
-            el.setAttribute(attr.name, '')
-          } catch {
-            // Ignore in test / non-DOM environments
-          }
-        }
-        return
-      }
-
-      if ((name === 'href' || name === 'xlink:href') && value.startsWith('javascript:')) {
-        try {
-          el.removeAttribute(attr.name)
-        } catch {
-          try {
-            el.setAttribute(attr.name, '')
-          } catch {
-            // Ignore in test / non-DOM environments
-          }
-        }
-      }
-    })
+  svg.querySelectorAll(UNSAFE_ELEMENTS).forEach(element => element.remove())
+  svg.querySelectorAll(ANIMATION_ELEMENTS).forEach(element => {
+    const target = element.getAttribute('attributeName')?.trim().toLowerCase() ?? ''
+    if (LINK_ATTRIBUTES.has(target)) element.remove()
   })
+
+  for (const element of [svg, ...Array.from(svg.querySelectorAll('*'))]) {
+    for (const attribute of Array.from(element.attributes)) {
+      const name = attribute.name.toLowerCase()
+      if (name.startsWith('on') || (URL_ATTRIBUTES.has(name) && isScriptUrl(attribute.value))) {
+        element.removeAttribute(attribute.name)
+      }
+    }
+  }
 
   return svg.outerHTML
 }

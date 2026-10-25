@@ -67,8 +67,10 @@ export const CircleFlag = ({
           throw new Error(`Failed to load flag: ${response.statusText}`)
         }
 
-        const svg = await response.text()
-        const sanitizedSvg = sanitizeSvg(svg)
+        const sanitizedSvg = sanitizeSvg(await response.text())
+        if (!sanitizedSvg) {
+          throw new Error('Flag response is not a well-formed SVG')
+        }
         setSvgContent(sanitizedSvg)
         setError(false)
       } catch (err) {

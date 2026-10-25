@@ -102,6 +102,25 @@ describe('@sankyu/vue-circle-flags', () => {
     expect(html).toContain('<svg')
   })
 
+  it('CircleFlag shows the fallback when the response is not well-formed SVG', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    globalThis.fetch = vi.fn(
+      async () =>
+        ({
+          ok: true,
+          statusText: 'OK',
+          text: async () => '<html><body>Not Found</body></html>',
+        }) as unknown as Response
+    ) as unknown as typeof fetch
+
+    const wrapper = mount(CircleFlag, { props: { countryCode: 'us' } })
+    await flushPromises()
+
+    expect(wrapper.find('text').text()).toBe('US')
+    expect(warn).toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
   it('CircleFlag aborts the previous request when the code changes', async () => {
     const { pending, aborted } = installFetch()
     const wrapper = mount(CircleFlag, { props: { countryCode: 'us' } })

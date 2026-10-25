@@ -122,6 +122,22 @@ describe('@sankyu/svelte-circle-flags', () => {
       })
     })
 
+    it('shows fallback when the response is not well-formed SVG', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          text: () => Promise.resolve('<html><body>Not Found</body></html>'),
+        })
+      ) as unknown as typeof fetch
+
+      const { container } = render(CircleFlag, { props: { countryCode: 'us' } })
+      await waitFor(() => {
+        expect(container.querySelector('text')?.textContent?.trim()).toBe('US')
+      })
+      expect(warn).toHaveBeenCalled()
+    })
+
     it('aborts in-flight requests on unmount', async () => {
       const abortSpy = vi.fn()
       const fetchNever = vi.fn(() =>

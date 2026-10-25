@@ -186,7 +186,11 @@ const _CircleFlag = defineComponent({
 
         const svg = await response.text()
         if (controller.signal.aborted) return
-        svgContent.value = sanitizeSvg(svg)
+        const sanitizedSvg = sanitizeSvg(svg)
+        if (!sanitizedSvg) {
+          throw new Error('Flag response is not a well-formed SVG')
+        }
+        svgContent.value = sanitizedSvg
       } catch (err) {
         if (controller.signal.aborted) return
         console.warn(`Failed to load flag for country code: ${finalCountryCode.value}`, err)

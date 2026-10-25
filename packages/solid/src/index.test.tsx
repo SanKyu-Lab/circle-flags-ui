@@ -133,6 +133,21 @@ describe('@sankyu/solid-circle-flags', () => {
     expect(text).toBe('ZZ')
   })
 
+  it('CircleFlag renders the code fallback when the response is not well-formed SVG', async () => {
+    const { pending } = installFetch()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { container, dispose } = mount(() => <CircleFlag countryCode="us" />)
+    pending.get(cdn('us'))?.('<html><body>Not Found</body></html>')
+    await flush()
+    await flush()
+    const text = container.querySelector('text')?.textContent
+    const warned = warn.mock.calls.length
+    dispose()
+    warn.mockRestore()
+    expect(text).toBe('US')
+    expect(warned).toBe(1)
+  })
+
   it('CircleFlag keeps string and object styles after the SVG loads', async () => {
     const { pending } = installFetch()
     const { container, dispose } = mount(() => (

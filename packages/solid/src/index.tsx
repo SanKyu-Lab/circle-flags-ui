@@ -153,7 +153,11 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
       })
       .then(svg => {
         if (controller.signal.aborted) return
-        setSvgContent(sanitizeSvg(svg))
+        const sanitizedSvg = sanitizeSvg(svg)
+        if (!sanitizedSvg) {
+          throw new Error('Flag response is not a well-formed SVG')
+        }
+        setSvgContent(sanitizedSvg)
       })
       .catch(err => {
         if (controller.signal.aborted) return
