@@ -1,5 +1,5 @@
-import { computed, defineComponent, h, onMounted, ref, watch } from 'vue'
-import type { Component, PropType, VNode } from 'vue'
+import { computed, defineComponent, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import type { Component, PropType, StyleValue, VNode } from 'vue'
 import {
   codeToEmoji,
   codeToComponentName,
@@ -164,37 +164,42 @@ const _CircleFlag = defineComponent({
     const defaultTitle = computed(() => props.title ?? `${emoji.value} ${upperCode.value}`)
 
     const load = async () => {
+      currentController?.abort()
+      currentController = null
+      svgContent.value = null
+      error.value = false
+
       if (!finalCountryCode.value) {
-        svgContent.value = null
         error.value = true
         return
       }
 
-      currentController?.abort()
-      currentController = new AbortController()
+      const controller = new AbortController()
+      currentController = controller
 
       try {
         const url = `${props.cdnUrl.replace(/\/$/, '')}/${normalizedCode.value}.svg`
-        const response = await fetch(url, { signal: currentController.signal })
+        const response = await fetch(url, { signal: controller.signal })
         if (!response.ok) {
           throw new Error(`Failed to load flag: ${response.statusText}`)
         }
 
         const svg = await response.text()
+        if (controller.signal.aborted) return
         svgContent.value = sanitizeSvg(svg)
-        error.value = false
       } catch (err) {
-        if (err instanceof Error && err.name === 'AbortError') {
-          return
-        }
+        if (controller.signal.aborted) return
         console.warn(`Failed to load flag for country code: ${finalCountryCode.value}`, err)
-        svgContent.value = null
         error.value = true
       }
     }
 
     onMounted(() => {
       void load()
+    })
+
+    onBeforeUnmount(() => {
+      currentController?.abort()
     })
 
     watch([() => finalCountryCode.value, () => props.cdnUrl], () => {
@@ -231,21 +236,16 @@ const _CircleFlag = defineComponent({
       )
 
       const { class: cls, style, ...rest } = attrsAny
-      const baseStyle: Record<string, unknown> = {
+      const baseStyle = {
         width: toCssSize(props.width),
         height: toCssSize(props.height),
         display: 'inline-block',
       }
 
-      const mergedStyle =
-        typeof style === 'object' && style !== null
-          ? { ...baseStyle, ...(style as object) }
-          : baseStyle
-
       return h('div', {
         ...rest,
         class: [props.className, cls],
-        style: mergedStyle,
+        style: [baseStyle, style as StyleValue],
         innerHTML: svgWithSize,
         role: 'img',
         'aria-label': defaultTitle.value,

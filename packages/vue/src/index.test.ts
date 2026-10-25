@@ -4,6 +4,26 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { CircleFlag, DynamicFlag, FlagUtils } from './index'
 import { FlagUs } from '../generated/flags/us'
 
+const cdn = (code: string) => `https://hatscripts.github.io/circle-flags/flags/${code}.svg`
+
+const installFetch = () => {
+  const pending = new Map<string, (svg: string) => void>()
+  const aborted: string[] = []
+  globalThis.fetch = vi.fn(
+    (url: string, init: RequestInit) =>
+      new Promise<Response>((resolve, reject) => {
+        init.signal?.addEventListener('abort', () => {
+          aborted.push(url)
+          reject(Object.assign(new Error('aborted'), { name: 'AbortError' }))
+        })
+        pending.set(url, svg =>
+          resolve({ ok: true, statusText: 'OK', text: async () => svg } as Response)
+        )
+      })
+  ) as unknown as typeof fetch
+  return { pending, aborted }
+}
+
 describe('@sankyu/vue-circle-flags', () => {
   it('FlagUtils.isValidCountryCode works', () => {
     expect(FlagUtils.isValidCountryCode('us')).toBe(true)
@@ -63,5 +83,60 @@ describe('@sankyu/vue-circle-flags', () => {
     expect(html).not.toContain('<script')
     expect(html).not.toContain('onload=')
     expect(html).toContain('<svg')
+  })
+
+  it('CircleFlag aborts the previous request when the code changes', async () => {
+    const { pending, aborted } = installFetch()
+    const wrapper = mount(CircleFlag, { props: { countryCode: 'us' } })
+    await flushPromises()
+    await wrapper.setProps({ countryCode: 'cn' })
+    pending.get(cdn('cn'))?.('<svg id="CN"></svg>')
+    await flushPromises()
+    pending.get(cdn('us'))?.('<svg id="US"></svg>')
+    await flushPromises()
+    expect(aborted).toContain(cdn('us'))
+    expect(wrapper.html()).toContain('id="CN"')
+    expect(wrapper.html()).not.toContain('id="US"')
+  })
+
+  it('CircleFlag ignores a pending response after the code is cleared', async () => {
+    const { pending, aborted } = installFetch()
+    const wrapper = mount(CircleFlag, { props: { countryCode: 'us' } })
+    await flushPromises()
+    await wrapper.setProps({ countryCode: '' })
+    pending.get(cdn('us'))?.('<svg id="US"></svg>')
+    await flushPromises()
+    expect(aborted).toContain(cdn('us'))
+    expect(wrapper.html()).not.toContain('id="US"')
+  })
+
+  it('CircleFlag aborts its request on unmount', async () => {
+    const { aborted } = installFetch()
+    const wrapper = mount(CircleFlag, { props: { countryCode: 'de' } })
+    await flushPromises()
+    wrapper.unmount()
+    expect(aborted).toContain(cdn('de'))
+  })
+
+  it('CircleFlag keeps string and array styles after the SVG loads', async () => {
+    const { pending } = installFetch()
+    const text = mount(CircleFlag, {
+      props: { countryCode: 'fr' },
+      attrs: { style: 'outline: 1px solid red' },
+    })
+    const list = mount(CircleFlag, {
+      props: { countryCode: 'it' },
+      attrs: { style: [{ outline: '1px solid red' }, { opacity: 0.5 }] },
+    })
+    await flushPromises()
+    pending.get(cdn('fr'))?.('<svg id="FR"></svg>')
+    pending.get(cdn('it'))?.('<svg id="IT"></svg>')
+    await flushPromises()
+    const textStyle = text.find('div').attributes('style')
+    const listStyle = list.find('div').attributes('style')
+    expect(textStyle).toContain('outline')
+    expect(textStyle).toContain('width: 48px')
+    expect(listStyle).toContain('outline')
+    expect(listStyle).toContain('opacity: 0.5')
   })
 })
