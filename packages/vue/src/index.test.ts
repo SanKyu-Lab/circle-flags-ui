@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
+import { h } from 'vue'
 import { mount, flushPromises } from '@vue/test-utils'
 
 import { CircleFlag, DynamicFlag, FlagUtils } from './index'
@@ -51,6 +52,22 @@ describe('@sankyu/vue-circle-flags', () => {
     expect(svg.attributes('aria-label')).toBe('US')
     expect(svg.html()).toContain('<title>')
     expect(svg.html()).toContain('US')
+  })
+
+  it('DynamicFlag applies the default size and accepts strict codes', () => {
+    const wrapper = mount(() => h(DynamicFlag, { code: 'jp', strict: true }))
+    const svg = wrapper.find('svg')
+    expect(svg.attributes('width')).toBe('48')
+    expect(svg.attributes('height')).toBe('48')
+    expect(svg.attributes('aria-label')).toBe('JP')
+  })
+
+  it('DynamicFlag types reject unknown codes in strict mode', () => {
+    // @ts-expect-error strict mode only accepts FlagCode values
+    const strictInvalid = () => h(DynamicFlag, { code: 'not-a-code', strict: true })
+    const looseUnknown = () => h(DynamicFlag, { code: 'not-a-code' })
+    expect(typeof strictInvalid).toBe('function')
+    expect(typeof looseUnknown).toBe('function')
   })
 
   it('CircleFlag shows loading state before fetch resolves', async () => {
