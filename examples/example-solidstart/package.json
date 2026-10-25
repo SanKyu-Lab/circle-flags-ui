@@ -1,0 +1,25 @@
+{
+  "name": "example-solidstart",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "circleFlagsUi": {
+    "syncShared": false
+  },
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0 --port 31007",
+    "build": "tsc --noEmit && vite build",
+    "start": "node .output/server/index.mjs",
+    "verify:ssr": "node ../../scripts/verify-ssr-example.mjs --url http://127.0.0.1:32007 --expect 'data-ssr-example=\"solidstart\"' --expect '<svg' --expect 'data-hk=' -- node .output/server/index.mjs"
+  },
+  "dependencies": {
+    "@sankyu/solid-circle-flags": "^1.0.0",
+    "@solidjs/start": "^2.1.0",
+    "nitro": "^3.0.260903-beta",
+    "solid-js": "^1.9.17",
+    "vite": "^8.3.2"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3"
+  }
+}

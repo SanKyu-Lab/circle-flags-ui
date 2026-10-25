@@ -1,12 +1,12 @@
 ---
 title: SSR Compatibility
-description: Use circle-flags-ui with Next.js App Router, Nuxt, and modern Vite-based frameworks.
+description: Use circle-flags-ui with Next.js App Router, Nuxt, SolidStart, and modern Vite-based frameworks.
 ---
 
 import { Card, CardGrid, LinkCard, TabItem, Tabs } from '@astrojs/starlight/components'
 
 The flag packages render inline SVG and do not need browser APIs. Named flag imports and
-`DynamicFlag` can therefore render in the first server response with Next.js and Nuxt.
+`DynamicFlag` can therefore render in the first server response with Next.js, Nuxt, and SolidStart.
 
 <CardGrid>
   <Card title="Named imports" icon="rocket">
@@ -25,14 +25,15 @@ The flag packages render inline SVG and do not need browser APIs. Named flag imp
 
 ## Tested examples
 
-| Rendering | Stack                      | Verification                                                      |
-| --------- | -------------------------- | ----------------------------------------------------------------- |
-| CSR       | React + Vite 8             | TypeScript and production bundle build                            |
-| SSR       | Next.js App Router + React | Production build, server startup, first-response SVG assertion    |
-| CSR       | Vue 3 + Vite 8             | Vue TypeScript and production bundle build                        |
-| SSR       | Nuxt 4 + Vue 3             | Nuxt typecheck/build, Nitro startup, first-response SVG assertion |
-| CSR       | Svelte 5 + Vite 8          | Svelte compiler and production bundle build                       |
-| CSR       | Solid.js + Vite 8          | TypeScript and production bundle build                            |
+| Rendering | Stack                      | Verification                                                           |
+| --------- | -------------------------- | ---------------------------------------------------------------------- |
+| CSR       | React + Vite 8             | TypeScript and production bundle build                                 |
+| SSR       | Next.js App Router + React | Production build, server startup, first-response SVG assertion         |
+| CSR       | Vue 3 + Vite 8             | Vue TypeScript and production bundle build                             |
+| SSR       | Nuxt 4 + Vue 3             | Nuxt typecheck/build, Nitro startup, first-response SVG assertion      |
+| CSR       | Svelte 5 + Vite 8          | Svelte compiler and production bundle build                            |
+| CSR       | Solid.js + Vite 8          | TypeScript and production bundle build                                 |
+| SSR       | SolidStart 2 + Solid.js    | Production build, Nitro startup, first-response SVG and hydration keys |
 
 <LinkCard
   title="Browse all compatibility examples"
@@ -80,6 +81,28 @@ import { DynamicFlag, FlagJp } from '@sankyu/vue-circle-flags'
   </main>
 </template>
 ```
+
+## SolidStart
+
+Import flags in any route or component. Do not wrap named flags or `DynamicFlag` in `clientOnly`;
+the server renders them and the client hydrates the same markup.
+
+```tsx
+import { DynamicFlag, FlagJp } from '@sankyu/solid-circle-flags'
+
+export default function Page() {
+  return (
+    <main>
+      <FlagJp width={64} height={64} title="Japan" />
+      <DynamicFlag code="de" width={64} height={64} title="Germany" />
+    </main>
+  )
+}
+```
+
+The package exports a `solid` condition with JSX source, so SolidStart and `vite-plugin-solid`
+compile it with the same settings as the app. Other server runtimes resolve the `node`, `worker`,
+or `deno` condition and receive a precompiled SSR build. Browsers receive a hydratable DOM build.
 
 ## Vite 8 clients
 

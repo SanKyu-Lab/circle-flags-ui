@@ -15,7 +15,7 @@ const features: readonly Feature[] = [
     id: 'render',
     label: 'Rendering',
     title: 'An inline <svg>, rendered on the server.',
-    body: 'Each flag is a component that outputs one <svg> element in place. Named flags render during SSR in Next.js and Nuxt and make no network request.',
+    body: 'Each flag is a component that outputs one <svg> element in place. Named flags render during SSR in Next.js, Nuxt, and SolidStart and make no network request.',
     Demo: RenderDemo,
   },
   {
