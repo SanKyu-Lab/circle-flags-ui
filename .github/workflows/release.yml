@@ -95,13 +95,6 @@ jobs:
           PACKAGE_NAME="${{ matrix.pkg.name }}"
           VERSION="${{ matrix.pkg.version }}"
 
-          # Encode package name for npm registry URL
-          if [[ "$PACKAGE_NAME" == @* ]]; then
-            ENCODED_NAME="${PACKAGE_NAME/\//%2f}"
-          else
-            ENCODED_NAME="$PACKAGE_NAME"
-          fi
-
           echo "Checking if $PACKAGE_NAME@$VERSION is already published..."
 
           # Check npm registry
@@ -186,7 +179,9 @@ jobs:
         with:
           name: changelog-${{ matrix.pkg.slug }}
           path: .release-artifacts
-          if-no-files-found: warn
+          # upload-artifact skips dot-prefixed paths unless this is set.
+          include-hidden-files: true
+          if-no-files-found: error
 
       - name: Upload release notes artifact
         if: steps.check_published.outputs.already_published != 'true'
@@ -194,6 +189,7 @@ jobs:
         with:
           name: release-notes-${{ matrix.pkg.slug }}
           path: .release-notes.md
+          include-hidden-files: true
 
       - name: Create and push git tag
         id: tag

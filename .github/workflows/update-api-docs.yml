@@ -37,7 +37,6 @@ jobs:
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: '22'
-          pnpm-version: '10'
 
       - name: Build parent library
         run: pnpm run build
