@@ -272,18 +272,8 @@ export type DynamicFlagProps =
   | (DynamicFlagPropsBase & { strict?: false; code: string })
   | (DynamicFlagPropsBase & { strict: true; code: CountryCode })
 
-const _DynamicFlag = defineComponent({
-  name: 'DynamicFlag',
-  inheritAttrs: false,
-  props: {
-    code: { type: String, required: true },
-    strict: { type: Boolean, default: false },
-    width: { type: [Number, String] as PropType<number | string>, default: 48 },
-    height: { type: [Number, String] as PropType<number | string>, default: 48 },
-    title: { type: String, default: undefined },
-    className: { type: String, default: undefined },
-  },
-  setup(props, { attrs }): () => VNode {
+export const DynamicFlag = defineComponent(
+  (props: DynamicFlagProps, { attrs }): (() => VNode) => {
     const normalizedInput = computed(() => props.code.trim().toLowerCase())
     const resolvedCode = computed(() => coerceFlagCode(props.code, 'xx'))
     const componentName = computed(() => FLAG_REGISTRY[resolvedCode.value])
@@ -307,16 +297,19 @@ const _DynamicFlag = defineComponent({
 
       return h(FlagComponent as Component, {
         ...attrsAny,
-        width: props.width,
-        height: props.height,
+        width: props.width ?? 48,
+        height: props.height ?? 48,
         title: fallbackTitle.value,
         className: props.className,
       })
     }
   },
-})
-
-export const DynamicFlag: typeof _DynamicFlag = _DynamicFlag
+  {
+    name: 'DynamicFlag',
+    inheritAttrs: false,
+    props: ['code', 'strict', 'width', 'height', 'title', 'className'],
+  }
+)
 
 export type CountryCode = FlagCode
 
