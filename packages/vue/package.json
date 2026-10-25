@@ -38,6 +38,16 @@
       }
     }
   },
+  "typesVersions": {
+    "*": {
+      "meta": [
+        "./dist/meta.d.ts"
+      ],
+      "flags/*": [
+        "./dist/flags/*.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist",
     "README.md",
