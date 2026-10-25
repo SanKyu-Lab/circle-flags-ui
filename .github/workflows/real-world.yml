@@ -1,0 +1,127 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Real-world
+
+on:
+  pull_request:
+    paths: &paths
+      - 'packages/**'
+      - 'scripts/**'
+      - 'examples/**'
+      - 'tests/real-world/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/real-world.yml'
+  push:
+    branches: [main]
+    paths: *paths
+  # Weekly run against the latest releases of the bundlers, frameworks and TypeScript.
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch: {}
+
+concurrency:
+  group: real-world-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pack:
+    name: Pack packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm + Node.js
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24.x
+
+      - name: Build packages
+        run: pnpm run build
+        env:
+          NODE_ENV: production
+
+      - name: Pack packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tarballs
+          for pkg in core react vue solid svelte; do
+            pnpm -C "packages/$pkg" pack --pack-destination "$PWD/tarballs"
+          done
+
+      - name: Upload tarballs
+        uses: actions/upload-artifact@v6
+        with:
+          name: real-world-tarballs
+          path: tarballs/*.tgz
+          retention-days: 7
+
+  test:
+    name: ${{ matrix.suite.name }}
+    needs: pack
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - name: Bundlers
+            only: bundlers
+          - name: Node SSR
+            only: node-ssr
+          - name: TypeScript
+            only: typescript
+          - name: Framework versions
+            only: framework-versions
+          - name: React and Vue examples
+            only: example-react,example-vue,example-next,example-nuxt
+            browser: true
+          - name: Solid and Svelte examples
+            only: example-solid,example-svelte
+            browser: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm + Node.js
+        uses: ./.github/actions/setup-pnpm
+        with:
+          node-version: 24.x
+          install: 'false'
+
+      - name: Download tarballs
+        uses: actions/download-artifact@v8
+        with:
+          name: real-world-tarballs
+          path: tarballs
+
+      - name: Install the test runner
+        working-directory: tests/real-world
+        run: pnpm install --ignore-workspace --no-lockfile
+
+      - name: Install Chromium
+        if: matrix.suite.browser
+        working-directory: tests/real-world
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run real-world tests
+        run: >
+          node tests/real-world/run.mjs
+          --tarballs tarballs
+          --only "${{ matrix.suite.only }}"
+          --work "${{ runner.temp }}/real-world"
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: real-world-logs-${{ strategy.job-index }}
+          path: ${{ runner.temp }}/real-world/logs
+          retention-days: 7
