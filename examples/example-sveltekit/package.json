@@ -1,0 +1,28 @@
+{
+  "name": "example-sveltekit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "circleFlagsUi": {
+    "syncShared": false
+  },
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0 --port 31008",
+    "build": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && vite build",
+    "start": "node build",
+    "prepare": "svelte-kit sync || echo ''",
+    "verify:ssr": "node ../../scripts/verify-ssr-example.mjs --url http://127.0.0.1:32008 --expect 'data-ssr-example=\"sveltekit\"' --expect '<svg' -- node build"
+  },
+  "dependencies": {
+    "@sankyu/svelte-circle-flags": "^1.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-node": "^6.0.0",
+    "@sveltejs/kit": "^3.1.0",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "svelte": "^5.57.2",
+    "svelte-check": "^4.7.7",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.5"
+  }
+}

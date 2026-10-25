@@ -1,12 +1,13 @@
 ---
 title: SSR Compatibility
-description: Use circle-flags-ui with Next.js App Router, Nuxt, SolidStart, and modern Vite-based frameworks.
+description: Use circle-flags-ui with Next.js App Router, Nuxt, SolidStart, SvelteKit, and modern Vite-based frameworks.
 ---
 
 import { Card, CardGrid, LinkCard, TabItem, Tabs } from '@astrojs/starlight/components'
 
 The flag packages render inline SVG and do not need browser APIs. Named flag imports and
-`DynamicFlag` can therefore render in the first server response with Next.js, Nuxt, and SolidStart.
+`DynamicFlag` can therefore render in the first server response with Next.js, Nuxt, SolidStart,
+and SvelteKit.
 
 <CardGrid>
   <Card title="Named imports" icon="rocket">
@@ -34,6 +35,7 @@ The flag packages render inline SVG and do not need browser APIs. Named flag imp
 | CSR       | Svelte 5 + Vite 8          | Svelte compiler and production bundle build                            |
 | CSR       | Solid.js + Vite 8          | TypeScript and production bundle build                                 |
 | SSR       | SolidStart 2 + Solid.js    | Production build, Nitro startup, first-response SVG and hydration keys |
+| SSR       | SvelteKit 3 + Svelte 5     | svelte-check/build, Node adapter startup, first-response SVG assertion |
 
 <LinkCard
   title="Browse all compatibility examples"
@@ -103,6 +105,22 @@ export default function Page() {
 The package exports a `solid` condition with JSX source, so SolidStart and `vite-plugin-solid`
 compile it with the same settings as the app. Other server runtimes resolve the `node`, `worker`,
 or `deno` condition and receive a precompiled SSR build. Browsers receive a hydratable DOM build.
+
+## SvelteKit
+
+Import flags in any route or component. They do not need a `browser` check or `onMount`; the
+server renders them and the client hydrates the same markup.
+
+```svelte
+<script lang="ts">
+  import { DynamicFlag, FlagJp } from '@sankyu/svelte-circle-flags'
+</script>
+
+<main>
+  <FlagJp width={64} height={64} title="Japan" />
+  <DynamicFlag code="de" width={64} height={64} title="Germany" />
+</main>
+```
 
 ## Vite 8 clients
 
