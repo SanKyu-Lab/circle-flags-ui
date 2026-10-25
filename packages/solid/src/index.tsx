@@ -1,4 +1,13 @@
-import { createSignal, createEffect, mergeProps, splitProps, Show } from 'solid-js'
+import {
+  createSignal,
+  createEffect,
+  mergeProps,
+  onCleanup,
+  splitProps,
+  Match,
+  Show,
+  Switch,
+} from 'solid-js'
 import type { Component, JSX } from 'solid-js'
 import {
   codeToEmoji,
@@ -68,7 +77,21 @@ const toCssSize = (value: number | string | undefined) => {
   return value
 }
 
-// Simple CDN-based flag loader (for demonstration - production would use resources)
+const joinClass = (...values: Array<string | undefined>) =>
+  values.filter(Boolean).join(' ') || undefined
+
+const mergeStyle = (
+  base: Record<string, string | undefined>,
+  style: JSX.CSSProperties | string | undefined
+): JSX.CSSProperties | string => {
+  if (typeof style !== 'string') return { ...base, ...style }
+  const baseText = Object.entries(base)
+    .filter(([, value]) => value !== undefined)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('; ')
+  return `${baseText}; ${style}`
+}
+
 /**
  * @deprecated `CircleFlag` is deprecated and not recommended for new code.
  *
@@ -95,6 +118,7 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
     'title',
     'class',
     'className',
+    'style',
   ])
 
   const finalCountryCode = () => local.countryCode ?? local.code ?? ''
@@ -108,14 +132,18 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
 
   createEffect(() => {
     const code = finalCountryCode()
+    const url = `${local.cdnUrl.replace(/\/$/, '')}/${normalizedCode()}.svg`
+    setSvgContent(null)
+    setError(false)
+
     if (!code) {
-      setSvgContent(null)
       setError(true)
       return
     }
 
     const controller = new AbortController()
-    const url = `${local.cdnUrl!.replace(/\/$/, '')}/${normalizedCode()}.svg`
+    onCleanup(() => controller.abort())
+
     fetch(url, { signal: controller.signal })
       .then(response => {
         if (!response.ok) {
@@ -124,36 +152,58 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
         return response.text()
       })
       .then(svg => {
+        if (controller.signal.aborted) return
         setSvgContent(sanitizeSvg(svg))
-        setError(false)
       })
       .catch(err => {
-        if (err instanceof Error && err.name === 'AbortError') {
-          return
-        }
+        if (controller.signal.aborted) return
         console.warn(`Failed to load flag for country code: ${code}`, err)
-        setSvgContent(null)
         setError(true)
       })
+  })
 
-    return () => {
-      controller.abort()
-    }
+  const svgProps = (): JSX.SvgSVGAttributes<SVGSVGElement> => ({
+    ...rest,
+    viewBox: '0 0 512 512',
+    width: local.width,
+    height: local.height,
+    class: joinClass(local.class, local.className),
+    style: local.style,
+    role: 'img',
+    'aria-label': defaultTitle(),
   })
 
   return (
-    <Show
-      when={svgContent() && !error()}
+    <Switch
       fallback={
-        <svg
-          {...rest}
-          viewBox="0 0 512 512"
-          width={local.width}
-          height={local.height}
-          class={local.class || local.className}
-          role="img"
-          aria-label={defaultTitle()}
-        >
+        <svg {...svgProps()}>
+          <title>{defaultTitle()}</title>
+          <circle cx="256" cy="256" r="256" fill="#f5f5f5" />
+          <circle cx="256" cy="256" r="200" fill="#e0e0e0" class="animate-pulse" />
+        </svg>
+      }
+    >
+      <Match when={svgContent()}>
+        {content => (
+          <div
+            {...(rest as unknown as JSX.HTMLAttributes<HTMLDivElement>)}
+            class={joinClass(local.class, local.className)}
+            style={mergeStyle(
+              {
+                width: toCssSize(local.width),
+                height: toCssSize(local.height),
+                display: 'inline-block',
+              },
+              local.style
+            )}
+            role="img"
+            aria-label={defaultTitle()}
+            innerHTML={content().replace(/<svg([^>]*)>/, '<svg$1 width="100%" height="100%">')}
+          />
+        )}
+      </Match>
+      <Match when={error()}>
+        <svg {...svgProps()}>
           <title>{defaultTitle()}</title>
           <circle cx="256" cy="256" r="256" fill="#f0f0f0" />
           <circle cx="256" cy="256" r="200" fill="#e0e0e0" />
@@ -161,22 +211,8 @@ export const CircleFlag: Component<CircleFlagProps> = props => {
             {upperCode()}
           </text>
         </svg>
-      }
-    >
-      <div
-        {...(rest as unknown as JSX.HTMLAttributes<HTMLDivElement>)}
-        class={local.class || local.className}
-        style={{
-          width: toCssSize(local.width),
-          height: toCssSize(local.height),
-          display: 'inline-block',
-          ...(typeof rest.style === 'object' ? (rest.style as object) : {}),
-        }}
-        role="img"
-        aria-label={defaultTitle()}
-        innerHTML={svgContent()!.replace(/<svg([^>]*)>/, '<svg$1 width="100%" height="100%">')}
-      />
-    </Show>
+      </Match>
+    </Switch>
   )
 }
 
@@ -205,15 +241,7 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
     props
   )
 
-  const [local, rest] = splitProps(merged, [
-    'code',
-    'strict',
-    'width',
-    'height',
-    'title',
-    'class',
-    'className',
-  ])
+  const [local, rest] = splitProps(merged, ['code', 'strict', 'width', 'height', 'title'])
 
   const normalizedInput = () => local.code.trim().toLowerCase()
   const resolvedCode = () => coerceFlagCode(local.code, 'xx')
@@ -235,7 +263,6 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
           width={local.width}
           height={local.height}
           title={fallbackTitle()}
-          class={local.class || local.className}
         />
       }
     >
@@ -246,13 +273,7 @@ export const DynamicFlag: Component<DynamicFlagProps> = props => {
           return <div>Flag not found: {local.code}</div>
         }
         return (
-          <FlagComponent
-            {...rest}
-            width={local.width}
-            height={local.height}
-            title={local.title}
-            class={local.class || local.className}
-          />
+          <FlagComponent {...rest} width={local.width} height={local.height} title={local.title} />
         )
       })()}
     </Show>
