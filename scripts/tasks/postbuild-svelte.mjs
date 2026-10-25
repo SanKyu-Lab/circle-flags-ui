@@ -27,30 +27,22 @@ export const postbuildSvelte = () => {
   removeTestFiles(distDir)
   console.log('✅ Removed test files from dist')
 
-  // Inject build-time metadata constants into dist/meta.js so that buildMeta
-  // matches React/Vue/Solid packages. svelte-package does not provide a define
-  // replacement like tsup, so we perform a post-build text replacement.
-  const metaJsPath = join(distDir, 'meta.js')
-  if (existsSync(metaJsPath)) {
-    const before = readFileSync(metaJsPath, 'utf-8')
-    const after = before
-      .replace(
-        /__SVELTE_CIRCLE_FLAGS_COMMIT__/g,
-        JSON.stringify(resolveRepoCommit('SVELTE_CIRCLE_FLAGS_COMMIT'))
-      )
-      .replace(
-        /__SVELTE_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT__/g,
-        JSON.stringify(resolveCircleFlagsCommit('SVELTE_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT'))
-      )
-      .replace(
-        /__SVELTE_CIRCLE_FLAGS_BUILT_AT__/g,
-        JSON.stringify(resolveBuiltAt('SVELTE_CIRCLE_FLAGS_BUILT_AT'))
-      )
-    if (before !== after) {
-      writeFileSync(metaJsPath, after, 'utf-8')
-      console.log('✅ Injected build metadata into dist/meta.js')
-    }
+  // svelte-package compiles src/meta.ts as is, so dist/meta.js would import package.json and
+  // fall back to runtime values. Write the values at build time, as tsup does for the other
+  // packages.
+  const { version } = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf-8'))
+  const buildMeta = {
+    version,
+    commitHash: resolveRepoCommit('SVELTE_CIRCLE_FLAGS_COMMIT'),
+    circleFlagsCommitHash: resolveCircleFlagsCommit('SVELTE_CIRCLE_FLAGS_CIRCLE_FLAGS_COMMIT'),
+    builtTimestamp: Number(resolveBuiltAt('SVELTE_CIRCLE_FLAGS_BUILT_AT')),
   }
+  writeFileSync(
+    join(distDir, 'meta.js'),
+    `export const buildMeta = ${JSON.stringify(buildMeta, null, 2)}\n`,
+    'utf-8'
+  )
+  console.log('✅ Wrote build metadata to dist/meta.js')
 
   // Declaration maps reference the unpublished src directory, so they are
   // useless in the npm tarball and only bloat the package. Remove them.

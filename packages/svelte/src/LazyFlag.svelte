@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Component, Snippet } from 'svelte'
   import { coerceFlagCode } from '@sankyu/circle-flags-core'
-  import { flagLoaders } from './flags/lazy'
-  import type { FlagComponentProps } from './types'
+  import { flagLoaders } from './flags/lazy.js'
+  import type { FlagComponentProps } from './types.js'
 
   /**
    * Lazy-loading flag component for runtime country codes.
@@ -33,7 +33,9 @@
     ...rest
   }: Props = $props()
 
-  const finalClass = $derived(classNameProp ?? classProp)
+  const finalClass = $derived(
+    classProp && classNameProp ? `${classProp} ${classNameProp}` : (classProp ?? classNameProp)
+  )
   const resolvedCode = $derived(coerceFlagCode(code, 'xx'))
   const loadFlag = $derived(flagLoaders[resolvedCode])
 

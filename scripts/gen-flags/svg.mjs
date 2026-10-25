@@ -379,7 +379,9 @@ export function svgToSvelteComponent(svg, code) {
     ...rest
   }: Props = $props()
 
-  const finalClass = $derived(classNameProp ?? classProp)
+  const finalClass = $derived(
+    classProp && classNameProp ? \`\${classProp} \${classNameProp}\` : (classProp ?? classNameProp)
+  )
   const SVG_BODY: string = ${innerStringLiteral}
 </script>
 

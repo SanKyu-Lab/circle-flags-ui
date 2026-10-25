@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Component } from 'svelte'
   import { coerceFlagCode, FLAG_REGISTRY } from '@sankyu/circle-flags-core'
-  import * as AllFlags from './flags'
-  import type { DynamicFlagProps } from './types'
+  import * as AllFlags from './flags/index.js'
+  import type { DynamicFlagProps } from './types.js'
 
   let {
     code,
@@ -15,12 +15,14 @@
     ...rest
   }: DynamicFlagProps = $props()
 
-  const finalClass = $derived(classNameProp ?? classProp)
+  const finalClass = $derived(
+    classProp && classNameProp ? `${classProp} ${classNameProp}` : (classProp ?? classNameProp)
+  )
 
   const normalizedInput = $derived(code.trim().toLowerCase())
   const resolvedCode = $derived(coerceFlagCode(code, 'xx'))
   const isFallback = $derived(resolvedCode === 'xx' && normalizedInput !== 'xx')
-  const fallbackTitle = $derived(() => {
+  const fallbackTitle = $derived.by(() => {
     if (!isFallback) return titleProp
     const upperCode = code.trim().toUpperCase()
     return titleProp ?? (upperCode.length > 0 ? upperCode : 'XX')
@@ -34,7 +36,7 @@
 </script>
 
 {#if FlagComponent}
-  <FlagComponent {...rest} {width} {height} className={finalClass} title={fallbackTitle()} />
+  <FlagComponent {...rest} {width} {height} className={finalClass} title={fallbackTitle} />
 {:else}
   <div>Flag not found: {code}</div>
 {/if}
