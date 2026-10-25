@@ -11,7 +11,8 @@ Standard SVG properties accepted by generated React flag components.
 
 ## Extends
 
-- `SVGProps`\<`SVGSVGElement`\>.`FlagComponentProps`
+- `SVGProps`\<`SVGSVGElement`\>
+- `FlagComponentProps`
 
 ## Properties
 

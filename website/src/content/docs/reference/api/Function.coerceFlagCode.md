@@ -878,7 +878,7 @@ Defined in: [core/src/utils.ts:70](https://github.com/SanKyu-Lab/circle-flags-ui
   \| `"yu"`
   \| `"za"`
   \| `"zm"`
-  \| `"zw"`
+  \| `"zw"` = `'xx'`
 
 ## Returns
 
