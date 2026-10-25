@@ -47,7 +47,7 @@ Perfect for applications that need fast, crisp country flags without external im
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
-- ⚡ **Lightweight shared core** - Only Solid.js is required as a peer dependency
+- ⚡ **Lightweight shared core** - Only Solid.js 1.9+ is required as a peer dependency
 - 🎨 **Inline SVG** - No external requests, works offline
 - 🔧 **Fully customizable** - All standard SVG props supported
 - 📱 **Vite 8 compatible** - Verified against the latest client-side Solid toolchain

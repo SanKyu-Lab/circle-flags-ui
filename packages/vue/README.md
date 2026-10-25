@@ -50,7 +50,7 @@ Perfect for applications that need fast, crisp country flags without external im
 
 - 🎯 **Tree-shakable** - Only bundle the flags you use
 - 📦 **TypeScript** - Full type definitions included
-- ⚡ **Lightweight shared core** - Only Vue 3 is required as a peer dependency
+- ⚡ **Lightweight shared core** - Only Vue 3.5+ is required as a peer dependency
 - 🎨 **Inline SVG** - No external requests, works offline
 - 🔧 **Fully customizable** - All standard SVG props supported
 - 📱 **SSR verified** - First-response SVG rendering is tested with Nuxt 4
