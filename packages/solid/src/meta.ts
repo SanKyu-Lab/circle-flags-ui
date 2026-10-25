@@ -1,4 +1,4 @@
-import pkg from '../package.json' with { type: 'json' }
+import { version } from '../package.json'
 
 export interface BuildMeta {
   version: string
@@ -31,7 +31,7 @@ const builtAt = parseBuiltAt(
 )
 
 export const buildMeta: BuildMeta = {
-  version: pkg.version,
+  version,
   commitHash: commit,
   circleFlagsCommitHash: circleFlagsCommit,
   builtTimestamp: builtAt,
