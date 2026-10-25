@@ -1,0 +1,10 @@
+{
+  // Used by the tsup build only. esbuild takes JSX settings from tsconfig over its own options,
+  // so the classic factory is set here; type checking keeps the automatic runtime.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "createElement",
+    "jsxFragmentFactory": "Fragment"
+  }
+}

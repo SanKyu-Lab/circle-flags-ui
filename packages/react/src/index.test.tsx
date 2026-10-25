@@ -17,6 +17,7 @@ import { FlagCn } from '../generated/flags/cn'
 type FetchMock = ReturnType<typeof vi.fn>
 
 const getFetchMock = () => globalThis.fetch as unknown as FetchMock
+const cdn = (code: string) => `https://hatscripts.github.io/circle-flags/flags/${code}.svg`
 
 describe('Main exports', () => {
   test('published entries preserve the Next.js client boundary', async () => {
@@ -28,6 +29,18 @@ describe('Main exports', () => {
 
     for (const entry of entries) {
       expect(entry).toMatch(/^['"]use client['"];/)
+    }
+  })
+
+  test('published entries create elements without react/jsx-runtime', async () => {
+    const files = ['index.mjs', 'index.cjs', 'flags/us.mjs', 'flags/us.cjs']
+    const entries = await Promise.all(
+      files.map(fileName => readFile(join(process.cwd(), 'dist', fileName), 'utf8'))
+    )
+
+    for (const entry of entries) {
+      expect(entry).not.toContain('react/jsx-runtime')
+      expect(entry).toContain('createElement')
     }
   })
 
@@ -255,6 +268,68 @@ describe('CircleFlag CDN loading', () => {
       'Failed to load flag for country code: us',
       expect.any(Error)
     )
+  })
+
+  test('should keep the default size when a style is passed', async () => {
+    fetchMock.mockResolvedValue({ ok: true, text: async () => '<svg viewBox="0 0 1 1"></svg>' })
+
+    render(<CircleFlag countryCode="us" data-testid="flag-style" style={{ opacity: 0.5 }} />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('flag-style').tagName).toBe('DIV')
+    })
+    const flag = screen.getByTestId('flag-style')
+    expect(flag.style.width).toBe('48px')
+    expect(flag.style.display).toBe('inline-block')
+    expect(flag.style.opacity).toBe('0.5')
+  })
+
+  test('should show the loading state while a new code loads', async () => {
+    const pending = new Map<string, (svg: string) => void>()
+    fetchMock.mockImplementation(
+      (url: string) =>
+        new Promise(resolve => {
+          pending.set(url, svg => resolve({ ok: true, text: async () => svg }))
+        })
+    )
+
+    const { rerender } = render(<CircleFlag countryCode="us" data-testid="flag-change" />)
+    pending.get(cdn('us'))?.('<svg id="US"></svg>')
+    await waitFor(() => {
+      expect(screen.getByTestId('flag-change').innerHTML).toContain('id="US"')
+    })
+
+    rerender(<CircleFlag countryCode="cn" data-testid="flag-change" />)
+    const loading = screen.getByTestId('flag-change')
+    expect(loading.querySelector('.animate-pulse')).not.toBeNull()
+    expect(loading).toHaveAttribute('aria-label', '🇨🇳 CN')
+
+    pending.get(cdn('cn'))?.('<svg id="CN"></svg>')
+    await waitFor(() => {
+      expect(screen.getByTestId('flag-change').innerHTML).toContain('id="CN"')
+    })
+  })
+
+  test('should ignore a response that arrives after the code changed', async () => {
+    const pending = new Map<string, (svg: string) => void>()
+    fetchMock.mockImplementation(
+      (url: string) =>
+        new Promise(resolve => {
+          pending.set(url, svg => resolve({ ok: true, text: async () => svg }))
+        })
+    )
+
+    const { rerender } = render(<CircleFlag countryCode="us" data-testid="flag-late" />)
+    rerender(<CircleFlag countryCode="cn" data-testid="flag-late" />)
+    pending.get(cdn('cn'))?.('<svg id="CN"></svg>')
+    await waitFor(() => {
+      expect(screen.getByTestId('flag-late').innerHTML).toContain('id="CN"')
+    })
+
+    pending.get(cdn('us'))?.('<svg id="US"></svg>')
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(screen.getByTestId('flag-late').innerHTML).toContain('id="CN"')
+    expect(screen.getByTestId('flag-late').innerHTML).not.toContain('id="US"')
   })
 
   test('should render fetched SVG with injected size attributes', async () => {
