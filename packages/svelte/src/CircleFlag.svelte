@@ -60,7 +60,12 @@
         return response.text()
       })
       .then(svg => {
-        svgContent = sanitizeSvg(svg)
+        if (controller.signal.aborted) return
+        const sanitizedSvg = sanitizeSvg(svg)
+        if (!sanitizedSvg) {
+          throw new Error('Flag response is not a well-formed SVG')
+        }
+        svgContent = sanitizedSvg
         error = false
       })
       .catch(err => {

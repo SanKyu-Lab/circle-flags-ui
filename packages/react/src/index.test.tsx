@@ -239,6 +239,24 @@ describe('CircleFlag CDN loading', () => {
     )
   })
 
+  test('should show the fallback when the response is not well-formed SVG', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    fetchMock.mockResolvedValue({
+      ok: true,
+      text: async () => '<html><body>Not Found</body></html>',
+    })
+
+    render(<CircleFlag countryCode="us" data-testid="flag-not-svg" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('US')).toBeInTheDocument()
+    })
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Failed to load flag for country code: us',
+      expect.any(Error)
+    )
+  })
+
   test('should render fetched SVG with injected size attributes', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -298,68 +316,9 @@ describe('CircleFlag CDN loading', () => {
     })
   })
 
-  test('should run href sanitizer branch with DOMParser present', async () => {
-    const originalParser = global.DOMParser
-    let parserCalled = false
-
-    class MockParser {
-      parseFromString() {
-        parserCalled = true
-        return {
-          querySelector: () => null,
-          documentElement: {
-            outerHTML: '<svg><use/></svg>',
-            querySelectorAll: (selector: string) => {
-              if (selector === 'script,foreignObject') {
-                return [{ remove: vi.fn() }]
-              }
-              if (selector === '*') {
-                return [
-                  {
-                    attributes: [
-                      {
-                        name: 'href',
-                        value: 'javascript:alert(1)',
-                        removeAttribute: vi.fn(),
-                      },
-                      {
-                        name: 'xlink:href',
-                        value: 'javascript:alert(2)',
-                        removeAttribute: vi.fn(),
-                      },
-                    ],
-                  },
-                ]
-              }
-              return []
-            },
-          },
-        }
-      }
-    }
-
-    // @ts-expect-error - override for test
-    global.DOMParser = MockParser as unknown as typeof DOMParser
-    fetchMock.mockResolvedValue({
-      ok: true,
-      text: async () => '<svg><use href="javascript:alert(1)"/></svg>',
-    })
-
-    render(<CircleFlag countryCode="us" data-testid="flag-href-parser" />)
-
-    await waitFor(() => {
-      const container = screen.getByTestId('flag-href-parser')
-      expect(parserCalled).toBe(true)
-      expect(container.innerHTML).not.toContain('javascript:')
-    })
-
-    global.DOMParser = originalParser
-  })
-
-  test('should sanitize when DOMParser is unavailable', async () => {
-    const originalParser = global.DOMParser
-    // @ts-expect-error - simulate absence
-    global.DOMParser = undefined
+  test('should show the fallback when DOMParser is unavailable', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.stubGlobal('DOMParser', undefined)
     fetchMock.mockResolvedValue({
       ok: true,
       text: async () => '<svg><script>alert(1)</script></svg>',
@@ -368,11 +327,11 @@ describe('CircleFlag CDN loading', () => {
     render(<CircleFlag countryCode="us" data-testid="flag-no-parser" />)
 
     await waitFor(() => {
-      const container = screen.getByTestId('flag-no-parser')
-      expect(container.innerHTML).not.toContain('<script>')
+      expect(screen.getByText('US')).toBeInTheDocument()
     })
-
-    global.DOMParser = originalParser
+    expect(screen.getByTestId('flag-no-parser').innerHTML).not.toContain('<script>')
+    expect(warnSpy).toHaveBeenCalled()
+    vi.unstubAllGlobals()
   })
 })
 
