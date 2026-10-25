@@ -13,7 +13,7 @@
     "verify:ssr": "node ../../scripts/verify-ssr-example.mjs --url http://127.0.0.1:32006 --expect 'data-ssr-example=\"nuxt\"' --expect '<svg' -- node .output/server/index.mjs"
   },
   "dependencies": {
-    "@sankyu/vue-circle-flags": "0.1.6",
+    "@sankyu/vue-circle-flags": "^1.0.0",
     "nuxt": "^4.6.2",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0"
