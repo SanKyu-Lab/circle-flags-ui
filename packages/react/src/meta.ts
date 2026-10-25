@@ -1,4 +1,4 @@
-import pkg from '../package.json' with { type: 'json' }
+import { version } from '../package.json'
 
 /** Metadata captured when the React package is built. */
 export interface BuildMeta {
@@ -33,7 +33,7 @@ const builtAt = parseBuiltAt(
 
 /** Build and source revision metadata for the installed React package. */
 export const buildMeta: BuildMeta = {
-  version: pkg.version,
+  version,
   commitHash: commit,
   circleFlagsCommitHash: circleFlagsCommit,
   builtTimestamp: builtAt,

@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import { basename, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const repoRootDir = fileURLToPath(new URL('../..', import.meta.url))
@@ -65,6 +66,35 @@ export const outExtensionMjsCjs = ({ format }) => ({
   js: format === 'esm' ? '.mjs' : '.cjs',
 })
 
+/**
+ * Keeps every generated flag in its own output module.
+ *
+ * Relative imports that resolve into `flagsDir` become external imports of the sibling build
+ * output: `./flags/<name><ext>` from a main entry and `./<name><ext>` from another flag module.
+ * Main entries then only re-export flag modules, so bundlers drop the flags a consumer never uses.
+ */
+export const createFlagModulesPlugin = ({ flagsDir, extension }) => ({
+  name: 'circle-flags:flag-modules',
+  setup(build) {
+    const ext = extension ?? (build.initialOptions.format === 'cjs' ? '.cjs' : '.mjs')
+
+    build.onResolve({ filter: /^\.{1,2}\// }, args => {
+      if (args.kind === 'entry-point') return undefined
+
+      const target = resolve(args.resolveDir, args.path)
+      const isFlagsIndex = target === flagsDir
+      if (!isFlagsIndex && dirname(target) !== flagsDir) return undefined
+
+      const name = isFlagsIndex ? 'index' : basename(target).replace(/\.[cm]?[jt]sx?$/, '')
+      const importerInFlagsDir = dirname(args.importer) === flagsDir
+      return {
+        path: importerInFlagsDir ? `./${name}${ext}` : `./flags/${name}${ext}`,
+        external: true,
+      }
+    })
+  },
+})
+
 export const createBaseTsupConfig = options => {
   const { external, define, isProduction, esbuildOptions } = options
 
@@ -72,7 +102,9 @@ export const createBaseTsupConfig = options => {
     format: ['cjs', 'esm'],
     dts: false,
     sourcemap: false,
-    treeshake: true,
+    // esbuild must emit the final format itself so createFlagModulesPlugin picks .mjs or .cjs.
+    // tsup's rollup pass would build ESM first and convert it afterwards.
+    treeshake: false,
     minify: isProduction,
     silent: true,
     external,
