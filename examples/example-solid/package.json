@@ -15,13 +15,13 @@
   "dependencies": {
     "@sankyu/solid-circle-flags": "^1.0.0",
     "@tailwindcss/vite": "^4.3.5",
-    "solid-js": "^1.9.18",
+    "solid-js": "^1.9.19",
     "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
     "typescript": "~6.0.3",
-    "vite": "^8.3.6",
+    "vite": "^8.3.8",
     "vite-plugin-solid": "^2.11.14"
   }
 }
