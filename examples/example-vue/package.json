@@ -16,7 +16,7 @@
     "@sankyu/vue-circle-flags": "^1.0.0",
     "@tailwindcss/vite": "^4.3.5",
     "tailwindcss": "^4.3.5",
-    "vue": "^3.5.45"
+    "vue": "^3.5.46"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
