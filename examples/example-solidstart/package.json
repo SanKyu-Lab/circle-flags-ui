@@ -16,7 +16,7 @@
     "@sankyu/solid-circle-flags": "^1.0.0",
     "@solidjs/start": "^2.2.3",
     "nitro": "^3.0.260903-beta",
-    "solid-js": "^1.9.19",
+    "solid-js": "^2.0.3",
     "vite": "^8.3.8"
   },
   "devDependencies": {
